@@ -1,0 +1,7 @@
+<resources>
+    <dimen name="fab_margin">96dp</dimen>
+    <dimen name="fab_margin_right">16dp</dimen>
+    <dimen name="navigation_bar_height">48dp</dimen>
+    <dimen name="m3_bottom_nav_min_height">80dp</dimen>
+
+</resources>

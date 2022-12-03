@@ -1,0 +1,29 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.appfinalproject_10130492.MainActivity">
+    <item
+        android:id="@+id/assignments"
+        android:icon="@drawable/assignment_48px"
+        android:iconTint="#606060"
+        android:orderInCategory="2"
+        android:title="作業"
+        android:tooltipText="作業"
+        app:showAsAction="always|withText" />
+    <item
+        android:id="@+id/classes"
+        android:icon="@drawable/book_48px"
+        android:iconTint="#606060"
+        android:orderInCategory="2"
+        android:title="課程"
+        android:tooltipText="課程"
+        app:showAsAction="always|withText" />
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/settings_48px"
+        android:iconTint="#606060"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        android:tooltipText="課程"
+        app:showAsAction="always|withText" />
+</menu>
