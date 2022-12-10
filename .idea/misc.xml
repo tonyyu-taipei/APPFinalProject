@@ -4,18 +4,26 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2155" />
+        <entry key="app/src/main/res/drawable/add_48px.xml" value="0.215" />
         <entry key="app/src/main/res/drawable/assignment_48px.xml" value="0.1725" />
         <entry key="app/src/main/res/drawable/book-48px.xml" value="0.2155" />
         <entry key="app/src/main/res/drawable/book_48px.xml" value="0.2155" />
         <entry key="app/src/main/res/drawable/calendar_month_48px.xml" value="0.1725" />
         <entry key="app/src/main/res/drawable/d.xml" value="0.2155" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.2155" />
+        <entry key="app/src/main/res/drawable/qr_code_scanner_48px.xml" value="0.215" />
         <entry key="app/src/main/res/drawable/recyclerview_border.xml" value="0.2155" />
         <entry key="app/src/main/res/drawable/schedule_48px.xml" value="0.1725" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.18865661621093757" />
-        <entry key="app/src/main/res/layout/content_main.xml" value="0.15222829182942713" />
-        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.2701461791992188" />
-        <entry key="app/src/main/res/layout/fragment_second.xml" value="0.14583333333333334" />
+        <entry key="app/src/main/res/layout/activity_add.xml" value="0.1743659420289855" />
+        <entry key="app/src/main/res/layout/activity_class.xml" value="0.19384057971014493" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/content_class.xml" value="0.19384057971014493" />
+        <entry key="app/src/main/res/layout/content_main.xml" value="0.20289001464843753" />
+        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.29199981689453125" />
+        <entry key="app/src/main/res/layout/fragment_first_add.xml" value="0.28219757080078123" />
+        <entry key="app/src/main/res/layout/fragment_first_class.xml" value="0.19384057971014493" />
+        <entry key="app/src/main/res/layout/fragment_second.xml" value="0.21800740559895834" />
+        <entry key="app/src/main/res/layout/fragment_second_qrcode.xml" value="0.19384057971014493" />
         <entry key="app/src/main/res/layout/recyclerview_list.xml" value="0.24961853027343747" />
         <entry key="app/src/main/res/menu/menu_main.xml" value="0.1" />
       </map>

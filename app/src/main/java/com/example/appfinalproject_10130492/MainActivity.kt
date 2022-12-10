@@ -10,7 +10,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.MenuItem
-import androidx.core.view.get
 import androidx.core.widget.NestedScrollView
 import com.example.appfinalproject_10130492.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -30,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.toolbarAdd)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -42,17 +41,21 @@ class MainActivity : AppCompatActivity() {
         botnav?.setOnItemSelectedListener{
             Log.i("Menu", ""+it.itemId+" Title"+it.title)
             when(it.itemId){
-                R.id.classes->{
-                    navController.navigate(R.id.FirstFragment)
+                R.id.assignments->{
+
                 }
                 R.id.classes -> {
-                    navController.navigate(R.id.SecondFragment);
+
                 }
             }
             return@setOnItemSelectedListener true
         }
         setupActionBarWithNavController(navController, appBarConfiguration)
-
+        fab.setOnClickListener{l->
+            var intent = Intent(this, AddActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(R.anim.bottom_up,R.anim.no_anim)
+        }
 
 
     }
