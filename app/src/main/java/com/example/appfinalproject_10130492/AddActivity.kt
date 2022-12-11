@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -14,6 +15,7 @@ class AddActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityAddBinding
+    private lateinit var navController: NavController
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +29,7 @@ class AddActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbarAdd)
 
 
-        val navController = findNavController(R.id.nav_host_fragment_content_class)
+        navController = findNavController(R.id.nav_host_fragment_content_class)
         appBarConfiguration = AppBarConfiguration(navController.graph)
 
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -45,6 +47,9 @@ class AddActivity : AppCompatActivity() {
         super.onBackPressed()
         if(onBackBehavior == "Activity")
         overridePendingTransition(R.anim.no_anim,R.anim.up_bottom)
+        else{
+            overridePendingTransition(R.anim.no_anim,R.anim.left_right)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -52,6 +57,15 @@ class AddActivity : AppCompatActivity() {
             "Activity" -> {
                 finish()
                 overridePendingTransition(R.anim.no_anim,R.anim.up_bottom)
+                true
+            }
+            "Fragment" ->{
+                if(backFragmentTransition == R.id.action_Second2Fragment_to_First2Fragment){
+                    onBackBehavior = "Activity"
+                }
+                navController.navigate(backFragmentTransition)
+                supportActionBar?.setDisplayHomeAsUpEnabled(true);
+                supportActionBar?.setDisplayShowHomeEnabled(true);
                 true
             }
             else ->{
@@ -63,5 +77,7 @@ class AddActivity : AppCompatActivity() {
     }
     companion object{
         var onBackBehavior = "Activity"
+        var backFragmentTransition = 0
+
     }
 }

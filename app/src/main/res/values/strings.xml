@@ -14,4 +14,7 @@
     <string name="title_activity_class">ClassActivity</string>
     <string name="add_qr_code">掃描QR Code</string>
     <string name="add_assign">新增作業</string>
+    <string name="course_name_hint">課程名稱</string>
+    <string name="assign_name_hint">作業名稱</string>
+    <string name="assign_note_hint">作業備註</string>
 </resources>

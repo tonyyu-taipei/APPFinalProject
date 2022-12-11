@@ -6,14 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.example.appfinalproject_10130492.databinding.FragmentSecondQrcodeBinding
+import com.example.appfinalproject_10130492.databinding.FragmentSecondNewAssignBinding
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class AddQRCodeFragment : Fragment() {
+class NewAssignFragment : Fragment() {
 
-    private var _binding: FragmentSecondQrcodeBinding? = null
+    private var _binding: FragmentSecondNewAssignBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -24,7 +24,7 @@ class AddQRCodeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentSecondQrcodeBinding.inflate(inflater, container, false)
+        _binding = FragmentSecondNewAssignBinding.inflate(inflater, container, false)
         return binding.root
 
     }
@@ -32,9 +32,7 @@ class AddQRCodeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_Second2Fragment_to_First2Fragment)
-        }
+
     }
 
     override fun onDestroyView() {

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.findNavController
 import com.example.appfinalproject_10130492.databinding.FragmentFirstAddBinding
 
@@ -31,6 +32,11 @@ class AddFirstFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.addAssignBtn.setOnClickListener {
+            AddActivity.backFragmentTransition = R.id.action_Second2Fragment_to_First2Fragment
+            findNavController().navigate(R.id.action_First2Fragment_to_Second2Fragment)
+            AddActivity.onBackBehavior = "Fragment"
+        }
 /* default btn behav.
         binding.buttonFirst.setOnClickListener {
             findNavController().navigate(R.id.action_First2Fragment_to_Second2Fragment)
