@@ -12,5 +12,5 @@ class AssignmentsSQLHelper(
             " assignedDate DATETIME NOT NULL,"+
             " dueDate DATETIME NOT NULL,"+
             "courseName TEXT ,"+"FOREIGN KEY(courseName) REFERENCES Course(courseName) )"
-    override val SQL_DELETE_ENTRIES: String = "DROP TABLE IF EXSITS $tableName"
+    override val SQL_DELETE_ENTRIES: String = "DROP TABLE IF EXISTS $tableName"
 }

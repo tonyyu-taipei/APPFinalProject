@@ -16,7 +16,11 @@
             android:id="@+id/toolbarAdd"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorSurface"
+            app:menu="@menu/menu_add"
             app:navigationIcon="?attr/actionModeCloseDrawable" />
+
+
 
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -14,17 +14,20 @@
         <entry key="app/src/main/res/drawable/qr_code_scanner_48px.xml" value="0.215" />
         <entry key="app/src/main/res/drawable/recyclerview_border.xml" value="0.2155" />
         <entry key="app/src/main/res/drawable/schedule_48px.xml" value="0.1725" />
-        <entry key="app/src/main/res/layout/activity_add.xml" value="0.1743659420289855" />
+        <entry key="app/src/main/res/layout/activity_add.xml" value="0.1256544502617801" />
         <entry key="app/src/main/res/layout/activity_class.xml" value="0.19384057971014493" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.22269592285156253" />
         <entry key="app/src/main/res/layout/content_class.xml" value="0.19384057971014493" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.20289001464843753" />
-        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.29199981689453125" />
+        <entry key="app/src/main/res/layout/dropdown_list_item.xml" value="0.13333333333333333" />
+        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.26465201465201466" />
         <entry key="app/src/main/res/layout/fragment_first_add.xml" value="0.28219757080078123" />
         <entry key="app/src/main/res/layout/fragment_first_class.xml" value="0.19384057971014493" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.21800740559895834" />
+        <entry key="app/src/main/res/layout/fragment_second_new_assign.xml" value="0.16029052734375004" />
         <entry key="app/src/main/res/layout/fragment_second_qrcode.xml" value="0.19384057971014493" />
         <entry key="app/src/main/res/layout/recyclerview_list.xml" value="0.24961853027343747" />
+        <entry key="app/src/main/res/menu/menu_add.xml" value="0.3607152303059896" />
         <entry key="app/src/main/res/menu/menu_main.xml" value="0.1" />
       </map>
     </option>

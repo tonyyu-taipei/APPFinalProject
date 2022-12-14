@@ -15,8 +15,8 @@
             android:id="@+id/action_First2Fragment_to_Second2Fragment"
             app:destination="@id/AddSecondFragment"
             app:enterAnim="@anim/right_left"
-            app:popEnterAnim="@anim/right_left"
-/>
+            app:exitAnim="@anim/fade"
+            app:popExitAnim="@anim/left_right" />
     </fragment>
     <fragment
         android:id="@+id/AddSecondFragment"
@@ -28,6 +28,7 @@
         <action
             android:id="@+id/action_Second2Fragment_to_First2Fragment"
             app:destination="@id/AddFirstFragment"
-/>
+            app:enterAnim="@anim/right_left"
+            app:popEnterAnim="@anim/right_left" />
     </fragment>
 </navigation>

@@ -5,7 +5,7 @@
     <string name="first_fragment_label">作業</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="first_fragment_add_label">新增</string>
-    <string name="second_fragment_add_label">Second Fragment</string>
+    <string name="second_fragment_add_label">新增作業</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="empty_assign">沒有作業</string>
@@ -18,4 +18,9 @@
     <string name="assign_name_hint">作業名稱</string>
     <string name="assign_note_hint">作業備註</string>
     <string name="date_pick">選取時間</string>
+    <string name="alert">提醒</string>
+    <string name="alert_msg">無任何課程，請先新增課程</string>
+    <string name="alert_msg_required">請填入必填欄位</string>
+    <string name="save">儲存</string>
+
 </resources>

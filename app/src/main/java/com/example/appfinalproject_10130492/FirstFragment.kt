@@ -38,22 +38,24 @@ class FirstFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerview)
+        recyclerView = view.findViewById(R.id.recyclerview)
         val courseDb = CoursesDB(this.context)
         val assignDb = AssignmentsDB(this.context)
 
         val assignmentsCursor = assignDb.readAll()
-        courseDb.readAll()
+
         if (assignmentsCursor!=null && assignmentsCursor.moveToFirst())
-        for(i in 0 until assignmentsCursor.columnCount){
+        while(!assignmentsCursor.isAfterLast){
             // _id note title assignedDate dueDate courseName
+            Log.i("Menu",assignmentsCursor.getString(2))
             val _id = assignmentsCursor.getInt(0)
-            val note = assignmentsCursor.getString(1)
+            val note = assignmentsCursor.getString(5)
             val title = assignmentsCursor.getString(2)
             val assignedDate = assignmentsCursor.getLong(3)
             val dueDate = assignmentsCursor.getLong(4)
-            val courseName = assignmentsCursor.getString(5)
+            val courseName = assignmentsCursor.getString(1)
             val assignment = Assignment(_id,title,assignedDate,dueDate,note,courseName)
+            assignmentsCursor.moveToNext()
             assList.add(assignment)
         }
 
@@ -80,4 +82,11 @@ class FirstFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+    companion object{
+        private lateinit var recyclerView:RecyclerView
+        fun reloadItem(){
+            recyclerView.adapter?.notifyDataSetChanged()
+        }
+    }
+
 }

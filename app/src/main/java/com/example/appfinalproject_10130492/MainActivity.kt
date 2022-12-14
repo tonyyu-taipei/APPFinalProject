@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
 
         // Bottom Navigation Listener
         botnav = findViewById(R.id.botnav)
-
         botnav?.setOnItemSelectedListener{
             Log.i("Menu", ""+it.itemId+" Title"+it.title)
             when(it.itemId){
@@ -53,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         fab.setOnClickListener{l->
             var intent = Intent(this, AddActivity::class.java)
+            intent.putExtra("selected",botnav.selectedItemId)
             startActivity(intent)
             overridePendingTransition(R.anim.bottom_up,R.anim.no_anim)
         }
@@ -75,6 +75,11 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.i("Menu","Activity Finished")
     }
 
     override fun onSupportNavigateUp(): Boolean {
