@@ -12,30 +12,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class RecyclerAdapter(val itemData: ArrayList<Assignment>) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
-    init {
-        /*
-        val template = Assignment(-1,"統計學作業","第一題、第二題",1669809847768,1669852800000,"統計學")
-        val template2 = Assignment(-2,"App作業","完成SQLite",1669809847768,1669852800000,"App開發")
-        item.add(template)
-        item.add(template2)
-        item.add(template)
-        item.add(template2)
-        item.add(template2)
-        item.add(template2)
-        item.add(template2)
-        item.add(template2)
-        item.add(template2)
-        item.add(template2)
-        item.add(template2)
-        item.add(template2)
-        item.add(template2)
-        item.add(template2)
-        item.add(template2)
-        item.add(template2)
-        item.add(template2)
-        item.add(template2)
-        item.add(template2)*/
-    }
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val name: TextView
         val desc: TextView
@@ -63,8 +39,8 @@ class RecyclerAdapter(val itemData: ArrayList<Assignment>) : RecyclerView.Adapte
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data: Assignment = itemData.get(position)
-        holder.name.setText(data.title)
-        holder.courseTxt.setText(data.courseName)
+        holder.name.text = data.title
+        holder.courseTxt.text = data.courseName
         val date = Date(data.dueDate)
         val uDate = java.text.SimpleDateFormat("yyyy-MM-dd  aa hh:mm", Locale.TAIWAN)
         holder.timeTxt.text = uDate.format(date)

@@ -5,6 +5,7 @@
     android:id="@+id/nest"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/m3_bottom_nav_with_margin"
     tools:context=".FirstFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout

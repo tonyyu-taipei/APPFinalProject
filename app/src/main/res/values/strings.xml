@@ -20,6 +20,10 @@
     <string name="date_pick">選取時間</string>
     <string name="alert">提醒</string>
     <string name="alert_msg">無任何課程，請先新增課程</string>
+    <string name="alert_msg_date_error">起始時間與截止時間順序錯誤</string>
+    <string name="alert_msg_date_confirm">對調時間</string>
+    <string name="alert_msg_date_success">時間對調成功</string>
+    <string name="alert_msg_date_cancel">取消</string>
     <string name="alert_msg_required">請填入必填欄位</string>
     <string name="save">儲存</string>
 

@@ -12,11 +12,13 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.TextView
+import android.widget.Toast
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databases.CoursesDB
 import com.example.appfinalproject_10130492.databinding.FragmentSecondNewAssignBinding
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -39,7 +41,7 @@ class NewAssignFragment : Fragment() {
     private lateinit var name: TextInputLayout
     private lateinit var note: TextInputLayout
     private lateinit var courseName: AutoCompleteTextView
-
+    private val uDate = java.text.SimpleDateFormat("yyyy-MM-dd  aa hh:mm", Locale.TAIWAN)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -78,8 +80,8 @@ class NewAssignFragment : Fragment() {
 
 
         //init text
-        fromDateTextView.text = "${fromCalendarDate.get(Calendar.YEAR)}年${fromCalendarDate.get(Calendar.MONTH)+1}月${fromCalendarDate.get(Calendar.DATE)}日  ${fromCalendarDate.get(Calendar.HOUR_OF_DAY)}時${fromCalendarDate.get(Calendar.MINUTE)}分"
-        toDateTextView.text = "${toCalendarDate.get(Calendar.YEAR)}年${toCalendarDate.get(Calendar.MONTH)+1}月${toCalendarDate.get(Calendar.DATE)}日  ${toCalendarDate.get(Calendar.HOUR_OF_DAY)}時${toCalendarDate.get(Calendar.MINUTE)}分"
+        dateToTextHelper(fromCalendarDate,"from")
+        dateToTextHelper(toCalendarDate,"to")
 
 
         fromCalendarDate.timeZone = TimeZone.getDefault()
@@ -96,21 +98,39 @@ class NewAssignFragment : Fragment() {
         }
         binding.datepick.setOnClickListener{
             fromCalendarDate = datePickHelper(fromCalendarDate,"from")
-            fromDateTextView.text = "${fromCalendarDate.get(Calendar.YEAR)}年${fromCalendarDate.get(Calendar.MONTH)+1}月${fromCalendarDate.get(Calendar.DATE)}日  ${fromCalendarDate.get(Calendar.HOUR_OF_DAY)}時${fromCalendarDate.get(Calendar.MINUTE)}分"
+            dateToTextHelper(fromCalendarDate,"from")
         }
         binding.datepick2.setOnClickListener{
             toCalendarDate = datePickHelper(toCalendarDate,"to")
-            toDateTextView.text = "${toCalendarDate.get(Calendar.YEAR)}年${toCalendarDate.get(Calendar.MONTH)+1}月${toCalendarDate.get(Calendar.DATE)}日  ${toCalendarDate.get(Calendar.HOUR_OF_DAY)}時${toCalendarDate.get(Calendar.MINUTE)}分"
+            dateToTextHelper(toCalendarDate,"to")
 
         }
 
         binding.save.setOnClickListener{
+            val alert = AlertDialog.Builder(requireContext())
             val nameString = name.editText!!.text.toString()
             if(nameString.isEmpty()){
-                val alert = AlertDialog.Builder(requireContext())
                 alert.setTitle(R.string.alert)
                 alert.setMessage(R.string.alert_msg_required)
                 alert.setPositiveButton("Ok") { dialog, _ -> dialog.dismiss() }
+                alert.create().show()
+                return@setOnClickListener
+            }
+            if(fromCalendarDate.timeInMillis > toCalendarDate.timeInMillis){
+                alert.setTitle(R.string.alert)
+                alert.setMessage(R.string.alert_msg_date_error)
+                alert.setPositiveButton(R.string.alert_msg_date_confirm) { dialog, _ ->
+                    dialog.dismiss();
+                    val tmp = fromCalendarDate
+                    fromCalendarDate = toCalendarDate
+                    toCalendarDate = tmp
+                    dateToTextHelper(fromCalendarDate,"from")
+                    dateToTextHelper(toCalendarDate,"to")
+                    Snackbar.make(view,R.string.alert_msg_date_success,Snackbar.LENGTH_SHORT).show()
+
+                }
+                alert.setNegativeButton(R.string.alert_msg_date_cancel){ dialog,_->dialog.dismiss()}
+
                 alert.create().show()
                 return@setOnClickListener
             }
@@ -144,16 +164,17 @@ class NewAssignFragment : Fragment() {
                 calendarDate.set(Calendar.HOUR_OF_DAY,timepicker.hour)
                 calendarDate.set(Calendar.MINUTE,timepicker.minute)
                 Log.i("Date",""+timepicker.hour)
-                if(type == "from"){
-                    fromDateTextView.text = "${calendarDate.get(Calendar.YEAR)}年${calendarDate.get(Calendar.MONTH)+1}月${calendarDate.get(Calendar.DATE)}日  ${calendarDate.get(Calendar.HOUR_OF_DAY)}時${calendarDate.get(Calendar.MINUTE)}分"
-                }else if(type == "to"){
-                    toDateTextView.text = "${calendarDate.get(Calendar.YEAR)}年${calendarDate.get(Calendar.MONTH)+1}月${calendarDate.get(Calendar.DATE)}日  ${calendarDate.get(Calendar.HOUR_OF_DAY)}時${calendarDate.get(Calendar.MINUTE)}分"
-
-                }
+                dateToTextHelper(calendarDate,type)
 
             }
         }
         return calendarDate
+    }
+    private fun dateToTextHelper(calendarDate: Calendar, type: String){
+        when(type){
+            "to"->toDateTextView.text = uDate.format(Date(calendarDate.timeInMillis))
+            "from"->fromDateTextView.text = uDate.format(Date(calendarDate.timeInMillis))
+        }
     }
     private fun readCourses(db:CoursesDB):Array<String?>{
         val cursor = db.readAllCursor()
