@@ -7,24 +7,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appfinalproject_10130492.data.Assignment
+import com.example.appfinalproject_10130492.data.Course
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databases.CoursesDB
 import com.example.appfinalproject_10130492.databinding.FragmentFirstBinding
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class FirstFragment : Fragment() {
-    val assList = ArrayList<Assignment>()
+    var assList = ArrayList<Assignment>()
     private lateinit var scroll: NestedScrollView
     private var _binding: FragmentFirstBinding? = null
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private lateinit var adapter: RecyclerAdapter
+    private lateinit var courseDB: CoursesDB
+    private lateinit var assignDB:AssignmentsDB
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,30 +40,28 @@ class FirstFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        recyclerView = view?.findViewById(R.id.recyclerview)!!
+        assList = assignDB.readAll()
+        Log.i("Menu",""+recyclerView.adapter?.itemCount+"  COUNT")
+        adapter = RecyclerAdapter(assList)
+        recyclerView.adapter = adapter
+
+
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById(R.id.recyclerview)
-        val courseDb = CoursesDB(this.context)
-        val assignDb = AssignmentsDB(this.context)
+        courseDB = CoursesDB(this.context)
+        assignDB = AssignmentsDB(this.context)
 
-        val assignmentsCursor = assignDb.readAll()
 
-        if (assignmentsCursor!=null && assignmentsCursor.moveToFirst())
-        while(!assignmentsCursor.isAfterLast){
-            // _id note title assignedDate dueDate courseName
-            Log.i("Menu",assignmentsCursor.getString(2))
-            val _id = assignmentsCursor.getInt(0)
-            val note = assignmentsCursor.getString(5)
-            val title = assignmentsCursor.getString(2)
-            val assignedDate = assignmentsCursor.getLong(3)
-            val dueDate = assignmentsCursor.getLong(4)
-            val courseName = assignmentsCursor.getString(1)
-            val assignment = Assignment(_id,title,assignedDate,dueDate,note,courseName)
-            assignmentsCursor.moveToNext()
-            assList.add(assignment)
-        }
-
-        recyclerView.adapter = RecyclerAdapter(assList)
+        courseDB
+        assList = assignDB.readAll()
+        adapter = RecyclerAdapter(assList)
+        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
         scroll = view.findViewById(R.id.nest)
         scroll.setOnScrollChangeListener(View.OnScrollChangeListener(
@@ -83,10 +85,11 @@ class FirstFragment : Fragment() {
         _binding = null
     }
     companion object{
+
+
         private lateinit var recyclerView:RecyclerView
-        fun reloadItem(){
-            recyclerView.adapter?.notifyDataSetChanged()
-        }
     }
+
+
 
 }

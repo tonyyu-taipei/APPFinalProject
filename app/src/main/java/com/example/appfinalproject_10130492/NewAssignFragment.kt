@@ -156,7 +156,7 @@ class NewAssignFragment : Fragment() {
         return calendarDate
     }
     private fun readCourses(db:CoursesDB):Array<String?>{
-        val cursor = db.readAll()
+        val cursor = db.readAllCursor()
         val courseArr = arrayOfNulls<String>(cursor.columnCount)
         if (cursor!=null && cursor.moveToFirst())
             for(i in 0 until cursor.columnCount){

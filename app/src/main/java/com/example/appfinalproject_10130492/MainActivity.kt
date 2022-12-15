@@ -10,7 +10,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.MenuItem
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.FragmentManager
+import com.example.appfinalproject_10130492.databases.CoursesDB
 import com.example.appfinalproject_10130492.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -21,11 +24,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var botnav: BottomNavigationView
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity() {
             var intent = Intent(this, AddActivity::class.java)
             intent.putExtra("selected",botnav.selectedItemId)
             startActivity(intent)
+
             overridePendingTransition(R.anim.bottom_up,R.anim.no_anim)
         }
 
@@ -77,13 +79,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Log.i("Menu","Activity Finished")
-    }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
+
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
