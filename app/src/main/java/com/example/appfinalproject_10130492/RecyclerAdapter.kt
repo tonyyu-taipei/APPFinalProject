@@ -13,6 +13,8 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 
@@ -49,6 +51,21 @@ class RecyclerAdapter(val itemData: ArrayList<Assignment>, val dbHelper: Assignm
         holder.courseTxt.text = data.courseName
         val date = Date(data.dueDate)
         val uDate = java.text.SimpleDateFormat("yyyy-MM-dd  aa hh:mm", Locale.TAIWAN)
+
+        val dateCalendar = Calendar.getInstance()
+        dateCalendar.time = Date(data.dueDate)
+
+        if(dateIsLate(dateCalendar) && data.finished ==0){
+            holder.statusIco.setImageResource(R.drawable.error_48px)
+        }
+        else if(data.finished == 1){
+            holder.statusIco.setImageResource(R.drawable.check_circle_48px)
+        }
+        else{
+            holder.statusIco.setImageResource(R.drawable.alarm_on_48px)
+        }
+
+
         holder.timeTxt.text = uDate.format(date)
         holder.desc.text = data.note
         holder.linear.setOnClickListener{
@@ -79,5 +96,11 @@ class RecyclerAdapter(val itemData: ArrayList<Assignment>, val dbHelper: Assignm
             //notifyItemRangeChanged(pos, itemData.size);
         }
 
+    }
+    private fun dateIsLate(calendar: Calendar): Boolean{
+        val date = calendar.timeInMillis
+        val dateNow = Date().time
+
+        return date <= dateNow
     }
 }
