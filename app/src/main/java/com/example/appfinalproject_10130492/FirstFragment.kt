@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appfinalproject_10130492.data.Assignment
@@ -42,13 +43,9 @@ class FirstFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
-        recyclerView = view?.findViewById(R.id.recyclerview)!!
-        assList = assignDB.readAll()
-        Log.i("Menu",""+recyclerView.adapter?.itemCount+"  COUNT")
-        adapter = RecyclerAdapter(assList)
-        recyclerView.adapter = adapter
-
+        assList.clear()
+        assList.addAll(assignDB.readAll())
+        adapter.notifyDataSetChanged()
 
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,11 +55,11 @@ class FirstFragment : Fragment() {
         assignDB = AssignmentsDB(this.context)
 
 
-        courseDB
         assList = assignDB.readAll()
-        adapter = RecyclerAdapter(assList)
+        adapter = RecyclerAdapter(assList,assignDB,view)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
+
         scroll = view.findViewById(R.id.nest)
         scroll.setOnScrollChangeListener(View.OnScrollChangeListener(
             fun(v: View, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int){
@@ -76,7 +73,13 @@ class FirstFragment : Fragment() {
                     MainActivity.scrollFab(true);
                 }
             }
+
         ))
+        val itemCallback = ItemTouchHelperCallback(adapter)
+        val itemHelper = ItemTouchHelper(itemCallback)
+        itemHelper.attachToRecyclerView(recyclerView)
+
+
 
     }
 
@@ -86,7 +89,7 @@ class FirstFragment : Fragment() {
     }
     companion object{
 
-
+        lateinit var selectedAssignment: Assignment
         private lateinit var recyclerView:RecyclerView
     }
 

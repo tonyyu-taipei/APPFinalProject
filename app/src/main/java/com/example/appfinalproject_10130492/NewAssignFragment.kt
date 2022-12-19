@@ -135,7 +135,7 @@ class NewAssignFragment : Fragment() {
                 return@setOnClickListener
             }
             val assignment = Assignment(null, nameString,fromCalendarDate.timeInMillis,toCalendarDate.timeInMillis,courseName.text.toString(),
-                note.editText!!.text.toString())
+                note.editText!!.text.toString(),0)
             assignDB.insert(assignment)
             val intent = Intent()
             activity?.setResult(RESULT_OK)

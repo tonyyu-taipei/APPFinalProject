@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/share_assign"
+        android:icon="@drawable/qr_code_2_48px"
+        android:iconTint="#606060"
+        android:orderInCategory="2"
+        android:title="分享"
+        android:tooltipText="離開"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/delete_assign"
+        android:icon="@drawable/delete_forever_48px"
+        android:iconTint="#606060"
+        android:orderInCategory="2"
+        android:title="分享"
+        android:tooltipText="離開"
+        app:showAsAction="always" />
+</menu>

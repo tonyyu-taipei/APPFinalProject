@@ -14,7 +14,9 @@ class SQLiteHelper(context: Context?): SQLiteOpenHelper(context,DATABASE_NAME, n
             " note TEXT, title TEXT NOT NULL,"+
             " assignedDate DATETIME NOT NULL,"+
             " dueDate DATETIME NOT NULL,"+
-            "courseName TEXT ,"+"FOREIGN KEY(courseName) REFERENCES Course(courseName) )"
+            "courseName TEXT ,"+
+            "finished INTEGER DEFAULT 0,"+
+            "FOREIGN KEY(courseName) REFERENCES Course(courseName) )"
     private val SQL_DELETE_ENTRIES_COURSES = "DROP TABLE IF EXISTS $courseTableName"
     private val SQL_DELETE_ENTRIES_ASSIGN = "DROP TABLE IF EXISTS $assignTableName"
     override fun onCreate(db: SQLiteDatabase) {
@@ -34,7 +36,7 @@ class SQLiteHelper(context: Context?): SQLiteOpenHelper(context,DATABASE_NAME, n
     }
     companion object {
         // If you change the database schema, you must increment the database version.
-        const val DATABASE_VERSION = 5
+        const val DATABASE_VERSION = 7
         const val DATABASE_NAME = "School.db"
 
     }

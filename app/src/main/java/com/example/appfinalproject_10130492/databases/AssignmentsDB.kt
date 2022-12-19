@@ -26,11 +26,12 @@ class AssignmentsDB(context: Context?) {
                     Log.i("Menu",cursor.getString(2))
                     val _id = cursor.getInt(0)
                     val note = cursor.getString(5)
+                    val finished = cursor.getInt(6)
                     val title = cursor.getString(2)
                     val assignedDate = cursor.getLong(3)
                     val dueDate = cursor.getLong(4)
                     val courseName = cursor.getString(1)
-                    val assignment = Assignment(_id,title,assignedDate,dueDate,note,courseName)
+                    val assignment = Assignment(_id,title,assignedDate,dueDate,note,courseName,finished)
                     cursor.moveToNext()
                     assList.add(assignment)
                 }
@@ -51,6 +52,8 @@ class AssignmentsDB(context: Context?) {
         toInsert.put("assignedDate",assignment.assignedDate)
         toInsert.put("dueDate",assignment.dueDate)
         toInsert.put("courseName",assignment.courseName)
+        toInsert.put("finished",assignment.finished)
+
         val res = db.insert(dbHelper.assignTableName,null,toInsert)
         return res != (-1).toLong()
     }
@@ -61,6 +64,9 @@ class AssignmentsDB(context: Context?) {
             put("assignedDate",assignment.assignedDate)
             put("dueDate",assignment.dueDate)
             put("courseName",assignment.courseName)
+            put("courseName",assignment.finished)
+
+
         }
 
         val res= db.update(dbHelper.assignTableName,update,"id = ${assignment.id}",null)

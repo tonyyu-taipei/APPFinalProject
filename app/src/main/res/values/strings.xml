@@ -3,7 +3,7 @@
     <string name="action_settings">設定</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">作業</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="second_fragment_label">內容</string>
     <string name="first_fragment_add_label">新增</string>
     <string name="second_fragment_add_label">新增作業</string>
     <string name="next">Next</string>
@@ -25,6 +25,15 @@
     <string name="alert_msg_date_success">時間對調成功</string>
     <string name="alert_msg_date_cancel">取消</string>
     <string name="alert_msg_required">請填入必填欄位</string>
+    <string name="day">天</string>
+    <string name="hour">小時</string>
+    <string name="min">分鐘</string>
+    <string name="sec">秒</string>
     <string name="save">儲存</string>
+    <string name="done">已完成</string>
+    <string name="late">逾時</string>
+    <string name="queued">排程中</string>
+
+    <string name="finished">標示完成</string>
 
 </resources>
