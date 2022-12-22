@@ -37,6 +37,11 @@ class AddFirstFragment : Fragment() {
             findNavController().navigate(R.id.action_First2Fragment_to_Second2Fragment)
             AddActivity.onBackBehavior = "Fragment"
         }
+        binding.scanQrBtn.setOnClickListener {
+            AddActivity.backFragmentTransition = R.id.action_addQRFragment_to_AddFirstFragment
+            findNavController().navigate(R.id.action_AddFirstFragment_to_addQRFragment)
+            AddActivity.onBackBehavior = "Fragment"
+        }
 /* default btn behav.
         binding.buttonFirst.setOnClickListener {
             findNavController().navigate(R.id.action_First2Fragment_to_Second2Fragment)

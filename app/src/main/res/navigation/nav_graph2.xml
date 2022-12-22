@@ -17,6 +17,12 @@
             app:enterAnim="@anim/right_left"
             app:exitAnim="@anim/fade"
             app:popExitAnim="@anim/left_right" />
+        <action
+            android:id="@+id/action_AddFirstFragment_to_addQRFragment"
+            app:enterAnim="@anim/right_left"
+            app:exitAnim="@anim/fade"
+            app:popExitAnim="@anim/left_right"
+            app:destination="@id/addQRFragment" />
     </fragment>
     <fragment
         android:id="@+id/AddSecondFragment"
@@ -30,5 +36,17 @@
             app:destination="@id/AddFirstFragment"
             app:enterAnim="@anim/right_left"
             app:popEnterAnim="@anim/right_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/addQRFragment"
+        android:name="com.example.appfinalproject_10130492.AddQRFragment"
+        android:label="fragment_add_q_r"
+        tools:layout="@layout/fragment_add_q_r" >
+        <action
+            android:id="@+id/action_addQRFragment_to_AddFirstFragment"
+            app:destination="@id/AddFirstFragment" />
+        <action
+            android:id="@+id/action_addQRFragment_to_AddSecondFragment"
+            app:destination="@id/AddSecondFragment" />
     </fragment>
 </navigation>

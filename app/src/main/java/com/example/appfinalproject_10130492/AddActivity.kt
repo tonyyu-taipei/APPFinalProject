@@ -22,6 +22,7 @@ class AddActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
 
+
         binding = ActivityAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

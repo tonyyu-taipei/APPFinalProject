@@ -123,85 +123,114 @@
                 >
 
                 <LinearLayout
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="48sp"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/sec_day"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="0"
+                                android:textSize="30sp" />
+
+                            <TextView
+                                android:id="@+id/textView2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/day" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="48sp"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/sec_hour"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="0"
+                                android:textSize="30sp" />
+
+                            <TextView
+                                android:id="@+id/textView3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="bottom|center_horizontal"
+                                android:text="@string/hour" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="48sp"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/sec_min"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="0"
+                                android:textSize="30sp" />
+
+                            <TextView
+                                android:id="@+id/textView5"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/min" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="48sp"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/sec_second"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="0"
+                                android:textSize="30sp" />
+
+                            <TextView
+                                android:id="@+id/textView4"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/sec" />
+                        </LinearLayout>
+                    </LinearLayout>
 
                     <ProgressBar
                         android:id="@+id/progressBar"
 
-                        style="?android:attr/progressBarStyleLarge"
-                        android:layout_width="50sp"
+                        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1" />
 
-                    <LinearLayout
-                        android:layout_width="48sp"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="5dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/sec_day"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="1"
-                            android:textSize="30sp" />
-
-                        <TextView
-                            android:id="@+id/textView2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/day" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="48sp"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="5dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/sec_hour"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="1"
-                            android:textSize="30sp" />
-
-                        <TextView
-                            android:id="@+id/textView3"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="bottom|center_horizontal"
-                            android:text="@string/hour" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="48sp"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="5dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/sec_second"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="1"
-                            android:textSize="30sp" />
-
-                        <TextView
-                            android:id="@+id/textView4"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/sec" />
-                    </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

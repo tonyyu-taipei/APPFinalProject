@@ -4,15 +4,15 @@ import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableStringBuilder
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databases.CoursesDB
@@ -23,8 +23,9 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import org.joda.time.LocalDateTime
+import java.time.LocalTime
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -64,6 +65,8 @@ class NewAssignFragment : Fragment() {
         val course = CoursesDB(this.context)
         val assignDB = AssignmentsDB(this.context)
 
+
+
         //get courses data
         var coursesArr= readCourses(course)
 
@@ -83,8 +86,23 @@ class NewAssignFragment : Fragment() {
         dateToTextHelper(fromCalendarDate,"from")
         dateToTextHelper(toCalendarDate,"to")
 
+        Log.i("Time","Time Now: ${Date().time}")
+
+
 
         fromCalendarDate.timeZone = TimeZone.getDefault()
+        toCalendarDate.timeZone = TimeZone.getDefault()
+        if(isAssignmentInitialized()){
+
+            name.editText?.text = SpannableStringBuilder(assignmentInput.title)
+            note.editText?.text = SpannableStringBuilder(assignmentInput.note)
+            fromCalendarDate.time = Date((assignmentInput.assignedDate + 978307200)*1000)
+            toCalendarDate.time = Date((assignmentInput.dueDate + 978307200)*1000)
+            dateToTextHelper(fromCalendarDate,"from")
+            dateToTextHelper(toCalendarDate,"to")
+
+
+        }
         binding.courseSelMenu.setOnClickListener {
             if(coursesArr[0] == null) {
                 val alert = AlertDialog.Builder(requireContext())
@@ -97,11 +115,11 @@ class NewAssignFragment : Fragment() {
 
         }
         binding.datepick.setOnClickListener{
-            fromCalendarDate = datePickHelper(fromCalendarDate,"from")
+             datePickHelper(fromCalendarDate,"from")
             dateToTextHelper(fromCalendarDate,"from")
         }
         binding.datepick2.setOnClickListener{
-            toCalendarDate = datePickHelper(toCalendarDate,"to")
+            datePickHelper(toCalendarDate,"to")
             dateToTextHelper(toCalendarDate,"to")
 
         }
@@ -192,5 +210,9 @@ class NewAssignFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    companion object{
+        lateinit var assignmentInput: Assignment
+        fun isAssignmentInitialized()= :: assignmentInput.isInitialized
     }
 }

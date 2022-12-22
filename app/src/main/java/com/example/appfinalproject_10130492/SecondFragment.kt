@@ -1,6 +1,9 @@
 package com.example.appfinalproject_10130492
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -9,7 +12,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databinding.FragmentSecondBinding
+import org.joda.time.*
 import org.w3c.dom.Text
+import java.time.LocalDateTime
 import java.util.*
 
 /**
@@ -26,6 +31,10 @@ class SecondFragment : Fragment() {
     private lateinit var progress: ProgressBar
     private lateinit var note: TextView
     private lateinit var dueDate: TextView
+    private lateinit var day: TextView
+    private lateinit var hour: TextView
+    private lateinit var sec: TextView
+    private lateinit var min: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +54,10 @@ class SecondFragment : Fragment() {
         progress = view.findViewById(R.id.progressBar)
         note = view.findViewById(R.id.sec_notes)
         dueDate = view.findViewById(R.id.duedate_sec)
+        hour = view.findViewById(R.id.sec_hour)
+        day = view.findViewById(R.id.sec_day)
+        sec = view.findViewById(R.id.sec_second)
+        min = view.findViewById(R.id.sec_min)
 
         name.text = assignmentBody.title
         courseName.text = assignmentBody.courseName
@@ -52,6 +65,52 @@ class SecondFragment : Fragment() {
         val date = Date(assignmentBody.dueDate)
         val uDate = java.text.SimpleDateFormat("yyyy-MM-dd  aa hh:mm", Locale.TAIWAN)
         dueDate.text = uDate.format(date)
+
+        val assignedCal = Calendar.getInstance()
+        assignedCal.time = Date(assignmentBody.assignedDate)
+
+        val dueCal = Calendar.getInstance()
+        dueCal.time = Date(assignmentBody.dueDate)
+
+
+        progress.max = 100
+
+
+        Timer().scheduleAtFixedRate(object: TimerTask(){
+            override fun run() {
+
+            progress.progress = percentageCalc(assignedCal,dueCal)
+            Log.i("Menu","目前百分比：${percentageCalc(assignedCal,dueCal)}")
+
+            if(progress.progress < 100) {
+                val days: Int = Days.daysBetween(
+                    DateTime(),
+                    DateTime(assignmentBody.dueDate)
+                ).days
+                val hours: Int = Hours.hoursBetween(
+                    DateTime(), DateTime(
+                        assignmentBody.dueDate
+                    )
+                ).hours - days * 24
+                val mins: Int = Minutes.minutesBetween(DateTime(), DateTime(
+                    assignmentBody.dueDate)).minutes - days*24*60 -hours * 60
+                val secs: Int = Seconds.secondsBetween(
+                    DateTime(), DateTime(
+                        assignmentBody.dueDate
+                    )
+                ).seconds - days * 24*60*60 - hours * 60*60 - mins * 60
+                day.text = "$days"
+                hour.text = "$hours"
+                min.text = "$mins"
+                sec.text = "$secs"
+            }
+            if(progress.progress > 90){
+                progress.progressTintList = ColorStateList.valueOf(Color.rgb(181, 5, 5))
+            }
+            }
+
+        },0,1000)
+
         /*
 
         binding.buttonSecond.setOnClickListener {
@@ -69,6 +128,14 @@ class SecondFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    fun percentageCalc(calendarFrom: Calendar, calendarDue: Calendar): Int{
+        val from = calendarFrom.timeInMillis
+        val to = calendarDue.timeInMillis
+        val now = Date().time
+        val res:Int =  (((now-from).toFloat() / (to-from).toFloat())* 100).toInt()
+
+        return res
     }
 
     companion object{
