@@ -1,5 +1,7 @@
 package com.example.appfinalproject_10130492
 
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,15 +15,19 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import com.example.appfinalproject_10130492.data.Assignment
+import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databases.CoursesDB
 import com.example.appfinalproject_10130492.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 private lateinit var fab: FloatingActionButton
+lateinit var navController: NavController
 
 class MainActivity : AppCompatActivity() {
     private lateinit var botnav: BottomNavigationView
@@ -35,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbarAdd)
 
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         fab = findViewById(R.id.fab1)
 
@@ -71,6 +77,7 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
     override fun onBackPressed() {
         super.onBackPressed()
         fab.setImageResource(android.R.drawable.ic_input_add)
@@ -84,7 +91,29 @@ class MainActivity : AppCompatActivity() {
         Log.i("Menu","Menu Clicked")
 
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.delete_assign ->{
+                Log.i("Menu","delete button clicked")
+                val alertBuilder = AlertDialog.Builder(this)
+                alertBuilder.setMessage(R.string.confirm_del)
+                    .setPositiveButton(R.string.confirm) { _, _ ->
+                        val assignDB = AssignmentsDB(this)
+                        assigment.id?.let { assignDB.deleteOne(it) }
+                        this.onBackPressed()
+                    }
+                    .setNegativeButton(R.string.cancel){_,_ ->
+
+                    }
+                alertBuilder.create().show()
+
+                true
+            }
+            R.id.share_assign ->{
+                Log.i("Menu","Share button clicked")
+                QRShareFragment.findId = assigment.id!!
+                navController.navigate(R.id.action_SecondFragment_to_QRShareFragment)
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

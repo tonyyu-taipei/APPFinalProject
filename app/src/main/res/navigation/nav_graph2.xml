@@ -40,8 +40,8 @@
     <fragment
         android:id="@+id/addQRFragment"
         android:name="com.example.appfinalproject_10130492.AddQRFragment"
-        android:label="fragment_add_q_r"
-        tools:layout="@layout/fragment_add_q_r" >
+        android:label="@string/fragment_add_q_r_label"
+        tools:layout="@layout/fragment_add_q_r">
         <action
             android:id="@+id/action_addQRFragment_to_AddFirstFragment"
             app:destination="@id/AddFirstFragment" />

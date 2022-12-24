@@ -1,8 +1,6 @@
 package com.example.appfinalproject_10130492
 
-import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.util.Log
@@ -97,7 +95,14 @@ class NewAssignFragment : Fragment() {
             name.editText!!.text = SpannableStringBuilder(assignmentInput.title)
             note.editText!!.text = SpannableStringBuilder(assignmentInput.note)
             Log.i("QR","QR Title: ${assignmentInput.title}")
-            fromCalendarDate.time = Date(assignmentInput.assignedDate)
+
+            fromCalendarDate.time =
+                if(assignmentInput.id == -1){
+                    Date(assignmentInput.assignedDate)
+                }
+                else{
+                    Date(assignmentInput.assignedDate)
+                }
             toCalendarDate.time = Date(assignmentInput.dueDate)
             dateToTextHelper(fromCalendarDate,"from")
             dateToTextHelper(toCalendarDate,"to")
@@ -148,7 +153,7 @@ class NewAssignFragment : Fragment() {
                     Snackbar.make(view,R.string.alert_msg_date_success,Snackbar.LENGTH_SHORT).show()
 
                 }
-                alert.setNegativeButton(R.string.alert_msg_date_cancel){ dialog,_->dialog.dismiss()}
+                alert.setNegativeButton(R.string.cancel){ dialog, _->dialog.dismiss()}
 
                 alert.create().show()
                 return@setOnClickListener
