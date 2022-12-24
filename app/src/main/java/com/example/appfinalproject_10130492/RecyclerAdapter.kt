@@ -1,5 +1,9 @@
 package com.example.appfinalproject_10130492
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +22,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 
-class RecyclerAdapter(val itemData: ArrayList<Assignment>, val dbHelper: AssignmentsDB, val viewParent: View) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>(), ItemTouchHelperAdapter {
+class RecyclerAdapter(val itemData: ArrayList<Assignment>, val dbHelper: AssignmentsDB, val viewParent: View, val context: Context?) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>(), ItemTouchHelperAdapter {
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val name: TextView
         val desc: TextView
@@ -45,6 +49,7 @@ class RecyclerAdapter(val itemData: ArrayList<Assignment>, val dbHelper: Assignm
     }
 
 
+    @SuppressLint("ResourceType")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data: Assignment = itemData[position]
         holder.name.text = data.title
@@ -57,18 +62,22 @@ class RecyclerAdapter(val itemData: ArrayList<Assignment>, val dbHelper: Assignm
 
         if(dateIsLate(dateCalendar) && data.finished ==0){
             holder.statusIco.setImageResource(R.drawable.error_48px)
+            holder.statusIco.imageTintList = ColorStateList.valueOf(Color.parseColor(context?.getString(R.color.late)))
+
         }
         else if(data.finished == 1){
             holder.statusIco.setImageResource(R.drawable.check_circle_48px)
         }
         else{
             holder.statusIco.setImageResource(R.drawable.alarm_on_48px)
+            holder.statusIco.imageTintList = ColorStateList.valueOf(Color.parseColor(context?.getString(R.color.blue)))
         }
 
 
         holder.timeTxt.text = uDate.format(date)
         holder.desc.text = data.note
         holder.linear.setOnClickListener{
+            MainActivity.scrollFab(true)
             SecondFragment.assignmentBody = data
             viewParent.findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }

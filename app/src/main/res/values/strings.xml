@@ -18,6 +18,8 @@
     <string name="assign_name_hint">作業名稱</string>
     <string name="assign_note_hint">作業備註</string>
     <string name="date_pick">選取時間</string>
+    <string name="date_assigned">指派時間</string>
+    <string name="date_due">截止時間</string>
     <string name="alert">提醒</string>
     <string name="alert_msg">無任何課程，請先新增課程</string>
     <string name="alert_msg_date_error">起始時間與截止時間順序錯誤</string>
@@ -35,7 +37,9 @@
     <string name="queued">排程中</string>
 
     <string name="finished">標示完成</string>
+    <string name="unfinish">標示未完成</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="editAssign" >編輯作業</string>
 
 </resources>

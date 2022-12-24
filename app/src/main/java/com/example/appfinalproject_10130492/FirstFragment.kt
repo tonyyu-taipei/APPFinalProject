@@ -56,7 +56,7 @@ class FirstFragment : Fragment() {
 
 
         assList = assignDB.readAll()
-        adapter = RecyclerAdapter(assList,assignDB,view)
+        adapter = RecyclerAdapter(assList,assignDB,view,this.context)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
 

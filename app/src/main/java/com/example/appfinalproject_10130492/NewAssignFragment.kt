@@ -23,8 +23,6 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import org.joda.time.LocalDateTime
-import java.time.LocalTime
 import java.util.*
 
 /**
@@ -58,6 +56,7 @@ class NewAssignFragment : Fragment() {
         fromDateTextView = view.findViewById(R.id.fromDateText)
         toDateTextView = view.findViewById(R.id.toDateText)
         name = view.findViewById(R.id.add_assign_name)
+        name.markRequired()
         note = view.findViewById(R.id.add_assign_notes)
         courseName = view.findViewById(R.id.course_sel_menu)
         var fromCalendarDate = Calendar.getInstance()
@@ -89,15 +88,17 @@ class NewAssignFragment : Fragment() {
         Log.i("Time","Time Now: ${Date().time}")
 
 
-
         fromCalendarDate.timeZone = TimeZone.getDefault()
         toCalendarDate.timeZone = TimeZone.getDefault()
-        if(isAssignmentInitialized()){
 
-            name.editText?.text = SpannableStringBuilder(assignmentInput.title)
-            note.editText?.text = SpannableStringBuilder(assignmentInput.note)
-            fromCalendarDate.time = Date((assignmentInput.assignedDate + 978307200)*1000)
-            toCalendarDate.time = Date((assignmentInput.dueDate + 978307200)*1000)
+        //See if there's assignment attached to companion obj.
+        if(isAssignmentInitialized()){
+            Log.d("QR","inited")
+            name.editText!!.text = SpannableStringBuilder(assignmentInput.title)
+            note.editText!!.text = SpannableStringBuilder(assignmentInput.note)
+            Log.i("QR","QR Title: ${assignmentInput.title}")
+            fromCalendarDate.time = Date(assignmentInput.assignedDate)
+            toCalendarDate.time = Date(assignmentInput.dueDate)
             dateToTextHelper(fromCalendarDate,"from")
             dateToTextHelper(toCalendarDate,"to")
 
@@ -152,12 +153,29 @@ class NewAssignFragment : Fragment() {
                 alert.create().show()
                 return@setOnClickListener
             }
-            val assignment = Assignment(null, nameString,fromCalendarDate.timeInMillis,toCalendarDate.timeInMillis,courseName.text.toString(),
-                note.editText!!.text.toString(),0)
-            assignDB.insert(assignment)
-            val intent = Intent()
-            activity?.setResult(RESULT_OK)
-            // APP p74
+
+            if(isAssignmentInitialized() && assignmentInput.id != -1){
+                val assignment = Assignment(
+                    assignmentInput.id,
+                    nameString,
+                    fromCalendarDate.timeInMillis,
+                    toCalendarDate.timeInMillis,
+                    courseName.text.toString(),
+                    note.editText!!.text.toString(),
+                    0 )
+                assignDB.update(assignment)
+            }else {
+                val assignment = Assignment(
+                    null,
+                    nameString,
+                    fromCalendarDate.timeInMillis,
+                    toCalendarDate.timeInMillis,
+                    courseName.text.toString(),
+                    note.editText!!.text.toString(),
+                    0
+                )
+                assignDB.insert(assignment)
+            }
             activity?.finish()
 
 
@@ -166,6 +184,7 @@ class NewAssignFragment : Fragment() {
     }
 
     fun datePickHelper(calendarDate: Calendar,type: String): Calendar{
+        val origCalendar:Calendar = calendarDate.clone() as Calendar
         val datepicker = MaterialDatePicker.Builder.datePicker().setTitleText(R.string.date_pick).setSelection(Date(calendarDate.timeInMillis).time).build()
         datepicker.show(parentFragmentManager,"tag")
         datepicker.addOnPositiveButtonClickListener {
@@ -176,7 +195,8 @@ class NewAssignFragment : Fragment() {
 
             //Set Calendar Time
             calendarDate.time = Date(dateSel)
-            val timepicker = MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_12H).setHour(calendarDate.get(Calendar.HOUR_OF_DAY)).setMinute(calendarDate.get(Calendar.MINUTE)).setTitleText(R.string.date_pick).build()
+            Log.wtf("time" ,""+calendarDate.get(Calendar.HOUR_OF_DAY))
+            val timepicker = MaterialTimePicker.Builder().setTimeFormat(TimeFormat.CLOCK_12H).setHour(origCalendar.get(Calendar.HOUR_OF_DAY)).setMinute(origCalendar.get(Calendar.MINUTE)).setTitleText(R.string.date_pick).build()
             timepicker.show(parentFragmentManager,"tag")
             timepicker.addOnPositiveButtonClickListener{
                 calendarDate.set(Calendar.HOUR_OF_DAY,timepicker.hour)
@@ -211,8 +231,20 @@ class NewAssignFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+    fun TextInputLayout.markRequired(){
+        hint = "$hint *"
+    }
     companion object{
         lateinit var assignmentInput: Assignment
-        fun isAssignmentInitialized()= :: assignmentInput.isInitialized
+        fun setEditModeToggle(toggle: Boolean){
+            EditMode.canItEdit = toggle
+        }
+        class EditMode{
+            companion object{
+                var canItEdit = false
+            }
+        }
+
+        fun isAssignmentInitialized()= :: assignmentInput.isInitialized && EditMode.canItEdit
     }
 }

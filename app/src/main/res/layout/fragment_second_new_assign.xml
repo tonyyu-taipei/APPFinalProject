@@ -55,7 +55,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:layout_weight="1"
-            android:text="@string/date_pick"
+            android:text="@string/date_assigned"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/add_assign_notes" />
 
@@ -76,7 +76,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:layout_weight="1"
-            android:text="@string/date_pick"
+            android:text="@string/date_due"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/datepick" />
 

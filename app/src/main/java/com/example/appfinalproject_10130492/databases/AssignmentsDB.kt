@@ -15,11 +15,45 @@ class AssignmentsDB(context: Context?) {
         return db.query(false, dbHelper.assignTableName, null, null, null, null, null, null, null)
     }
 
+
+    fun read(id: Int): Assignment?{
+        var assignment: Assignment? = null
+        try {
+            var cursor = db.query(
+                false,
+                dbHelper.assignTableName,
+                null,
+                "_id = ?",
+                Array(1) { id.toString() },
+                null,
+                null,
+                null,
+                null
+            )
+            Log.i("db",cursor.toString())
+            if (cursor!=null && cursor.moveToFirst())
+                    // _id note title assignedDate dueDate courseName
+                    Log.i("Menu",cursor.getString(2))
+                    val _id = cursor.getInt(0)
+                    val note = cursor.getString(5)
+                    val finished = cursor.getInt(6)
+                    val title = cursor.getString(2)
+                    val assignedDate = cursor.getLong(3)
+                    val dueDate = cursor.getLong(4)
+                    val courseName = cursor.getString(1)
+                    assignment = Assignment(_id,title,assignedDate,dueDate,note,courseName,finished)
+
+        }catch(e: Exception){
+            Log.i("db",e.toString())
+            e.printStackTrace()
+        }
+        return assignment
+    }
     fun readAll(): ArrayList<Assignment>{
         val assList = ArrayList<Assignment>()
         try {
             val cursor =
-                db.query(false, dbHelper.assignTableName, null, null, null, null, null, null, null)
+                db.query(false, dbHelper.assignTableName, null, null, null, null, null, "dueDate DESC", null)
             if (cursor!=null && cursor.moveToFirst())
                 while(!cursor.isAfterLast){
                     // _id note title assignedDate dueDate courseName
@@ -64,12 +98,13 @@ class AssignmentsDB(context: Context?) {
             put("assignedDate",assignment.assignedDate)
             put("dueDate",assignment.dueDate)
             put("courseName",assignment.courseName)
-            put("courseName",assignment.finished)
+            put("finished",assignment.finished)
 
 
         }
 
-        val res= db.update(dbHelper.assignTableName,update,"id = ${assignment.id}",null)
+        val res= db.update(dbHelper.assignTableName,update,"_id = ${assignment.id}",null)
         return res > 0
     }
+
 }

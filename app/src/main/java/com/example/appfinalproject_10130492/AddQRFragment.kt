@@ -1,20 +1,14 @@
 package com.example.appfinalproject_10130492
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
-import android.hardware.Camera.Parameters
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.example.appfinalproject_10130492.data.Assignment
-import com.example.appfinalproject_10130492.databases.AssignmentsDB
-import com.example.appfinalproject_10130492.databases.CoursesDB
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
@@ -32,6 +26,7 @@ class AddQRFragment : Fragment() {
 
     private lateinit var surfaceView: SurfaceView
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         surfaceView = view.findViewById(R.id.surfaceView)
@@ -42,8 +37,7 @@ class AddQRFragment : Fragment() {
             val array = arrayOf(Manifest.permission.CAMERA)
             this.activity?.let { ActivityCompat.requestPermissions(it,array,1) };
         }
-        val navController = parentFragment?.findNavController()
-
+        val navController = findNavController()
         surfaceView.holder.addCallback(object: SurfaceHolder.Callback{
             override fun surfaceCreated(holder: SurfaceHolder) {
 
@@ -78,22 +72,24 @@ class AddQRFragment : Fragment() {
         barcodeDetector.setProcessor(object : Detector.Processor<Barcode> {
             override fun release() {
             }
-
             override fun receiveDetections(p0: Detector.Detections<Barcode>) {
                 val qrCodes = p0.detectedItems
                 if(qrCodes.size() !=0){
                     Log.i("QR",qrCodes.valueAt(0).displayValue)
-
+                    NewAssignFragment.setEditModeToggle(true)
                     NewAssignFragment.assignmentInput = jsonParser(qrCodes.valueAt(0).displayValue)
-                    navController?.navigate(R.id.action_addQRFragment_to_AddSecondFragment)
                     AddActivity.backFragmentTransition = R.id.action_addQRFragment_to_AddFirstFragment
                     AddActivity.onBackBehavior = "Fragment"
-
+                    navController?.navigate(R.id.action_addQRFragment_to_AddSecondFragment)
+                    cameraSource.stop()
 
                 }
             }
 
         })
+
+
+
 
     }
 
@@ -107,7 +103,7 @@ class AddQRFragment : Fragment() {
 
     fun jsonParser(str: String): Assignment{
         val jsonObj = JSONObject(str)
-        return Assignment(-1,jsonObj.getString("title"),jsonObj.getLong("assignedDate"),jsonObj.getLong("dueDate"),jsonObj.getString("courseName"),jsonObj.getString("note"),0)
+        return Assignment(-1,jsonObj.getString("title"),jsonObj.getLong("assignedDate")+978307200*1000,jsonObj.getLong("dueDate")+978307200*1000,jsonObj.getString("courseName"),jsonObj.getString("note"),0)
     }
 
 }

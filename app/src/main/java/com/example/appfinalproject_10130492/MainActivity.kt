@@ -16,6 +16,7 @@ import androidx.activity.viewModels
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.CoursesDB
 import com.example.appfinalproject_10130492.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -23,7 +24,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 private lateinit var fab: FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var scroll: NestedScrollView
     private lateinit var botnav: BottomNavigationView
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
@@ -42,6 +42,9 @@ class MainActivity : AppCompatActivity() {
         // Bottom Navigation Listener
         botnav = findViewById(R.id.botnav)
         botnav?.setOnItemSelectedListener{
+
+            fab.setImageResource(android.R.drawable.ic_input_add)
+            editModeToggle(false)
             Log.i("Menu", ""+it.itemId+" Title"+it.title)
             when(it.itemId){
                 R.id.assignments->{
@@ -56,7 +59,11 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         fab.setOnClickListener{l->
             var intent = Intent(this, AddActivity::class.java)
+
             intent.putExtra("selected",botnav.selectedItemId)
+            if(EditMode.canItEdit){
+                intent.putExtra("assignment", assigment)
+            }
             startActivity(intent)
 
             overridePendingTransition(R.anim.bottom_up,R.anim.no_anim)
@@ -64,13 +71,18 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-
+    override fun onBackPressed() {
+        super.onBackPressed()
+        fab.setImageResource(android.R.drawable.ic_input_add)
+        editModeToggle(false)
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         Log.i("Menu","Menu Clicked")
+
         return when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
@@ -80,12 +92,23 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-
+        fab.setImageResource(android.R.drawable.ic_input_add)
+        editModeToggle(false)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
     // This is for hiding the fab button when user's navigating to the bottom.
     companion object{
+
+        lateinit var assigment:Assignment
+        fun editModeToggle(toggle: Boolean){
+            EditMode.canItEdit = toggle
+        }
+        class EditMode {
+            companion object{
+                var canItEdit = false
+            }
+        }
         fun scrollFab(show: Boolean){
             if(show){
                 fab.show()

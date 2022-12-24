@@ -1,5 +1,6 @@
 package com.example.appfinalproject_10130492
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,6 +11,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databinding.ActivityAddBinding
 
 class AddActivity : AppCompatActivity() {
@@ -22,6 +24,10 @@ class AddActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
 
+        //get bundled data
+        val inputed = intent.extras
+        val inputedAssignment: Assignment? = inputed?.get("assignment") as Assignment?
+
 
         binding = ActivityAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -31,27 +37,42 @@ class AddActivity : AppCompatActivity() {
 
 
         val navController = findNavController(R.id.nav_host_fragment_content_class)
+
         appBarConfiguration = AppBarConfiguration(navController.graph)
 
         setupActionBarWithNavController(navController, appBarConfiguration)
-        /*binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAnchorView(R.id.fab)
-                .setAction("Action", null).show()
-        }*/
-     //   supportActionBar?.setDisplayHomeAsUpEnabled(true);
-     //   supportActionBar?.setDisplayShowHomeEnabled(true);
+        if(inputedAssignment != null){
+            NewAssignFragment.assignmentInput = inputedAssignment
+            NewAssignFragment.setEditModeToggle(true)
+            navController.navigate(R.id.AddSecondFragment)
+            onBackBehavior = "No"
+            supportActionBar?.title = getString(R.string.editAssign)
+
+
+        }
+
 
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onBackPressed() {
+        if(onBackBehavior == "No"){
+            finish()
+            return
+        }
         super.onBackPressed()
+
+        NewAssignFragment.Companion.EditMode.canItEdit = false
+
         if(onBackBehavior == "Activity")
         overridePendingTransition(R.anim.no_anim,R.anim.up_bottom)
     }
-
     override fun onSupportNavigateUp(): Boolean {
         return when(onBackBehavior){
+            "No"->{
+                finish()
+                false
+            }
             "Activity" -> {
                 finish()
                 true
@@ -70,6 +91,7 @@ class AddActivity : AppCompatActivity() {
         when(item.itemId){
             R.id.close->{
                 finish()
+                NewAssignFragment.Companion.EditMode.canItEdit = false
                 overridePendingTransition(R.anim.no_anim,R.anim.up_bottom)
             }
         }
