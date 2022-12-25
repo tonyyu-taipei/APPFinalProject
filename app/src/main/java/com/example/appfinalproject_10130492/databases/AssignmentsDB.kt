@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.example.appfinalproject_10130492.data.Assignment
+import com.example.appfinalproject_10130492.data.AssignmentsWithStatus
 
 class AssignmentsDB(context: Context?) {
     private val dbHelper = SQLiteHelper(context);
@@ -31,18 +32,7 @@ class AssignmentsDB(context: Context?) {
                 null
             )
             Log.i("db",cursor.toString())
-            if (cursor!=null && cursor.moveToFirst())
-                    // _id note title assignedDate dueDate courseName
-                    Log.i("Menu",cursor.getString(2))
-                    val _id = cursor.getInt(0)
-                    val note = cursor.getString(5)
-                    val finished = cursor.getInt(6)
-                    val title = cursor.getString(2)
-                    val assignedDate = cursor.getLong(3)
-                    val dueDate = cursor.getLong(4)
-                    val courseName = cursor.getString(1)
-                    assignment = Assignment(_id,title,assignedDate,dueDate,note,courseName,finished)
-
+            assignment = cursorParser(cursor)[0]
         }catch(e: Exception){
             Log.i("db",e.toString())
             e.printStackTrace()
@@ -50,30 +40,51 @@ class AssignmentsDB(context: Context?) {
         return assignment
     }
     fun readAll(): ArrayList<Assignment>{
-        val assList = ArrayList<Assignment>()
+        var assList = ArrayList<Assignment>()
         try {
             val cursor =
                 db.query(false, dbHelper.assignTableName, null, null, null, null, null, "dueDate DESC", null)
-            if (cursor!=null && cursor.moveToFirst())
-                while(!cursor.isAfterLast){
-                    // _id note title assignedDate dueDate courseName
-                    Log.i("Menu",cursor.getString(2))
-                    val _id = cursor.getInt(0)
-                    val note = cursor.getString(5)
-                    val finished = cursor.getInt(6)
-                    val title = cursor.getString(2)
-                    val assignedDate = cursor.getLong(3)
-                    val dueDate = cursor.getLong(4)
-                    val courseName = cursor.getString(1)
-                    val assignment = Assignment(_id,title,assignedDate,dueDate,note,courseName,finished)
-                    cursor.moveToNext()
-                    assList.add(assignment)
-                }
+            assList = cursorParser(cursor)
         }catch(e:Exception){
 
         }
 
         return assList
+    }
+    fun readAllByStatus(): AssignmentsWithStatus{
+        var assListFinished = ArrayList<Assignment>()
+        var assListQueued = ArrayList<Assignment>()
+        var assListLate = ArrayList<Assignment>()
+        try {
+            //finished
+            var cursor =
+                db.rawQuery("SELECT _id,courseName,title,assignedDate,dueDate,note,finished " +
+                        "FROM ${dbHelper.assignTableName} " +
+                        "WHERE finished=1 " +
+                        "ORDER BY dueDate DESC"
+                    ,null)
+            assListFinished = cursorParser(cursor)
+
+            cursor =
+                db.rawQuery("SELECT _id,courseName,title,assignedDate,dueDate,note,finished " +
+                        "FROM ${dbHelper.assignTableName} " +
+                        "WHERE finished=0 AND dueDate <= DATETIME('now')  " +
+                        "ORDER BY dueDate DESC",null)
+            assListLate = cursorParser(cursor)
+
+            cursor =
+                db.rawQuery("SELECT _id,courseName,title,assignedDate,dueDate,note,finished " +
+                        "FROM ${dbHelper.assignTableName} " +
+                        "WHERE finished=0 AND dueDate > DATETIME('now')  " +
+                        "ORDER BY dueDate DESC",null)
+            assListQueued = cursorParser(cursor)
+
+
+        }catch(e:Exception){
+
+        }
+
+        return AssignmentsWithStatus(assListFinished,assListLate,assListQueued)
     }
     fun deleteOne(id: Int): Boolean{
         val res = db.delete(dbHelper.assignTableName,"_id = $id",null)
@@ -105,6 +116,26 @@ class AssignmentsDB(context: Context?) {
 
         val res= db.update(dbHelper.assignTableName,update,"_id = ${assignment.id}",null)
         return res > 0
+    }
+
+    fun cursorParser(cursor: Cursor): ArrayList<Assignment>{
+        val assList = ArrayList<Assignment>()
+        if (cursor!=null && cursor.moveToFirst())
+            while(!cursor.isAfterLast){
+                // _id note title assignedDate dueDate courseName
+                Log.i("Menu",cursor.getString(2))
+                val _id = cursor.getInt(0)
+                val note = cursor.getString(5)
+                val finished = cursor.getInt(6)
+                val title = cursor.getString(2)
+                val assignedDate = cursor.getLong(3)
+                val dueDate = cursor.getLong(4)
+                val courseName = cursor.getString(1)
+                val assignment = Assignment(_id,title,assignedDate,dueDate,note,courseName,finished)
+                cursor.moveToNext()
+                assList.add(assignment)
+            }
+        return assList
     }
 
 }

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appfinalproject_10130492.data.Assignment
+import com.example.appfinalproject_10130492.data.AssignmentsWithStatus
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databases.CoursesDB
 import com.example.appfinalproject_10130492.databinding.FragmentFirstBinding
@@ -18,14 +19,14 @@ import com.example.appfinalproject_10130492.databinding.FragmentFirstBinding
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class FirstFragment : Fragment() {
-    var assList = ArrayList<Assignment>()
+class CoursesFirstFragment : Fragment() {
+    private lateinit var assStatus:AssignmentsWithStatus
     private lateinit var scroll: NestedScrollView
     private var _binding: FragmentFirstBinding? = null
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private lateinit var adapter: AssignmentsRecyclerAdapter
+    private lateinit var adapter: CoursesRecyclerAdapter
     private lateinit var courseDB: CoursesDB
     private lateinit var assignDB:AssignmentsDB
 
@@ -41,20 +42,18 @@ class FirstFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        assList.clear()
-        assList.addAll(assignDB.readAll())
         adapter.notifyDataSetChanged()
 
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView = view.findViewById(R.id.recyclerview)
+        recyclerView = view.findViewById(R.id.cources_recyclerview)
         courseDB = CoursesDB(this.context)
         assignDB = AssignmentsDB(this.context)
 
 
-        assList = assignDB.readAll()
-        adapter = AssignmentsRecyclerAdapter(assList,assignDB,view,this.context)
+        assStatus = assignDB.readAllByStatus()
+        adapter = CoursesRecyclerAdapter(assStatus,assignDB,view,this.context)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
 

@@ -11,18 +11,22 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.fragment.app.FragmentActivity
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appfinalproject_10130492.data.Assignment
+import com.example.appfinalproject_10130492.data.AssignmentsWithStatus
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
+import kotlin.collections.ArrayList
 
 
-class RecyclerAdapter(val itemData: ArrayList<Assignment>, val dbHelper: AssignmentsDB, val viewParent: View, val context: Context?) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>(), ItemTouchHelperAdapter {
+class CoursesRecyclerAdapter(val assignWithStats:AssignmentsWithStatus, val dbHelper: AssignmentsDB, val viewParent: View, val context: Context?) : RecyclerView.Adapter<CoursesRecyclerAdapter.ViewHolder>(), ItemTouchHelperAdapter {
+    val itemData: ArrayList<Assignment> = ArrayList()
+    init {
+        itemData.addAll(assignWithStats.late)
+        itemData.addAll(assignWithStats.queued)
+        itemData.addAll(assignWithStats.finished)
+    }
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val name: TextView
         val desc: TextView
@@ -39,7 +43,9 @@ class RecyclerAdapter(val itemData: ArrayList<Assignment>, val dbHelper: Assignm
             timeTxt = view.findViewById(R.id.timeText)
             statusIco = view.findViewById(R.id.statusIcon)
             linear = view.findViewById(R.id.linear)
+
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

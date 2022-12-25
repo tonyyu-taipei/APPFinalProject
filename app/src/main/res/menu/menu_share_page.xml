@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<item
+        android:id="@+id/share_assign_options"
+        android:icon="@drawable/share_48px"
+        android:iconTint="#606060"
+        android:orderInCategory="2"
+        android:title="分享"
+        android:tooltipText="分享"
+        app:showAsAction="always" />
+</menu>
