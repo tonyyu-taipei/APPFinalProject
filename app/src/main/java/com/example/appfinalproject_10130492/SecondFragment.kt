@@ -200,6 +200,8 @@ class SecondFragment : Fragment() {
 
 
             assignmentBody.finished = if(assignmentBody.finished == 1 ) 0 else 1
+            finishedButt.text = if(assignmentBody.finished == 1)getString(R.string.unfinish) else getString(R.string.finished)
+
             assignmentDB.update(assignmentBody)
             statusHelper()
 

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.navigation.NavGraph
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appfinalproject_10130492.data.Assignment
@@ -39,7 +40,7 @@ class AssignmentsRecyclerAdapter(val itemData: ArrayList<Assignment>, val dbHelp
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_list,parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.assignments_recyclerview_list,parent,false)
 
         return ViewHolder(view)
     }
@@ -75,7 +76,15 @@ class AssignmentsRecyclerAdapter(val itemData: ArrayList<Assignment>, val dbHelp
         holder.linear.setOnClickListener{
             MainActivity.scrollFab(true)
             SecondFragment.assignmentBody = data
-            viewParent.findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            val graph = viewParent.findNavController().graph
+            when(graph.id){
+                R.id.nav_graph->
+                    viewParent.findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+                R.id.nav_graph3->
+                    viewParent.findNavController().navigate(R.id.action_firstFragment_to_SecondFragment_courses)
+            }
+
+
         }
         Log.i("Menu","Adapter Data: $itemData")
 

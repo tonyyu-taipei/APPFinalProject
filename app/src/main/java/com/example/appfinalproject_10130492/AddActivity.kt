@@ -28,7 +28,6 @@ class AddActivity : AppCompatActivity() {
         val inputed = intent.extras
         val inputedAssignment: Assignment? = inputed?.get("assignment") as Assignment?
 
-
         binding = ActivityAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -50,6 +49,7 @@ class AddActivity : AppCompatActivity() {
 
 
         }
+
 
 
     }
