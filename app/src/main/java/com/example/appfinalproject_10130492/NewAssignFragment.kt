@@ -2,6 +2,7 @@ package com.example.appfinalproject_10130492
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.appfinalproject_10130492.data.Assignment
@@ -69,7 +71,7 @@ class NewAssignFragment : Fragment() {
 
 
 
-        if(coursesArr[0]!=null) {
+        if(coursesArr.isNotEmpty() && coursesArr[0]!=null) {
             val adapter = ArrayAdapter(requireContext(), R.layout.dropdown_list_item, coursesArr)
             (binding.courseSelTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(
                 adapter
@@ -91,9 +93,12 @@ class NewAssignFragment : Fragment() {
 
         //See if there's assignment attached to companion obj.
         if(isAssignmentInitialized()){
+            super.setMenuVisibility(false)
             Log.d("QR","inited")
+
             name.editText!!.text = SpannableStringBuilder(assignmentInput.title)
             note.editText!!.text = SpannableStringBuilder(assignmentInput.note)
+            courseName.text = if(assignmentInput.courseName == null) courseName.text else Editable.Factory.getInstance().newEditable(assignmentInput.courseName)
             Log.i("QR","QR Title: ${assignmentInput.title}")
 
             fromCalendarDate.time =
@@ -153,12 +158,40 @@ class NewAssignFragment : Fragment() {
                     Snackbar.make(view,R.string.alert_msg_date_success,Snackbar.LENGTH_SHORT).show()
 
                 }
-                alert.setNegativeButton(R.string.cancel){ dialog, _->dialog.dismiss()}
+                alert.setNegativeButton(R.string.cancel_course){ dialog, _->dialog.dismiss()}
 
                 alert.create().show()
                 return@setOnClickListener
             }
 
+
+            if(!(coursesArr.contains(courseName.text.toString()) )&& courseName.text.toString().isNotEmpty()
+            ){
+                Log.i("Course","${coursesArr.contains(courseName.text.toString())}嗎？${courseName.text.toString()} ")
+                val dialog = AlertDialog.Builder(requireActivity())
+                dialog.setTitle(R.string.alert)
+                    .setMessage(R.string.new_courses_from_qr_hint)
+
+                dialog.setPositiveButton(R.string.ok) { _, _ ->
+                    val newCoursesDialog = NewCoursesDialog();
+                    newCoursesDialog.courseName = courseName.text.toString()
+                    newCoursesDialog.show(parentFragmentManager, null)
+                    newCoursesDialog.setDialogDestroyListener(object: NewCoursesDialog.DialogInterface{
+                        override fun onDestroyListener() {
+                            coursesArr = readCourses(course)
+                        }
+
+                    })
+                }
+                dialog.setNegativeButton(R.string.empty){_,_->
+                    courseName.text = Editable.Factory.getInstance().newEditable("");
+                }
+                dialog.create()
+                dialog.show()
+                coursesArr = readCourses(course)
+
+                return@setOnClickListener
+            }
             if(isAssignmentInitialized() && assignmentInput.id != -1){
                 val assignment = Assignment(
                     assignmentInput.id,
@@ -179,6 +212,7 @@ class NewAssignFragment : Fragment() {
                     note.editText!!.text.toString(),
                     0
                 )
+
                 assignDB.insert(assignment)
             }
             activity?.finish()
@@ -188,7 +222,7 @@ class NewAssignFragment : Fragment() {
         }
     }
 
-    fun datePickHelper(calendarDate: Calendar,type: String): Calendar{
+    private fun datePickHelper(calendarDate: Calendar, type: String): Calendar{
         val origCalendar:Calendar = calendarDate.clone() as Calendar
         val datepicker = MaterialDatePicker.Builder.datePicker().setTitleText(R.string.date_pick).setSelection(Date(calendarDate.timeInMillis).time).build()
         datepicker.show(parentFragmentManager,"tag")
@@ -220,17 +254,16 @@ class NewAssignFragment : Fragment() {
         }
     }
     private fun readCourses(db:CoursesDB):Array<String?>{
-        val cursor = db.readAllCursor()
-        val courseArr = arrayOfNulls<String>(cursor.columnCount)
-        if (cursor!=null && cursor.moveToFirst())
-            for(i in 0 until cursor.columnCount){
-                // _id note title assignedDate dueDate courseName
-                val courseName = cursor.getString(0)
-                courseArr[i] = courseName
-            }
-
+        val coursesList = db.readAll()
+        var courseArr = arrayOfNulls<String>(coursesList.size)
+        for(i in 0 until coursesList.size) {
+            courseArr[i] = coursesList[i].courseName
+            courseArr[i]?.let { Log.i("Courses", it) }
+        }
         return courseArr
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -244,6 +277,7 @@ class NewAssignFragment : Fragment() {
         fun setEditModeToggle(toggle: Boolean){
             EditMode.canItEdit = toggle
         }
+
         class EditMode{
             companion object{
                 var canItEdit = false

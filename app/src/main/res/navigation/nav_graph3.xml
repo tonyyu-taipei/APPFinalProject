@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph3"
+    app:startDestination="@id/coursesFirstFragment">
+
+    <fragment
+        android:id="@+id/coursesFirstFragment"
+        android:name="com.example.appfinalproject_10130492.CoursesFirstFragment"
+        android:label="@string/courses"
+        tools:layout="@layout/fragment_courses_first" >
+        <action
+            android:id="@+id/action_coursesFirstFragment_to_firstFragment"
+            app:enterAnim="@anim/right_left"
+            app:exitAnim="@anim/fade"
+            app:popExitAnim="@anim/left_right"
+            app:destination="@id/firstFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/firstFragment"
+        android:name="com.example.appfinalproject_10130492.FirstFragment"
+        android:label="@string/first_fragment_label"
+        tools:layout="@layout/fragment_first" >
+    <action
+        android:id="@+id/action_firstFragment_to_SecondFragment_courses"
+        app:enterAnim="@anim/right_left"
+        app:exitAnim="@anim/fade"
+        app:popExitAnim="@anim/left_right"
+        app:destination="@id/secondFragment2" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/QRShareFragment2"
+        android:name="com.example.appfinalproject_10130492.QRShareFragment"
+        android:label="@string/fragment_q_r_share_label"
+        tools:layout="@layout/fragment_q_r_share" />
+    <fragment
+        android:id="@+id/secondFragment2"
+        android:name="com.example.appfinalproject_10130492.SecondFragment"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_second">
+        <action
+            android:id="@+id/action_SecondFragment_to_QRShareFragment2"
+            app:destination="@id/QRShareFragment2"
+            app:enterAnim="@anim/right_left"
+            app:exitAnim="@anim/fade"
+            app:popExitAnim="@anim/left_right" />
+    </fragment>
+</navigation>

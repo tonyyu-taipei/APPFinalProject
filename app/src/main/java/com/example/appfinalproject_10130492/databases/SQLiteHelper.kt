@@ -8,7 +8,7 @@ import android.util.Log
 class SQLiteHelper(context: Context?): SQLiteOpenHelper(context,DATABASE_NAME, null, DATABASE_VERSION ) {
     val courseTableName: String = "Course"
     val assignTableName = "Assignments"
-    private val SQL_CREATE_ENTRIES_COURSES = "CREATE TABLE $courseTableName (courseName TEXT NOT NULL PRIMARY KEY, teacher TEXT NOT NULL)"
+    private val SQL_CREATE_ENTRIES_COURSES = "CREATE TABLE $courseTableName (courseName TEXT NOT NULL PRIMARY KEY, teacher TEXT)"
     private val SQL_CREATE_ENTRIES_ASSIGN = " CREATE TABLE $assignTableName ("+
             "_id INTEGER PRIMARY KEY,"+
             " note TEXT, title TEXT NOT NULL,"+
@@ -36,7 +36,7 @@ class SQLiteHelper(context: Context?): SQLiteOpenHelper(context,DATABASE_NAME, n
     }
     companion object {
         // If you change the database schema, you must increment the database version.
-        const val DATABASE_VERSION = 7
+        const val DATABASE_VERSION = 8
         const val DATABASE_NAME = "School.db"
 
     }

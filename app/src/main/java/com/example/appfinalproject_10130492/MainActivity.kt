@@ -1,11 +1,8 @@
 package com.example.appfinalproject_10130492
 
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.navigation.findNavController
@@ -13,16 +10,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.MenuItem
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.core.widget.NestedScrollView
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
-import com.example.appfinalproject_10130492.databases.CoursesDB
 import com.example.appfinalproject_10130492.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -33,7 +24,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var botnav: BottomNavigationView
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    var dialog: NewCoursesDialog = NewCoursesDialog()
     override fun onCreate(savedInstanceState: Bundle?) {
+        CoursesFirstFragment.newCoursesDialog = dialog
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -54,19 +47,27 @@ class MainActivity : AppCompatActivity() {
             Log.i("Menu", ""+it.itemId+" Title"+it.title)
             when(it.itemId){
                 R.id.assignments->{
+                    FirstFragment.modeOn = false
+                    navController.setGraph(R.navigation.nav_graph)
+                    appBarConfiguration = AppBarConfiguration(navController.graph)
 
                 }
                 R.id.classes -> {
-
+                    navController.setGraph(R.navigation.nav_graph3)
+                    appBarConfiguration = AppBarConfiguration(navController.graph)
                 }
             }
+            setupActionBarWithNavController(navController, appBarConfiguration)
             return@setOnItemSelectedListener true
         }
         setupActionBarWithNavController(navController, appBarConfiguration)
-        fab.setOnClickListener{l->
+        fab.setOnClickListener{
             var intent = Intent(this, AddActivity::class.java)
+            if(botnav.selectedItemId == R.id.classes){
+                dialog.show(supportFragmentManager,null)
 
-            intent.putExtra("selected",botnav.selectedItemId)
+                return@setOnClickListener
+            }
             if(EditMode.canItEdit){
                 intent.putExtra("assignment", assigment)
             }
@@ -100,7 +101,7 @@ class MainActivity : AppCompatActivity() {
                         assigment.id?.let { assignDB.deleteOne(it) }
                         this.onBackPressed()
                     }
-                    .setNegativeButton(R.string.cancel){_,_ ->
+                    .setNegativeButton(R.string.cancel_course){ _, _ ->
 
                     }
                 alertBuilder.create().show()
@@ -110,7 +111,12 @@ class MainActivity : AppCompatActivity() {
             R.id.share_assign ->{
                 Log.i("Menu","Share button clicked")
                 QRShareFragment.findId = assigment.id!!
-                navController.navigate(R.id.action_SecondFragment_to_QRShareFragment)
+                when(navController.graph.id) {
+                    R.id.nav_graph->
+                        navController.navigate(R.id.action_SecondFragment_to_QRShareFragment)
+                    R.id.nav_graph3->
+                        navController.navigate(R.id.action_SecondFragment_to_QRShareFragment2)
+                }
                 true
             }
 

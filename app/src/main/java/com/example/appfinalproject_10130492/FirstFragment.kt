@@ -42,7 +42,12 @@ class FirstFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         assList.clear()
-        assList.addAll(assignDB.readAll())
+        assList.addAll(if(isSpecific()){
+            assignDB.readAll(courseSpecific)
+        }else {
+            assignDB.readAll()
+        })
+
         adapter.notifyDataSetChanged()
 
     }
@@ -52,8 +57,11 @@ class FirstFragment : Fragment() {
         courseDB = CoursesDB(this.context)
         assignDB = AssignmentsDB(this.context)
 
-
-        assList = assignDB.readAll()
+        if(isSpecific()){
+            assList = assignDB.readAll(courseSpecific)
+        }else {
+            assList = assignDB.readAll()
+        }
         adapter = AssignmentsRecyclerAdapter(assList,assignDB,view,this.context)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
@@ -86,7 +94,11 @@ class FirstFragment : Fragment() {
         _binding = null
     }
     companion object{
-
+        lateinit var courseSpecific: String
+        var modeOn = false
+        fun isSpecific(): Boolean{
+            return this::courseSpecific.isInitialized && modeOn
+        }
         lateinit var selectedAssignment: Assignment
         private lateinit var recyclerView:RecyclerView
     }

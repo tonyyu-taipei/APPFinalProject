@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.data.AssignmentsWithStatus
+import com.example.appfinalproject_10130492.data.Course
 
 class AssignmentsDB(context: Context?) {
     private val dbHelper = SQLiteHelper(context);
@@ -39,11 +40,28 @@ class AssignmentsDB(context: Context?) {
         }
         return assignment
     }
+    fun readAll(courseName: String?): ArrayList<Assignment>{
+        var assList = ArrayList<Assignment>()
+        try {
+            val whereClause = if(courseName == null) "" else "courseName = '$courseName'"
+            val cursor =
+                db.query(false, dbHelper.assignTableName, null, whereClause, null, null, null, "dueDate DESC", null)
+            assList = cursorParser(cursor)
+        }catch(e:Exception){
+
+        }
+
+        return assList
+    }
     fun readAll(): ArrayList<Assignment>{
+        return readAll(null)
+    }
+
+    fun readAllByCourse(course: Course): ArrayList<Assignment>{
         var assList = ArrayList<Assignment>()
         try {
             val cursor =
-                db.query(false, dbHelper.assignTableName, null, null, null, null, null, "dueDate DESC", null)
+                db.query(false, dbHelper.assignTableName, null, "courseName = '${course.courseName}'", null, null, null, "dueDate DESC", null)
             assList = cursorParser(cursor)
         }catch(e:Exception){
 
@@ -52,15 +70,19 @@ class AssignmentsDB(context: Context?) {
         return assList
     }
     fun readAllByStatus(): AssignmentsWithStatus{
+        return readAllByStatus(null)
+    }
+    fun readAllByStatus(courseName: String?): AssignmentsWithStatus{
         var assListFinished = ArrayList<Assignment>()
         var assListQueued = ArrayList<Assignment>()
         var assListLate = ArrayList<Assignment>()
+        val courseWhereClause = if(courseName == null) "" else "AND courseName = '$courseName'"
         try {
             //finished
             var cursor =
                 db.rawQuery("SELECT _id,courseName,title,assignedDate,dueDate,note,finished " +
                         "FROM ${dbHelper.assignTableName} " +
-                        "WHERE finished=1 " +
+                        "WHERE finished=1 $courseWhereClause " +
                         "ORDER BY dueDate DESC"
                     ,null)
             assListFinished = cursorParser(cursor)
@@ -68,14 +90,14 @@ class AssignmentsDB(context: Context?) {
             cursor =
                 db.rawQuery("SELECT _id,courseName,title,assignedDate,dueDate,note,finished " +
                         "FROM ${dbHelper.assignTableName} " +
-                        "WHERE finished=0 AND dueDate <= DATETIME('now')  " +
+                        "WHERE finished=0 AND datetime(dueDate/1000,'unixepoch')<= datetime('now')  $courseWhereClause  " +
                         "ORDER BY dueDate DESC",null)
             assListLate = cursorParser(cursor)
 
             cursor =
                 db.rawQuery("SELECT _id,courseName,title,assignedDate,dueDate,note,finished " +
                         "FROM ${dbHelper.assignTableName} " +
-                        "WHERE finished=0 AND dueDate > DATETIME('now')  " +
+                        "WHERE finished=0 AND datetime(dueDate/1000,'unixepoch')> datetime('now')  $courseWhereClause  " +
                         "ORDER BY dueDate DESC",null)
             assListQueued = cursorParser(cursor)
 
@@ -90,13 +112,17 @@ class AssignmentsDB(context: Context?) {
         val res = db.delete(dbHelper.assignTableName,"_id = $id",null)
         return res > 0
     }
+    fun deleteByCourse(courseName: String): Boolean{
+        val res = db.delete(dbHelper.assignTableName,"courseName = '$courseName'",null)
+        return res>0
+    }
     fun insert(assignment: Assignment): Boolean{
         val toInsert = ContentValues()
         toInsert.put("note", assignment.note)
         toInsert.put("title",assignment.title)
         toInsert.put("assignedDate",assignment.assignedDate)
         toInsert.put("dueDate",assignment.dueDate)
-        toInsert.put("courseName",assignment.courseName)
+        toInsert.put("courseName",if(assignment.courseName == null || assignment.courseName == "")null else assignment.courseName)
         toInsert.put("finished",assignment.finished)
 
         val res = db.insert(dbHelper.assignTableName,null,toInsert)

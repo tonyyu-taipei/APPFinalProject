@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Scholarium</string>
+    <string name="app_name">作業提醒</string>
     <string name="action_settings">設定</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">作業</string>
@@ -12,11 +12,14 @@
     <string name="previous">Previous</string>
     <string name="empty_assign">沒有作業</string>
     <string name="celebrate">是不是應該慶祝一下？</string>
+    <string name="added_successfully">新增成功</string>
     <string name="lorem_ipsum"></string>
     <string name="title_activity_class">ClassActivity</string>
     <string name="add_qr_code">掃描QR Code</string>
     <string name="add_assign">新增作業</string>
+    <string name="add_course">新增課程</string>
     <string name="course_name_hint">課程名稱</string>
+    <string name="course_teacher_hint">教師名稱</string>
     <string name="assign_name_hint">作業名稱</string>
     <string name="assign_note_hint">作業備註</string>
     <string name="date_pick">選取時間</string>
@@ -25,10 +28,15 @@
     <string name="alert">提醒</string>
     <string name="alert_msg">無任何課程，請先新增課程</string>
     <string name="alert_msg_date_error">起始時間與截止時間順序錯誤</string>
+    <string name="new_courses_from_qr_hint">含有不存在的課程，請問是否直接新增該課程？</string>
     <string name="alert_msg_date_confirm">對調時間</string>
     <string name="alert_msg_date_success">時間對調成功</string>
-    <string name="cancel">取消</string>
+    <string name="empty">不要新增課程</string>
     <string name="confirm">確認</string>
+    <string name="cancel">取消</string>
+    <string name="cancel_course">刪除課程</string>
+
+    <string name="ok">好</string>
     <string name="alert_msg_required">請填入必填欄位</string>
     <string name="day">天</string>
     <string name="hour">小時</string>
@@ -44,6 +52,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="editAssign">編輯作業</string>
     <string name="confirm_del">確定要刪除嗎？</string>
-    <string name="share_hint">您可將上方QR Code截圖給同學們，只需使用此程式或Scholarium iOS版，即可輕鬆新增您所建立的作業。</string>
+    <string name="confirm_del_courses">確定要刪除嗎？\n所有此課程的作業將會一並刪除。</string>
 
+    <string name="share_hint">您可將上方QR Code截圖給同學們，只需使用此程式或Scholarium iOS版，即可輕鬆新增您所建立的作業。</string>
+    <string name="courses">課程</string>
 </resources>
