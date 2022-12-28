@@ -6,11 +6,11 @@ import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.appfinalproject_10130492.data.Assignment
@@ -73,9 +73,19 @@ class NewAssignFragment : Fragment() {
 
         if(coursesArr.isNotEmpty() && coursesArr[0]!=null) {
             val adapter = ArrayAdapter(requireContext(), R.layout.dropdown_list_item, coursesArr)
-            (binding.courseSelTextField.editText as? MaterialAutoCompleteTextView)?.setAdapter(
+            val textInput = (binding.courseSelTextField.editText as? MaterialAutoCompleteTextView)
+            textInput?.setAdapter(
                 adapter
             )
+            textInput?.setOnTouchListener{ _, _ ->
+                if(coursesArr.isNotEmpty()){
+                    if(binding.courseSelTextField.editText?.text.toString().isNotEmpty()){
+                        adapter.filter.filter(null)
+                    }
+                    textInput.showDropDown()
+                }
+                false
+            }
         }
 
 
@@ -267,6 +277,7 @@ class NewAssignFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        setEditModeToggle(false)
         _binding = null
     }
     fun TextInputLayout.markRequired(){

@@ -1,10 +1,9 @@
 package com.example.appfinalproject_10130492
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
-import android.net.Uri
+import android.graphics.Camera
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -14,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.appfinalproject_10130492.camera.CameraSourcePreview
 import com.example.appfinalproject_10130492.data.Assignment
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
@@ -33,7 +33,7 @@ import org.json.JSONObject
 
 class AddQRFragment : Fragment() {
 
-    private lateinit var surfaceView: SurfaceView
+    private lateinit var cameraPreview: CameraSourcePreview
     private lateinit var fab:FloatingActionButton
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
 
@@ -41,18 +41,16 @@ class AddQRFragment : Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
 
-        surfaceView = view.findViewById(R.id.surfaceView)
+         cameraPreview = view.findViewById(R.id.camera_view)
         fab = view.findViewById(R.id.add_qr_fab)
         val barcodeDetector = BarcodeDetector.Builder(this.context).setBarcodeFormats(Barcode.QR_CODE).build()
-        val cameraSource = CameraSource.Builder(this.context,barcodeDetector).setAutoFocusEnabled(true).build()
+        val cameraSource = CameraSource.Builder(this.context,barcodeDetector).setRequestedPreviewSize(500,500).setAutoFocusEnabled(true).build()
         if(this.context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.CAMERA) }
             != PackageManager.PERMISSION_GRANTED){
             val array = arrayOf(Manifest.permission.CAMERA)
             this.activity?.let { ActivityCompat.requestPermissions(it,array,1) };
         }
         val navController = findNavController()
-        surfaceView.holder.addCallback(object: SurfaceHolder.Callback{
-            override fun surfaceCreated(holder: SurfaceHolder) {
 
                 if (context?.let {
                         ActivityCompat.checkSelfPermission(
@@ -61,27 +59,16 @@ class AddQRFragment : Fragment() {
                         )
                     }
                     != PackageManager.PERMISSION_GRANTED
-                ) return
+                )
+                    navController.navigateUp()
                 try {
-                    cameraSource.start(holder)
+
+                    cameraPreview.start(cameraSource)
+
                 } catch (e:Exception) {
                     e.printStackTrace()
                 }
-            }
 
-            override fun surfaceChanged(
-                holder: SurfaceHolder,
-                format: Int,
-                width: Int,
-                height: Int
-            ) {
-            }
-
-            override fun surfaceDestroyed(holder: SurfaceHolder) {
-                cameraSource.stop()
-            }
-
-        })
 
         pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()){
                 uri ->
@@ -128,6 +115,10 @@ class AddQRFragment : Fragment() {
 
     }
 
+    override fun onDestroy() {
+        cameraPreview.stop()
+        super.onDestroy()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

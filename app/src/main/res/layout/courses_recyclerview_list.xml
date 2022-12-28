@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="16dp"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="5dp"
     android:layout_marginRight="18dp"
     android:backgroundTint="#FFFFFF"
     android:orientation="vertical"
@@ -19,9 +19,10 @@
         android:background="@drawable/recyclerview_border"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        app:cardBackgroundColor="#FFFFFF"
+        app:cardBackgroundColor="@color/material_on_primary_disabled"
         app:contentPaddingBottom="10dp"
-        app:contentPaddingTop="10dp">
+        app:contentPaddingTop="10dp"
+        app:rippleColor="@color/material_on_primary_emphasis_medium">
 
 
         <LinearLayout

@@ -8,6 +8,7 @@ import android.util.Log
 class SQLiteHelper(context: Context?): SQLiteOpenHelper(context,DATABASE_NAME, null, DATABASE_VERSION ) {
     val courseTableName: String = "Course"
     val assignTableName = "Assignments"
+    val settingTableName = "Settings"
     private val SQL_CREATE_ENTRIES_COURSES = "CREATE TABLE $courseTableName (courseName TEXT NOT NULL PRIMARY KEY, teacher TEXT)"
     private val SQL_CREATE_ENTRIES_ASSIGN = " CREATE TABLE $assignTableName ("+
             "_id INTEGER PRIMARY KEY,"+
@@ -17,11 +18,17 @@ class SQLiteHelper(context: Context?): SQLiteOpenHelper(context,DATABASE_NAME, n
             "courseName TEXT ,"+
             "finished INTEGER DEFAULT 0,"+
             "FOREIGN KEY(courseName) REFERENCES Course(courseName) )"
+    private val SQL_CREATE_ENTRIES_SETTINGS = "CREATE TABLE $settingTableName " +
+            "(toggleLate INTEGER DEFAULT 0," +
+            " toggleDue INTEGER DEFAULT 0," +
+            " duePercentage INTEGER DEFAULT 90 )"
     private val SQL_DELETE_ENTRIES_COURSES = "DROP TABLE IF EXISTS $courseTableName"
+    private val SQL_DELETE_ENTRIES_SETTINGS = "DROP TABLE IF EXISTS $settingTableName"
     private val SQL_DELETE_ENTRIES_ASSIGN = "DROP TABLE IF EXISTS $assignTableName"
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(SQL_CREATE_ENTRIES_COURSES)
         db.execSQL(SQL_CREATE_ENTRIES_ASSIGN)
+        db.execSQL(SQL_CREATE_ENTRIES_SETTINGS)
         Log.d("DB","Creating Databases")
     }
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -29,6 +36,7 @@ class SQLiteHelper(context: Context?): SQLiteOpenHelper(context,DATABASE_NAME, n
         // to simply to discard the data and start over
         db.execSQL(SQL_DELETE_ENTRIES_COURSES)
         db.execSQL(SQL_DELETE_ENTRIES_ASSIGN)
+        db.execSQL(SQL_DELETE_ENTRIES_SETTINGS)
         onCreate(db)
     }
     override fun onDowngrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

@@ -16,6 +16,7 @@ import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.color.DynamicColors
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 private lateinit var fab: FloatingActionButton
 lateinit var navController: NavController
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     var dialog: NewCoursesDialog = NewCoursesDialog()
     override fun onCreate(savedInstanceState: Bundle?) {
+        DynamicColors.applyToActivitiesIfAvailable(application);
         CoursesFirstFragment.newCoursesDialog = dialog
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
@@ -54,6 +56,10 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.classes -> {
                     navController.setGraph(R.navigation.nav_graph3)
+                    appBarConfiguration = AppBarConfiguration(navController.graph)
+                }
+                R.id.action_settings ->{
+                    navController.setGraph(R.navigation.nav_settings)
                     appBarConfiguration = AppBarConfiguration(navController.graph)
                 }
             }
@@ -126,6 +132,7 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onSupportNavigateUp(): Boolean {
+        editModeToggle(false)
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         fab.setImageResource(android.R.drawable.ic_input_add)
         editModeToggle(false)

@@ -18,7 +18,7 @@
         android:title="課程"
         android:tooltipText="課程"
         app:showAsAction="always|withText" />
-    <!--
+<!--
     <item
         android:id="@+id/action_settings"
         android:icon="@drawable/settings_48px"

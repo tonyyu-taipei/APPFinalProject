@@ -5,10 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".AddQRFragment">
 
-    <SurfaceView
-        android:id="@+id/surfaceView"
+
+    <com.example.appfinalproject_10130492.camera.CameraSourcePreview
+        android:id="@+id/camera_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"></com.example.appfinalproject_10130492.camera.CameraSourcePreview>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_qr_fab"

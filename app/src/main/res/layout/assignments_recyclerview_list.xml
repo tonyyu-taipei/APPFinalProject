@@ -4,7 +4,7 @@
     android:id="@+id/linear"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="5dp"
     android:backgroundTint="#FFFFFF"
     android:orientation="vertical"
     android:paddingTop="10dp"
@@ -17,9 +17,10 @@
         android:background="@drawable/recyclerview_border"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        app:cardBackgroundColor="#FFFFFF"
+        app:cardBackgroundColor="@color/material_on_primary_disabled"
         app:contentPaddingBottom="10dp"
-        app:contentPaddingTop="10dp">
+        app:contentPaddingTop="10dp"
+        app:rippleColor="@color/material_on_primary_emphasis_medium">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,7 +46,7 @@
                     android:layout_width="270dp"
                     android:layout_height="wrap_content"
                     android:text="作業說明"
-                    android:textColor="@android:color/system_neutral1_700" />
+                    android:textColor="@android:color/system_neutral1_400" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
