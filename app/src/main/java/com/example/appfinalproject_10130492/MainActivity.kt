@@ -58,10 +58,10 @@ class MainActivity : AppCompatActivity() {
                     navController.setGraph(R.navigation.nav_graph3)
                     appBarConfiguration = AppBarConfiguration(navController.graph)
                 }
-                R.id.action_settings ->{
-                    navController.setGraph(R.navigation.nav_settings)
-                    appBarConfiguration = AppBarConfiguration(navController.graph)
-                }
+                //R.id.action_settings ->{
+                  //  navController.setGraph(R.navigation.nav_settings)
+                    //appBarConfiguration = AppBarConfiguration(navController.graph)
+                //}
             }
             setupActionBarWithNavController(navController, appBarConfiguration)
             return@setOnItemSelectedListener true
