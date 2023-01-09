@@ -18,7 +18,7 @@
         android:title="課程"
         android:tooltipText="課程"
         app:showAsAction="always|withText" />
-<!--
+
     <item
         android:id="@+id/action_settings"
         android:icon="@drawable/settings_48px"
@@ -26,5 +26,5 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         android:tooltipText="設定"
-        app:showAsAction="always|withText" />-->
+        app:showAsAction="always|withText" />
 </menu>

@@ -68,8 +68,8 @@ class NewCoursesDialog: DialogFragment(){
                     coursesDB.insert(course)
                 }
                 .setNegativeButton(R.string.cancel
-                ) { dialog, id ->
-                    getDialog()?.cancel()
+                ) { _, _ ->
+                    dialog?.cancel()
                 }
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")

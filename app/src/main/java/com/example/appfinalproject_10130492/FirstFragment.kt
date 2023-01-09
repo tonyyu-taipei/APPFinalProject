@@ -83,9 +83,10 @@ class FirstFragment : Fragment() {
             }
 
         ))
-        val itemCallback = ItemTouchHelperCallback(adapter)
-        val itemHelper = ItemTouchHelper(itemCallback)
-        itemHelper.attachToRecyclerView(recyclerView)
+
+        val itemCallback = this.parentFragment?.context?.let { ItemTouchHelperCallback(adapter, it) }
+        val itemHelper = itemCallback?.let { ItemTouchHelper(it) }
+        itemHelper?.attachToRecyclerView(recyclerView)
 
 
 

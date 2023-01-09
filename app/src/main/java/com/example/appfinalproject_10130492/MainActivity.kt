@@ -52,16 +52,20 @@ class MainActivity : AppCompatActivity() {
                     FirstFragment.modeOn = false
                     navController.setGraph(R.navigation.nav_graph)
                     appBarConfiguration = AppBarConfiguration(navController.graph)
+                    scrollFab(true);
+
 
                 }
                 R.id.classes -> {
                     navController.setGraph(R.navigation.nav_graph3)
+                    scrollFab(true);
                     appBarConfiguration = AppBarConfiguration(navController.graph)
                 }
-                //R.id.action_settings ->{
-                  //  navController.setGraph(R.navigation.nav_settings)
-                    //appBarConfiguration = AppBarConfiguration(navController.graph)
-                //}
+                R.id.action_settings ->{
+                    navController.setGraph(R.navigation.nav_settings)
+                    appBarConfiguration = AppBarConfiguration(navController.graph)
+                    scrollFab(false);
+                }
             }
             setupActionBarWithNavController(navController, appBarConfiguration)
             return@setOnItemSelectedListener true
