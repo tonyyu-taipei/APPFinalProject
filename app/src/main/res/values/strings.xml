@@ -1,4 +1,13 @@
 <resources>
+    <string name="due_notification">即將到期提醒</string>
+    <string name="late_notification">逾時提醒</string>
+    <string name="due_notification_channel_description">系統將在作業即將到期時，自動通知您。</string>
+    <string name="late_notification_channel_description">系統將在作業逾時時，自動通知您。</string>
+
+    <string name="due_notification_description">%1$s 即將於 %2$s 截止</string>
+    <string name="late_notification_description">%1$s 已經截止了</string>
+
+
     <string name="app_name">作業提醒</string>
     <string name="action_settings">設定</string>
     <!-- Strings used for fragments for navigation -->

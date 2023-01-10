@@ -58,6 +58,7 @@ class FirstFragment : Fragment() {
         courseDB = CoursesDB(this.context)
         assignDB = AssignmentsDB(this.context)
 
+
         if(isSpecific()){
             assList = assignDB.readAll(courseSpecific)
         }else {

@@ -46,7 +46,7 @@ class ItemTouchHelperCallback(val iTadapter: ItemTouchHelperAdapter,val context:
                  val itemView = viewHolder.itemView
                 val p = Paint()
                 val drawable: Drawable? = AppCompatResources.getDrawable(context,R.drawable.delete_forever_48px_with_color)
-                val delIcon:Bitmap = drawable!!.toBitmap(dpiHelper.convertDpToPx(60f).toInt(),dpiHelper.convertDpToPx(60f).toInt(),null)
+                val delIcon:Bitmap = drawable!!.toBitmap(dpiHelper.convertDpToPx(40f).toInt(),dpiHelper.convertDpToPx(40f).toInt(),null)
 
                  if(dX < 0 ){
                     p.color = Color.parseColor("#de0707")

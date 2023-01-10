@@ -25,8 +25,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var botnav: BottomNavigationView
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var notificationService: NotificationService
     var dialog: NewCoursesDialog = NewCoursesDialog()
     override fun onCreate(savedInstanceState: Bundle?) {
+        notificationService = NotificationService(this.applicationContext)
         DynamicColors.applyToActivitiesIfAvailable(application);
         CoursesFirstFragment.newCoursesDialog = dialog
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -35,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbarAdd)
-
+        notificationService.showNotification(NotificationService.DUE_CHANNEL_ID)
         navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         fab = findViewById(R.id.fab1)
