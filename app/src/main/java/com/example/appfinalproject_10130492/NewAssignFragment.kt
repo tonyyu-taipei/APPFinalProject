@@ -1,6 +1,11 @@
 package com.example.appfinalproject_10130492
 
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.PendingIntent
+import android.app.TaskInfo
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableStringBuilder
@@ -16,6 +21,7 @@ import androidx.fragment.app.Fragment
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databases.CoursesDB
+import com.example.appfinalproject_10130492.databases.SettingDB
 import com.example.appfinalproject_10130492.databinding.FragmentSecondNewAssignBinding
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
@@ -212,6 +218,9 @@ class NewAssignFragment : Fragment() {
                     note.editText!!.text.toString(),
                     0 )
                 assignDB.update(assignment)
+                setNotification(assignment)
+                SecondFragment.assignmentBody = assignment
+
             }else {
                 val assignment = Assignment(
                     null,
@@ -223,7 +232,9 @@ class NewAssignFragment : Fragment() {
                     0
                 )
 
-                assignDB.insert(assignment)
+                val id = assignDB.insert(assignment)
+                assignment.id = id
+                setNotification(assignment)
             }
             activity?.finish()
 
@@ -256,6 +267,50 @@ class NewAssignFragment : Fragment() {
             }
         }
         return calendarDate
+    }
+    private fun setNotification(assignment: Assignment){
+        val settingDB = SettingDB(requireContext())
+        val setting = settingDB.read()
+        val id = assignment.id
+
+        if(id == null){
+            view?.let { Snackbar.make(it,getString(R.string.cant_set_notification),Snackbar.LENGTH_LONG).show() }
+            Log.e("Notification","Can't set the notification: ID is NULL")
+            return
+        }
+        val alarmManager = activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val mainActivityIntent = Intent(requireContext(),MainActivity::class.java)
+        val maPendingIntent = PendingIntent.getActivity(requireContext(),id,mainActivityIntent,PendingIntent.FLAG_IMMUTABLE)
+
+
+
+        fun dueNotiCalc(fromInMillis: Long, toInMillis: Long): Long{
+            return ((toInMillis - fromInMillis) * setting.duePercentage*0.01 + fromInMillis).toLong()
+        }
+
+        if(setting.toggleDue == 1) {
+            val intent = Intent(requireContext(), AlarmReceiver::class.java)
+            intent.putExtra("CHANNEL_ID",NotificationService.DUE_CHANNEL_ID)
+            intent.putExtra("assignment",assignment)
+            val pendingIntent = PendingIntent.getBroadcast(requireContext(), id, intent, PendingIntent.FLAG_IMMUTABLE)
+
+            val clockInfo = AlarmManager.AlarmClockInfo(dueNotiCalc(assignment.assignedDate,assignment.dueDate),maPendingIntent)
+            alarmManager.setAlarmClock(clockInfo,pendingIntent)
+        }
+        if(setting.toggleLate == 1){
+            val intent = Intent(requireContext(), AlarmReceiver::class.java)
+            intent.putExtra("CHANNEL_ID",NotificationService.LATE_CHANNEL_ID)
+            Log.i("Notification","Alarm Set: $assignment")
+            intent.putExtra("assignment",assignment)
+            val pendingIntent = PendingIntent.getBroadcast(requireContext(), id+1000, intent, PendingIntent.FLAG_IMMUTABLE)
+
+            val clockInfo = AlarmManager.AlarmClockInfo(assignment.dueDate,maPendingIntent)
+            alarmManager.setAlarmClock(clockInfo,pendingIntent)
+        }
+
+
+
     }
     private fun dateToTextHelper(calendarDate: Calendar, type: String){
         when(type){

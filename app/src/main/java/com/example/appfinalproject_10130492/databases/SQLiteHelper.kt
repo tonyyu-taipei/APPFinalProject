@@ -19,9 +19,11 @@ class SQLiteHelper(context: Context?): SQLiteOpenHelper(context,DATABASE_NAME, n
             "finished INTEGER DEFAULT 0,"+
             "FOREIGN KEY(courseName) REFERENCES Course(courseName) )"
     private val SQL_CREATE_ENTRIES_SETTINGS = "CREATE TABLE $settingTableName " +
-            "(toggleLate INTEGER DEFAULT 0," +
-            " toggleDue INTEGER DEFAULT 0," +
-            " duePercentage INTEGER DEFAULT 90 )"
+            "(toggleLate INTEGER DEFAULT 1," +
+            " toggleDue INTEGER DEFAULT 1," +
+            " duePercentage INTEGER DEFAULT 90 ) "
+
+    private val SQL_INSERT_FIRST_SETTING = "INSERT INTO Settings(toggleDue) VALUES (1)"
     private val SQL_DELETE_ENTRIES_COURSES = "DROP TABLE IF EXISTS $courseTableName"
     private val SQL_DELETE_ENTRIES_SETTINGS = "DROP TABLE IF EXISTS $settingTableName"
     private val SQL_DELETE_ENTRIES_ASSIGN = "DROP TABLE IF EXISTS $assignTableName"
@@ -29,6 +31,7 @@ class SQLiteHelper(context: Context?): SQLiteOpenHelper(context,DATABASE_NAME, n
         db.execSQL(SQL_CREATE_ENTRIES_COURSES)
         db.execSQL(SQL_CREATE_ENTRIES_ASSIGN)
         db.execSQL(SQL_CREATE_ENTRIES_SETTINGS)
+        db.execSQL(SQL_INSERT_FIRST_SETTING)
         Log.d("DB","Creating Databases")
     }
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -44,7 +47,7 @@ class SQLiteHelper(context: Context?): SQLiteOpenHelper(context,DATABASE_NAME, n
     }
     companion object {
         // If you change the database schema, you must increment the database version.
-        const val DATABASE_VERSION = 8
+        const val DATABASE_VERSION = 10
         const val DATABASE_NAME = "School.db"
 
     }

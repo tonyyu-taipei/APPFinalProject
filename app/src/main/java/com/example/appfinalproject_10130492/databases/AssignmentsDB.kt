@@ -116,7 +116,7 @@ class AssignmentsDB(context: Context?) {
         val res = db.delete(dbHelper.assignTableName,"courseName = '$courseName'",null)
         return res>0
     }
-    fun insert(assignment: Assignment): Boolean{
+    fun insert(assignment: Assignment): Int{
         val toInsert = ContentValues()
         toInsert.put("note", assignment.note)
         toInsert.put("title",assignment.title)
@@ -126,7 +126,13 @@ class AssignmentsDB(context: Context?) {
         toInsert.put("finished",assignment.finished)
 
         val res = db.insert(dbHelper.assignTableName,null,toInsert)
-        return res != (-1).toLong()
+        return if(res != (-1).toLong()){
+            val cursor = db.rawQuery("SELECT last_insert_rowid()",null);
+            cursor.moveToFirst()
+            cursor.getInt(0)
+        }else {
+            -1
+        }
     }
     fun update(assignment: Assignment): Boolean{
         val update = ContentValues().apply{

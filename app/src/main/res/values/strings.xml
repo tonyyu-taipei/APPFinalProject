@@ -4,6 +4,8 @@
     <string name="due_notification_channel_description">系統將在作業即將到期時，自動通知您。</string>
     <string name="late_notification_channel_description">系統將在作業逾時時，自動通知您。</string>
 
+    <string name="cant_set_notification">錯誤：無法設定通知（無法獲取ID）</string>
+
     <string name="due_notification_description">%1$s 即將於 %2$s 截止</string>
     <string name="late_notification_description">%1$s 已經截止了</string>
 

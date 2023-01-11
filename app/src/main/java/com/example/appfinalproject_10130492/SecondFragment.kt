@@ -232,6 +232,9 @@ class SecondFragment : Fragment() {
     }
 
     companion object{
+        fun isInited(): Boolean{
+            return this::assignmentBody.isInitialized
+        }
         lateinit var assignmentBody: Assignment
     }
 }
