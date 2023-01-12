@@ -1,5 +1,7 @@
 package com.example.appfinalproject_10130492
 
+import android.app.AlarmManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -27,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     var dialog: NewCoursesDialog = NewCoursesDialog()
     override fun onCreate(savedInstanceState: Bundle?) {
-        DynamicColors.applyToActivitiesIfAvailable(application);
+        AlarmService.alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         CoursesFirstFragment.newCoursesDialog = dialog
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
@@ -85,6 +87,12 @@ class MainActivity : AppCompatActivity() {
             overridePendingTransition(R.anim.bottom_up,R.anim.no_anim)
         }
 
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        AlarmService.alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
     }
 

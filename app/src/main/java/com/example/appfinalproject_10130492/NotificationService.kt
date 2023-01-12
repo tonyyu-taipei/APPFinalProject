@@ -4,6 +4,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import java.util.Calendar
 
@@ -13,15 +14,18 @@ class NotificationService(private val context: Context) {
     var notificationId: Int = 0
     var dueDateString = ""
     fun showNotification(channelID: String){
+
         val activityIntent = Intent(context, MainActivity::class.java)
+        activityIntent.putExtra("ID",notificationId)
         val receiverIntent = Intent(context, NotificationReceiver::class.java)
         receiverIntent.putExtra("NOTIFICATION_ID", notificationId)
+        Log.i("Notification","Notification Service Received: $notificationId")
         val pendingIntent = PendingIntent.getActivity(
-            context,1,activityIntent,PendingIntent.FLAG_IMMUTABLE
+            context, notificationId,activityIntent,PendingIntent.FLAG_IMMUTABLE
         )
         val finishedIntent = PendingIntent.getBroadcast(
             context,
-            2,
+            notificationId+1000,
             receiverIntent,
             PendingIntent.FLAG_IMMUTABLE
         )
@@ -45,6 +49,9 @@ class NotificationService(private val context: Context) {
             .setSmallIcon(R.drawable.book_48px)
 
         notificationManager.notify(notificationId, notification.build())
+    }
+    fun cancelNotification(id: Int){
+        notificationManager.cancel(id)
     }
     companion object{
         const val LATE_CHANNEL_ID = "late_channel"

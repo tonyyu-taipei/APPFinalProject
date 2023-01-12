@@ -10,7 +10,7 @@ import com.example.appfinalproject_10130492.data.Setting
 
 class SettingDB(context: Context?) {
     private val dbHelper = SQLiteHelper(context);
-    val db: SQLiteDatabase = dbHelper.readableDatabase
+    private val db: SQLiteDatabase = dbHelper.readableDatabase
 
     fun read(): Setting{
         val cursor = db.query(false,dbHelper.settingTableName,null,null,null,null,null,null,null)

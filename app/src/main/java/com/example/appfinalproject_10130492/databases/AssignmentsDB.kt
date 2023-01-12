@@ -20,6 +20,7 @@ class AssignmentsDB(context: Context?) {
 
     fun read(id: Int): Assignment?{
         var assignment: Assignment? = null
+        Log.i("database","database read-id: $id");
         try {
             var cursor = db.query(
                 false,
