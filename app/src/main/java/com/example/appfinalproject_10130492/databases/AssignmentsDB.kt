@@ -8,6 +8,8 @@ import android.util.Log
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.data.AssignmentsWithStatus
 import com.example.appfinalproject_10130492.data.Course
+import com.example.appfinalproject_10130492.databases.exceptions.MultipleMatchesException
+import com.example.appfinalproject_10130492.databases.exceptions.TooManyAssignmentsException
 
 class AssignmentsDB(context: Context?) {
     private val dbHelper = SQLiteHelper(context);
@@ -17,7 +19,12 @@ class AssignmentsDB(context: Context?) {
         return db.query(false, dbHelper.assignTableName, null, null, null, null, null, null, null)
     }
 
-
+    /**
+     * To read Specific ID in Assignment DB.
+     * If multiple value matches your arg, it throws MultipleMatchesException.
+     * @throws MultipleMatchesException
+     * @param[id] ID of the Assignment that you want to read
+     */
     fun read(id: Int): Assignment?{
         var assignment: Assignment? = null
         Log.i("database","database read-id: $id");
@@ -34,7 +41,13 @@ class AssignmentsDB(context: Context?) {
                 null
             )
             Log.i("db",cursor.toString())
-            assignment = cursorParser(cursor)[0]
+            val assList = cursorParser(cursor)
+            if(assList.size > 1){
+                val assListAny = ArrayList<Any>()
+                assListAny.addAll(assList)
+                throw MultipleMatchesException(assListAny)
+            }
+            assignment = assList[0]
         }catch(e: Exception){
             Log.i("db",e.toString())
             e.printStackTrace()
@@ -101,7 +114,7 @@ class AssignmentsDB(context: Context?) {
                         "WHERE finished=0 AND datetime(dueDate/1000,'unixepoch')> datetime('now')  $courseWhereClause  " +
                         "ORDER BY dueDate DESC",null)
             assListQueued = cursorParser(cursor)
-
+            cursor.close()
 
         }catch(e:Exception){
 
@@ -117,7 +130,20 @@ class AssignmentsDB(context: Context?) {
         val res = db.delete(dbHelper.assignTableName,"courseName = '$courseName'",null)
         return res>0
     }
+
+    /**
+     * Insert Assignment Into Database
+     * @exception TooManyAssignmentsException() The limit size of assignmentDB is 1000, due to notification status code.
+     *
+     */
     fun insert(assignment: Assignment): Int{
+        val cur = db.rawQuery("SELECT COUNT(*) FROM ${dbHelper.assignTableName}", null)
+        cur.moveToFirst()
+        val count = cur.getInt(0)
+        if(count > 1000){
+            throw  TooManyAssignmentsException()
+        }
+        cur.close()
         val toInsert = ContentValues()
         toInsert.put("note", assignment.note)
         toInsert.put("title",assignment.title)
@@ -131,6 +157,7 @@ class AssignmentsDB(context: Context?) {
             val cursor = db.rawQuery("SELECT last_insert_rowid()",null);
             cursor.moveToFirst()
             cursor.getInt(0)
+
         }else {
             -1
         }

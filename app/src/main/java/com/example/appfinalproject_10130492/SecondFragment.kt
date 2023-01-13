@@ -15,6 +15,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
+import com.example.appfinalproject_10130492.databases.SettingDB
 import com.example.appfinalproject_10130492.databinding.FragmentSecondBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.joda.time.*
@@ -158,7 +159,9 @@ class SecondFragment : Fragment() {
                         min.text = "$mins"
                         sec.text = "$secs"
                     }
-                    if(progress.progress > 90){
+                    val settingDB = SettingDB(requireContext());
+                    val setting = settingDB.read()
+                    if(progress.progress > setting.duePercentage){
                         progress.progressTintList = ColorStateList.valueOf(Color.parseColor(getString(R.color.late)))
                     }else{
                         progress.progressTintList = ColorStateList.valueOf(Color.parseColor(getString(R.color.blue)))
@@ -218,7 +221,7 @@ class SecondFragment : Fragment() {
     }
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.i("Fragment","SecondFragment Distroyed")
+        Log.i("Fragment","SecondFragment Destroyed")
         timer.cancel()
         _binding = null
     }

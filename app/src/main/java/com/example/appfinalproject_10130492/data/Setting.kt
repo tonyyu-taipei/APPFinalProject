@@ -1,3 +1,3 @@
 package com.example.appfinalproject_10130492.data
 
-data class Setting(val toggleLate: Int, val toggleDue: Int, val duePercentage: Int)
+data class Setting(var toggleLate: Int, var toggleDue: Int, var duePercentage: Int)

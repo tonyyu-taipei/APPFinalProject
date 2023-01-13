@@ -1,9 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
+    <style name="Theme.APPFinalProject_10130492.PreferenceFragmentCompatStyle" parent="@style/PreferenceFragment">
+        <item name="android:layout">@layout/sliderlayout1</item>
+
+    </style>
     <style name="Base.Theme.APPFinalProject_10130492" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <item name="preferenceTheme">@style/Base.Theme.APPFinalProject_10130492.PreferenceThemeOverlay</item>
     </style>
+    <style name="Preference.App" parent="Preference"></style>
 
     <style name="Theme.APPFinalProject_10130492" parent="Base.Theme.APPFinalProject_10130492" />
+    <style name="Base.Theme.APPFinalProject_10130492.PreferenceThemeOverlay" parent="@style/PreferenceThemeOverlay">
+       <item name="preferenceFragmentCompatStyle">@style/Theme.APPFinalProject_10130492.PreferenceFragmentCompatStyle</item>
+    </style>
 </resources>

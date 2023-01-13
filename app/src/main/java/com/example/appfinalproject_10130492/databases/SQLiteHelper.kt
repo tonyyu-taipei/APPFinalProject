@@ -5,6 +5,9 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 
+/**
+ * The SQLite Database Helper
+ */
 class SQLiteHelper(context: Context?): SQLiteOpenHelper(context,DATABASE_NAME, null, DATABASE_VERSION ) {
     val courseTableName: String = "Course"
     val assignTableName = "Assignments"
@@ -33,7 +36,7 @@ class SQLiteHelper(context: Context?): SQLiteOpenHelper(context,DATABASE_NAME, n
     private val SQL_DELETE_ENTRIES_COURSES = "DROP TABLE IF EXISTS $courseTableName"
     private val SQL_DELETE_ENTRIES_SETTINGS = "DROP TABLE IF EXISTS $settingTableName"
     private val SQL_DELETE_ENTRIES_ASSIGN = "DROP TABLE IF EXISTS $assignTableName"
-    private val SQL_DELETE_ENTRIES_NOTIFICATIONS = "DROP TABLE IF EXISTS $assignTableName"
+    private val SQL_DELETE_ENTRIES_NOTIFICATIONS = "DROP TABLE IF EXISTS $notificationTableName"
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(SQL_CREATE_ENTRIES_COURSES)
@@ -46,13 +49,6 @@ class SQLiteHelper(context: Context?): SQLiteOpenHelper(context,DATABASE_NAME, n
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
-        if(oldVersion == 10 && (newVersion == 11 || newVersion == 12)){
-            db.execSQL(SQL_CREATE_ENTRIES_NOTIFICATIONS)
-            return
-        }else if(oldVersion == 11 && newVersion == 12){
-            db.execSQL(SQL_DELETE_ENTRIES_NOTIFICATIONS)
-            return
-        }
         db.execSQL(SQL_DELETE_ENTRIES_COURSES)
         db.execSQL(SQL_DELETE_ENTRIES_ASSIGN)
         db.execSQL(SQL_DELETE_ENTRIES_SETTINGS)
@@ -64,7 +60,7 @@ class SQLiteHelper(context: Context?): SQLiteOpenHelper(context,DATABASE_NAME, n
     }
     companion object {
         // If you change the database schema, you must increment the database version.
-        const val DATABASE_VERSION = 11
+        const val DATABASE_VERSION = 13
         const val DATABASE_NAME = "School.db"
 
     }

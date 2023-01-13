@@ -20,7 +20,9 @@ import androidx.fragment.app.Fragment
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databases.CoursesDB
+import com.example.appfinalproject_10130492.databases.NotificationsDB
 import com.example.appfinalproject_10130492.databases.SettingDB
+import com.example.appfinalproject_10130492.databases.exceptions.TooManyAssignmentsException
 import com.example.appfinalproject_10130492.databinding.FragmentSecondNewAssignBinding
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
@@ -68,6 +70,7 @@ class NewAssignFragment : Fragment() {
         var toCalendarDate = Calendar.getInstance()
         val course = CoursesDB(this.context)
         val assignDB = AssignmentsDB(this.context)
+        val notificationsDB = NotificationsDB(requireContext())
 
 
 
@@ -130,7 +133,7 @@ class NewAssignFragment : Fragment() {
 
         }
         binding.courseSelMenu.setOnClickListener {
-            if(coursesArr[0] == null) {
+            if(coursesArr.isEmpty()) {
                 val alert = AlertDialog.Builder(requireContext())
                 alert.setTitle(R.string.alert)
                 alert.setMessage(R.string.alert_msg)
@@ -218,7 +221,12 @@ class NewAssignFragment : Fragment() {
                     note.editText!!.text.toString(),
                     0 )
                 assignDB.update(assignment)
-                alarmService = AlarmService(assignment,requireContext())
+                assignmentInput.id?.let { it1 -> notificationsDB.deleteOne(it1) }
+                /*
+                Note: AlarmService will handle the part where it adds the notification information into NotificationDB
+                Therefore, here we only need to delete the old one.
+                 */
+                alarmService = AlarmService(requireContext())
                 alarmService.setAlarm(assignment)
                 SecondFragment.assignmentBody = assignment
 
@@ -234,11 +242,16 @@ class NewAssignFragment : Fragment() {
                     0
                 )
 
-                val id = assignDB.insert(assignment)
-                Log.i("ID", "New Inserted Data id is: $id")
-                assignment.id = id
-                alarmService = AlarmService(assignment,requireContext())
-                alarmService.setAlarm(assignment)
+                try {
+                    val id = assignDB.insert(assignment)
+                    Log.i("ID", "New Inserted Data id is: $id")
+                    assignment.id = id
+                    alarmService = AlarmService(requireContext())
+                    alarmService.setAlarm(assignment)
+                }catch(tooManyExcpt: TooManyAssignmentsException){
+                    Snackbar.make(view,resources.getString(R.string.too_many_assignments),Snackbar.LENGTH_LONG).show()
+                }
+
             }
             activity?.finish()
 

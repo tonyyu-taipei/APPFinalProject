@@ -10,11 +10,14 @@ import android.os.Build
 import android.util.Log
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
+import com.example.appfinalproject_10130492.databases.NotificationsDB
 
 class NotificationReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         val service = NotificationService(context)
         val assignmentDB = AssignmentsDB(context)
+        val alarmService = AlarmService(context)
+        val notificationsDB = NotificationsDB(context)
         val id = intent?.getIntExtra("NOTIFICATION_ID",-1)
         Log.i("Notification",id.toString())
         if( id != null && id != -1){
@@ -23,6 +26,9 @@ class NotificationReceiver: BroadcastReceiver() {
             if (assignment != null) {
                 assignmentDB.update(assignment)
                 service.cancelNotification(id)
+                assignment.id?.let { notificationsDB.deleteOne(it) }
+                alarmService.cancelAlarm(assignment)
+
             }
         }
     }

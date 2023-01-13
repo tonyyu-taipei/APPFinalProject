@@ -1,15 +1,18 @@
 package com.example.appfinalproject_10130492
 
+import android.app.AlarmManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import androidx.core.content.getSystemService
 import com.example.appfinalproject_10130492.data.Assignment
 import java.util.*
 class AlarmReceiver :BroadcastReceiver(){
     private val uDate = java.text.SimpleDateFormat("yyyy-MM-dd  aa hh:mm", Locale.TAIWAN)
     override fun onReceive(context: Context, intent: Intent) {
+        AlarmService.alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         Log.i("Notification","Alarm Received")
 
         val assignment =
