@@ -16,18 +16,20 @@ import androidx.appcompat.app.AlertDialog
 import androidx.navigation.NavController
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
+import com.example.appfinalproject_10130492.databases.NotificationsDB
 import com.example.appfinalproject_10130492.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.color.DynamicColors
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 private lateinit var fab: FloatingActionButton
 lateinit var navController: NavController
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var botnav: BottomNavigationView
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     var dialog: NewCoursesDialog = NewCoursesDialog()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AlarmService.alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         CoursesFirstFragment.newCoursesDialog = dialog
@@ -40,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         fab = findViewById(R.id.fab1)
+
 
         // Bottom Navigation Listener
         botnav = findViewById(R.id.botnav)
@@ -80,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             if(EditMode.canItEdit){
-                intent.putExtra("assignment", assigment)
+                intent.putExtra("assignment", assignment)
             }
             startActivity(intent)
 
@@ -115,10 +118,15 @@ class MainActivity : AppCompatActivity() {
                 alertBuilder.setMessage(R.string.confirm_del)
                     .setPositiveButton(R.string.confirm) { _, _ ->
                         val assignDB = AssignmentsDB(this)
-                        assigment.id?.let { assignDB.deleteOne(it) }
+                        val notificationsDB = NotificationsDB(this)
+                        assignment.id?.let { notificationsDB.deleteOne(it) }
+                        val alarmService =  AlarmService(this)
+                        alarmService.cancelSpecificAlarm(assignment)
+                        assignment.id?.let { assignDB.deleteOne(it) }
+
                         this.onBackPressed()
                     }
-                    .setNegativeButton(R.string.cancel_course){ _, _ ->
+                    .setNegativeButton(R.string.cancel){ _, _ ->
 
                     }
                 alertBuilder.create().show()
@@ -127,7 +135,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.share_assign ->{
                 Log.i("Menu","Share button clicked")
-                QRShareFragment.findId = assigment.id!!
+                QRShareFragment.findId = assignment.id!!
                 when(navController.graph.id) {
                     R.id.nav_graph->
                         navController.navigate(R.id.action_SecondFragment_to_QRShareFragment)
@@ -153,7 +161,7 @@ class MainActivity : AppCompatActivity() {
     // This is for hiding the fab button when user's navigating to the bottom.
     companion object{
 
-        lateinit var assigment:Assignment
+        lateinit var assignment:Assignment
         fun editModeToggle(toggle: Boolean){
             EditMode.canItEdit = toggle
         }

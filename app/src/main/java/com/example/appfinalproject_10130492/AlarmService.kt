@@ -30,39 +30,21 @@ class AlarmService(val context: Context) {
             Log.e("Notification","Can't set the notification: ID is NULL")
             return
         }
-        val mainActivityIntent = Intent(context,MainActivity::class.java)
-
-        val maPendingIntent = PendingIntent.getActivity(context,id,mainActivityIntent,
-            PendingIntent.FLAG_IMMUTABLE)
-
-
-
-
-
-        if(setting.toggleDue == 1) {
-            val intent = Intent(context, AlarmReceiver::class.java)
-            intent.putExtra("CHANNEL_ID",NotificationService.DUE_CHANNEL_ID)
-            intent.putExtra("assignment",assignment)
-            val pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_IMMUTABLE)
+        /*
+        Due Assignment
+         */
+        cancelAllAlarm(false)
             val dueTime = dueNotiCalc(assignment.assignedDate,assignment.dueDate,setting)
-            val clockInfo = AlarmManager.AlarmClockInfo(dueTime,maPendingIntent)
-            alarmManager.setAlarmClock(clockInfo,pendingIntent)
-            val notification = Notification(-1, assignment.id!!, dueTime,NotificationService.DUE_CHANNEL_ID)
+            var notification = Notification(-1, assignment.id!!, dueTime,NotificationService.DUE_CHANNEL_ID)
             notificationsDB.insert(notification)
-        }
-        if(setting.toggleLate == 1){
-            val intent = Intent(context, AlarmReceiver::class.java)
-            intent.putExtra("CHANNEL_ID",NotificationService.LATE_CHANNEL_ID)
-            Log.i("Notification","Alarm Set: $assignment")
-            intent.putExtra("assignment",assignment)
-            val pendingIntent = PendingIntent.getBroadcast(context, id+1000, intent, PendingIntent.FLAG_IMMUTABLE)
 
-            val clockInfo = AlarmManager.AlarmClockInfo(assignment.dueDate,maPendingIntent)
-            alarmManager.setAlarmClock(clockInfo,pendingIntent)
-            val notification = Notification(-1, assignment.id!!, assignment.dueDate,NotificationService.LATE_CHANNEL_ID)
+        /*
+        Late Assignment
+         */
+            notification = Notification(-1, assignment.id!!, assignment.dueDate,NotificationService.LATE_CHANNEL_ID)
             notificationsDB.insert(notification)
-        }
 
+            restartAlarm()
 
 
     }
@@ -75,38 +57,49 @@ class AlarmService(val context: Context) {
             return
         val notificationsList = notificationsDB.readAll()
         val mainActivityIntent = Intent(context,MainActivity::class.java)
+        val settingDB = SettingDB(context)
+        val setting = settingDB.read()
+        cancelAllAlarm(false)
+        for(it in notificationsList) {
 
-        notificationsList.forEach {
-            run{
-                val maPendingIntent = PendingIntent.getActivity(context,it.assignmentID,mainActivityIntent,
-                    PendingIntent.FLAG_IMMUTABLE)
-                val intent = Intent(context, AlarmReceiver::class.java)
-                val assignment = assignmentsDB.read(it.assignmentID)
-                intent.putExtra("CHANNEL_ID",it.notifyType)
-                intent.putExtra("assignment",assignment)
+            val maPendingIntent = PendingIntent.getActivity(
+                context, it.assignmentID, mainActivityIntent,
+                PendingIntent.FLAG_MUTABLE
+            )
+            val assignment = assignmentsDB.read(it.assignmentID)
+            val intent = Intent(context, AlarmReceiver::class.java)
 
-                val isNotificationChannelLate = it.notifyType == NotificationService.LATE_CHANNEL_ID
+            intent.putExtra("CHANNEL_ID", it.notifyType)
+            intent.putExtra("assignment", assignment)
 
-                val pendingIntent = (if(isNotificationChannelLate)
-                    assignment?.id?.plus(1000)
-                else
-                    assignment?.id)?.let { it1 ->
-                    PendingIntent.getBroadcast(context,
-                        it1,
-                        intent,
-                        PendingIntent.FLAG_IMMUTABLE
-                    )
-                }
-                val clockInfo = AlarmManager.AlarmClockInfo(
-                    it.notifyDate,
-                    maPendingIntent
-                )
-                alarmManager.setAlarmClock(clockInfo,pendingIntent)
+            Log.i("AlamService", "CHANNEL_ID: ${it.notifyType}\r\nAssignment: $assignment")
+
+            val isNotificationChannelLate = it.notifyType == NotificationService.LATE_CHANNEL_ID
+            if (assignment == null || assignment?.id == null){
+                continue
+            }
+
+
+            val pendingIntent = PendingIntent.getBroadcast(context,
+            if(isNotificationChannelLate) assignment.id!! + 1000 else assignment.id!!,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE)
+            val clockInfo = AlarmManager.AlarmClockInfo(
+                it.notifyDate,
+                maPendingIntent
+            )
+            //Test if setting was set to on
+            val testToggleOn: Boolean =
+                (setting.toggleLate == 1 && it.notifyType == NotificationService.LATE_CHANNEL_ID) ||
+                        (setting.toggleDue == 1 && it.notifyType == NotificationService.DUE_CHANNEL_ID)
+            if (testToggleOn) {
+                alarmManager.setAlarmClock(clockInfo, pendingIntent)
             }
         }
 
+
     }
-    fun cancelAlarm(assignment: Assignment){
+    fun cancelSpecificAlarm(assignment: Assignment){
         if(!isAlarmInitialized())
             return
         val intent = Intent(context,AlarmReceiver::class.java)
@@ -114,17 +107,40 @@ class AlarmService(val context: Context) {
         matchAssignNotifications?.forEach {
             run {
                 if (it.notifyType == NotificationService.DUE_CHANNEL_ID) {
-                    val pendingIntent = PendingIntent.getBroadcast(context,it.assignmentID,intent,PendingIntent.FLAG_UPDATE_CURRENT)
+                    val pendingIntent = PendingIntent.getBroadcast(context,it.assignmentID,intent,PendingIntent.FLAG_MUTABLE)
                     alarmManager.cancel(pendingIntent)
                 }
                 if(it.notifyType == NotificationService.LATE_CHANNEL_ID){
-                    val pendingIntent = PendingIntent.getBroadcast(context,it.assignmentID+1000,intent,PendingIntent.FLAG_UPDATE_CURRENT)
+                    val pendingIntent = PendingIntent.getBroadcast(context,it.assignmentID+1000,intent,PendingIntent.FLAG_MUTABLE)
                     alarmManager.cancel(pendingIntent)
                 }
             }
         }
         assignment.id?.let { notificationsDB.deleteOne(it) }
     }
+    fun cancelAllAlarm(alsoDeleteInDB: Boolean){
+        if(!isAlarmInitialized())
+            return
+        val intent = Intent(context,AlarmReceiver::class.java)
+        val matchAssignNotifications = notificationsDB.readAll()
+        matchAssignNotifications.forEach {
+            run {
+                if (it.notifyType == NotificationService.DUE_CHANNEL_ID) {
+                    val pendingIntent = PendingIntent.getBroadcast(context,it.assignmentID,intent,PendingIntent.FLAG_MUTABLE)
+                    alarmManager.cancel(pendingIntent)
+                }
+                if(it.notifyType == NotificationService.LATE_CHANNEL_ID){
+                    val pendingIntent = PendingIntent.getBroadcast(context,it.assignmentID+1000,intent,PendingIntent.FLAG_MUTABLE)
+                    alarmManager.cancel(pendingIntent)
+                }
+            }
+        }
+        if(alsoDeleteInDB){
+            notificationsDB.deleteAll()
+        }
+
+    }
+
     companion object{
         fun isAlarmInitialized(): Boolean{
             return this::alarmManager.isInitialized

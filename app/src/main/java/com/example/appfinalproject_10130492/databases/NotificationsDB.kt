@@ -44,7 +44,9 @@ class NotificationsDB(context: Context){
         }
         return arrList[0]
     }
-
+    fun deleteAll(){
+        db.rawQuery("DELETE FROM ${dbHelper.notificationTableName}",null)
+    }
     fun deleteOne(assignId: Int): Boolean{
         /*
         @param

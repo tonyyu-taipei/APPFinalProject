@@ -11,16 +11,12 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databases.SettingDB
 import com.example.appfinalproject_10130492.databinding.FragmentSecondBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.joda.time.*
-import org.w3c.dom.Text
-import java.time.LocalDateTime
 import java.util.*
 
 /**
@@ -109,7 +105,7 @@ class SecondFragment : Fragment() {
         fab.setImageResource(R.drawable.edit_48px)
         // set MainActivity to accept the Assignment provided
         // it'll make AddActivity turn into edit mode
-        MainActivity.assigment = assignmentBody
+        MainActivity.assignment = assignmentBody
         MainActivity.editModeToggle(true)
 
         name.text = assignmentBody.title
@@ -201,9 +197,15 @@ class SecondFragment : Fragment() {
         finishedButt.setOnClickListener {
             assignmentDB = AssignmentsDB(this.context)
 
-
+            val alarmService = AlarmService(requireContext())
             assignmentBody.finished = if(assignmentBody.finished == 1 ) 0 else 1
-            finishedButt.text = if(assignmentBody.finished == 1)getString(R.string.unfinish) else getString(R.string.finished)
+            finishedButt.text = if(assignmentBody.finished == 1){
+                alarmService.cancelSpecificAlarm(assignmentBody)
+                getString(R.string.unfinish)
+            } else {
+                alarmService.setAlarm(assignmentBody)
+                getString(R.string.finished)
+            }
 
             assignmentDB.update(assignmentBody)
             statusHelper()

@@ -23,6 +23,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private lateinit var settingDB: SettingDB
     private lateinit var setting: Setting;
     private lateinit var sharedPref: SharedPreferences
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
@@ -76,6 +77,9 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setting.toggleLate = if(lateBoolean) 1 else 0
         settingDB.deleteAll()
         settingDB.insert(setting)
+
+        val alarmService = AlarmService(requireContext())
+        alarmService.restartAlarm()
 
     }
 

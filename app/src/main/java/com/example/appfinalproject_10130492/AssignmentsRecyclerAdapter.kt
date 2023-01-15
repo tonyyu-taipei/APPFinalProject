@@ -16,6 +16,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
+import com.example.appfinalproject_10130492.databases.NotificationsDB
 import java.util.*
 
 
@@ -105,6 +106,10 @@ class AssignmentsRecyclerAdapter(val itemData: ArrayList<Assignment>, val dbHelp
         if(itemData.size != 0) {
             val assignment = itemData[pos]
             assignment.id?.let { dbHelper.deleteOne(it) }
+            val notificationsDB = context?.let { NotificationsDB(it) }
+            assignment.id?.let { notificationsDB?.deleteOne(it) }
+            val alarmService = context?.let { AlarmService(it) }
+            alarmService?.cancelSpecificAlarm(assignment)
             itemData.removeAt(pos)
             notifyItemRemoved(pos)
             //notifyItemRangeChanged(pos, itemData.size);
