@@ -17,6 +17,10 @@
             app:title="@string/late_notification" />
 
     </PreferenceCategory>
+    <PreferenceCategory app:title="@string/about">
+        <Preference android:layout="@layout/settings_credit" />
+    </PreferenceCategory>
+
 
 
 </PreferenceScreen>

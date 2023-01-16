@@ -11,16 +11,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.navigation.NavGraph
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appfinalproject_10130492.data.Assignment
-import com.example.appfinalproject_10130492.databases.AssignmentsDB
-import com.example.appfinalproject_10130492.databases.NotificationsDB
+import com.example.appfinalproject_10130492.databases.AssignmentsDeleteQueue
+import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 
-class AssignmentsRecyclerAdapter(val itemData: ArrayList<Assignment>, val dbHelper: AssignmentsDB, val viewParent: View, val context: Context?) : RecyclerView.Adapter<AssignmentsRecyclerAdapter.ViewHolder>(), ItemTouchHelperAdapter {
+class AssignmentsRecyclerAdapter(
+    private val itemData: ArrayList<Assignment>,
+    private val viewParent: View, val context: Context?, private val deleteQueue: AssignmentsDeleteQueue) : RecyclerView.Adapter<AssignmentsRecyclerAdapter.ViewHolder>(), ItemTouchHelperAdapter {
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val name: TextView
         val desc: TextView
@@ -105,13 +106,25 @@ class AssignmentsRecyclerAdapter(val itemData: ArrayList<Assignment>, val dbHelp
         Log.i("Menu","The adapter data is \r\n $itemData")
         if(itemData.size != 0) {
             val assignment = itemData[pos]
-            assignment.id?.let { dbHelper.deleteOne(it) }
-            val notificationsDB = context?.let { NotificationsDB(it) }
-            assignment.id?.let { notificationsDB?.deleteOne(it) }
-            val alarmService = context?.let { AlarmService(it) }
-            alarmService?.cancelSpecificAlarm(assignment)
+            deleteQueue.enqueue(assignment)
             itemData.removeAt(pos)
             notifyItemRemoved(pos)
+            val snackbar = context?.resources?.getString(R.string.deleted,deleteQueue.getCount())
+                ?.let { Snackbar.make(viewParent, it,Snackbar.LENGTH_LONG) }
+            if (snackbar != null) {
+                snackbar.setAction(R.string.undo){
+                    val tmpCount = deleteQueue.getCount()
+                    var assignmentSize = itemData.size
+                    for(i in 0 until tmpCount){
+                        itemData.add(deleteQueue.dequeue())
+                        notifyItemInserted(assignmentSize)
+                        assignmentSize++
+                    }
+                    Snackbar.make(viewParent, R.string.undo_successfully,Snackbar.LENGTH_SHORT).show()
+
+                }
+                snackbar.show()
+            }
             //notifyItemRangeChanged(pos, itemData.size);
         }
 

@@ -7,17 +7,13 @@ import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.data.AssignmentsWithStatus
-import com.example.appfinalproject_10130492.data.Course
 import com.example.appfinalproject_10130492.databases.exceptions.MultipleMatchesException
 import com.example.appfinalproject_10130492.databases.exceptions.TooManyAssignmentsException
 
 class AssignmentsDB(context: Context?) {
-    private val dbHelper = SQLiteHelper(context);
+    private val dbHelper = SQLiteHelper(context)
     val db: SQLiteDatabase = dbHelper.readableDatabase
 
-    fun readAllCursor(): Cursor {
-        return db.query(false, dbHelper.assignTableName, null, null, null, null, null, null, null)
-    }
 
     /**
      * To read Specific ID in Assignment DB.
@@ -27,9 +23,9 @@ class AssignmentsDB(context: Context?) {
      */
     fun read(id: Int): Assignment?{
         var assignment: Assignment? = null
-        Log.i("database","database read-id: $id");
+        Log.i("database","database read-id: $id")
         try {
-            var cursor = db.query(
+            val cursor = db.query(
                 false,
                 dbHelper.assignTableName,
                 null,
@@ -40,7 +36,6 @@ class AssignmentsDB(context: Context?) {
                 null,
                 null
             )
-            Log.i("db",cursor.toString())
             val assList = cursorParser(cursor)
             if(assList.size > 1){
                 val assListAny = ArrayList<Any>()
@@ -62,7 +57,7 @@ class AssignmentsDB(context: Context?) {
                 db.query(false, dbHelper.assignTableName, null, whereClause, null, null, null, "dueDate DESC", null)
             assList = cursorParser(cursor)
         }catch(e:Exception){
-
+            e.printStackTrace()
         }
 
         return assList
@@ -71,18 +66,6 @@ class AssignmentsDB(context: Context?) {
         return readAll(null)
     }
 
-    fun readAllByCourse(course: Course): ArrayList<Assignment>{
-        var assList = ArrayList<Assignment>()
-        try {
-            val cursor =
-                db.query(false, dbHelper.assignTableName, null, "courseName = '${course.courseName}'", null, null, null, "dueDate DESC", null)
-            assList = cursorParser(cursor)
-        }catch(e:Exception){
-
-        }
-
-        return assList
-    }
     fun readAllByStatus(): AssignmentsWithStatus{
         return readAllByStatus(null)
     }
@@ -117,12 +100,13 @@ class AssignmentsDB(context: Context?) {
             cursor.close()
 
         }catch(e:Exception){
-
+            e.printStackTrace()
         }
 
         return AssignmentsWithStatus(assListFinished,assListLate,assListQueued)
     }
     fun deleteOne(id: Int): Boolean{
+        Log.i("DeleteQueue","Deleting $id")
         val res = db.delete(dbHelper.assignTableName,"_id = $id",null)
         return res > 0
     }
@@ -154,10 +138,11 @@ class AssignmentsDB(context: Context?) {
 
         val res = db.insert(dbHelper.assignTableName,null,toInsert)
         return if(res != (-1).toLong()){
-            val cursor = db.rawQuery("SELECT last_insert_rowid()",null);
+            val cursor = db.rawQuery("SELECT last_insert_rowid()",null)
             cursor.moveToFirst()
-            cursor.getInt(0)
-
+            val innerRes = cursor.getInt(0)
+            cursor.close()
+            innerRes
         }else {
             -1
         }
@@ -178,9 +163,9 @@ class AssignmentsDB(context: Context?) {
         return res > 0
     }
 
-    fun cursorParser(cursor: Cursor): ArrayList<Assignment>{
+    private fun cursorParser(cursor: Cursor): ArrayList<Assignment>{
         val assList = ArrayList<Assignment>()
-        if (cursor!=null && cursor.moveToFirst())
+        if (cursor.moveToFirst())
             while(!cursor.isAfterLast){
                 // _id note title assignedDate dueDate courseName
                 Log.i("Menu",cursor.getString(2))

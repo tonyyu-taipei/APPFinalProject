@@ -5,8 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toBitmap
@@ -20,7 +18,7 @@ class ItemTouchHelperCallback(val iTadapter: ItemTouchHelperAdapter,val context:
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
     ): Int {
-        return makeMovementFlags(0,ItemTouchHelper.START or ItemTouchHelper.END)
+        return makeMovementFlags(0,ItemTouchHelper.START )
     }
 
     override fun onMove(
@@ -29,7 +27,7 @@ class ItemTouchHelperCallback(val iTadapter: ItemTouchHelperAdapter,val context:
         target: RecyclerView.ViewHolder
     ): Boolean {
         //No need to move the view up and down
-        return false;
+        return false
     }
 
     override fun onChildDraw(
@@ -62,6 +60,7 @@ class ItemTouchHelperCallback(val iTadapter: ItemTouchHelperAdapter,val context:
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         iTadapter.onItemDismiss(viewHolder.adapterPosition)
+
     }
 
 

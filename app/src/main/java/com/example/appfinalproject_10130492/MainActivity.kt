@@ -16,12 +16,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.navigation.NavController
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
-import com.example.appfinalproject_10130492.databases.NotificationsDB
 import com.example.appfinalproject_10130492.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 private lateinit var fab: FloatingActionButton
-lateinit var navController: NavController
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     var dialog: NewCoursesDialog = NewCoursesDialog()
-
+    private lateinit var navController:NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         AlarmService.alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         CoursesFirstFragment.newCoursesDialog = dialog
@@ -37,7 +35,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setSupportActionBar(binding.toolbarAdd)
         navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -46,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         // Bottom Navigation Listener
         botnav = findViewById(R.id.botnav)
-        botnav?.setOnItemSelectedListener{
+        botnav.setOnItemSelectedListener{
 
             fab.setImageResource(android.R.drawable.ic_input_add)
             editModeToggle(false)
@@ -56,19 +53,19 @@ class MainActivity : AppCompatActivity() {
                     FirstFragment.modeOn = false
                     navController.setGraph(R.navigation.nav_graph)
                     appBarConfiguration = AppBarConfiguration(navController.graph)
-                    scrollFab(true);
+                    scrollFab(true)
 
 
                 }
                 R.id.classes -> {
                     navController.setGraph(R.navigation.nav_graph3)
-                    scrollFab(true);
+                    scrollFab(true)
                     appBarConfiguration = AppBarConfiguration(navController.graph)
                 }
                 R.id.action_settings ->{
                     navController.setGraph(R.navigation.nav_settings)
                     appBarConfiguration = AppBarConfiguration(navController.graph)
-                    scrollFab(false);
+                    scrollFab(false)
                 }
             }
             setupActionBarWithNavController(navController, appBarConfiguration)
@@ -76,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         }
         setupActionBarWithNavController(navController, appBarConfiguration)
         fab.setOnClickListener{
-            var intent = Intent(this, AddActivity::class.java)
+            val intent = Intent(this, AddActivity::class.java)
             if(botnav.selectedItemId == R.id.classes){
                 dialog.show(supportFragmentManager,null)
 
@@ -98,12 +95,16 @@ class MainActivity : AppCompatActivity() {
         AlarmService.alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
     }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
+    fun backPressedFunc(){
+        onBackPressedDispatcher.onBackPressed()
         fab.setImageResource(android.R.drawable.ic_input_add)
         editModeToggle(false)
     }
+    @Deprecated("Deprecated in Java", ReplaceWith("backPressedFunc()"))
+    override fun onBackPressed() {
+        backPressedFunc()
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
@@ -118,13 +119,11 @@ class MainActivity : AppCompatActivity() {
                 alertBuilder.setMessage(R.string.confirm_del)
                     .setPositiveButton(R.string.confirm) { _, _ ->
                         val assignDB = AssignmentsDB(this)
-                        val notificationsDB = NotificationsDB(this)
-                        assignment.id?.let { notificationsDB.deleteOne(it) }
                         val alarmService =  AlarmService(this)
                         alarmService.cancelSpecificAlarm(assignment)
                         assignment.id?.let { assignDB.deleteOne(it) }
+                        backPressedFunc()
 
-                        this.onBackPressed()
                     }
                     .setNegativeButton(R.string.cancel){ _, _ ->
 

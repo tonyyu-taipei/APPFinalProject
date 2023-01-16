@@ -1,11 +1,11 @@
 package com.example.appfinalproject_10130492
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
+import com.example.appfinalproject_10130492.databases.AssignmentsDeleteQueue
 import com.example.appfinalproject_10130492.databases.CoursesDB
 import com.example.appfinalproject_10130492.databinding.FragmentFirstBinding
 
@@ -29,17 +30,18 @@ class FirstFragment : Fragment() {
     private lateinit var adapter: AssignmentsRecyclerAdapter
     private lateinit var courseDB: CoursesDB
     private lateinit var assignDB:AssignmentsDB
-
+    private lateinit var deleteQueue: AssignmentsDeleteQueue
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         return binding.root
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
         assList.clear()
@@ -64,22 +66,24 @@ class FirstFragment : Fragment() {
         }else {
             assList = assignDB.readAll()
         }
-
-        adapter = AssignmentsRecyclerAdapter(assList,assignDB,view,this.context)
+        deleteQueue = AssignmentsDeleteQueue(requireContext())
+        adapter = AssignmentsRecyclerAdapter(assList, view,this.context,deleteQueue)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
+
+
 
         scroll = view.findViewById(R.id.nest)
         scroll.setOnScrollChangeListener(View.OnScrollChangeListener(
             fun(v: View, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int){
-                val view = scroll.getChildAt(scroll.childCount - 1) as View
-                val diff = view.bottom - (scroll.height + scroll
+                val scrollView = scroll.getChildAt(scroll.childCount - 1) as View
+                val diff = scrollView.bottom - (scroll.height + scroll
                     .scrollY)
                 if(diff==0){
                     Log.i("Scroll","BOTTOM")
-                    MainActivity.scrollFab(false);
+                    MainActivity.scrollFab(false)
                 }else{
-                    MainActivity.scrollFab(true);
+                    MainActivity.scrollFab(true)
                 }
             }
 
@@ -93,6 +97,11 @@ class FirstFragment : Fragment() {
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        deleteQueue.hardDelete()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -103,7 +112,6 @@ class FirstFragment : Fragment() {
         fun isSpecific(): Boolean{
             return this::courseSpecific.isInitialized && modeOn
         }
-        lateinit var selectedAssignment: Assignment
         private lateinit var recyclerView:RecyclerView
     }
 

@@ -1,7 +1,7 @@
 <resources>
     <string name="due_notification">即將到期提醒</string>
     <string name="due_notification_setting">即將到期百分比</string>
-    <string name="due_notification_setting_description">系統會在到達您指定的百分比時，將作業標為逾時。</string>
+    <string name="due_notification_setting_description">系統會在到達您指定的百分比時，將作業標為即將到期。</string>
     <string name="due_toggle_description">將在作業到達您所指定即將到期的百分比時，主動提醒您。</string>
     <string name="due_toggle_description_off">將不會在作業即將到期時提醒您。</string>
     <string name="late_notification">逾時提醒</string>
@@ -32,7 +32,6 @@
     <string name="empty_courses">沒有課程</string>
     <string name="celebrate">是不是應該慶祝一下？</string>
     <string name="added_successfully">新增成功</string>
-    <string name="lorem_ipsum"></string>
     <string name="title_activity_class">ClassActivity</string>
     <string name="add_qr_code">掃描QR Code</string>
     <string name="add_assign">新增作業</string>
@@ -54,7 +53,9 @@
     <string name="confirm">確認</string>
     <string name="cancel">取消</string>
     <string name="cancel_course">刪除課程</string>
-
+    <string name="deleted">已刪除%1$d個作業</string>
+    <string name="undo">復原</string>
+    <string name="undo_successfully">復原成功</string>
     <string name="ok">好</string>
     <string name="alert_msg_required">請填入必填欄位</string>
     <string name="day">天</string>
@@ -92,4 +93,7 @@
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
+    <string name="about">關於</string>
+    <string name="byAuthor">作業提醒 By 余致學</string>
+    <string name="originally_ios_scholarium_by">Originally iOS Scholarium By 吳承翰</string>
 </resources>

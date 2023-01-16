@@ -1,25 +1,22 @@
 package com.example.appfinalproject_10130492
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toolbar
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.data.AssignmentsWithStatus
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databases.CoursesDB
 import com.example.appfinalproject_10130492.databinding.FragmentCoursesFirstBinding
-import com.example.appfinalproject_10130492.databinding.FragmentFirstBinding
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -40,7 +37,7 @@ class CoursesFirstFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentCoursesFirstBinding.inflate(inflater, container, false)
         return binding.root
@@ -56,7 +53,7 @@ class CoursesFirstFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = findNavController(requireActivity(),R.id.nav_host_fragment_content_main)
+        val navController = findNavController(requireActivity(),R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         val navHostFragment = NavHostFragment.findNavController(this)
         val toolbar:androidx.appcompat.widget.Toolbar = requireActivity().findViewById(R.id.toolbarAdd)
@@ -73,6 +70,7 @@ class CoursesFirstFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
 
         newCoursesDialog.setDialogDestroyListener(object: NewCoursesDialog.DialogInterface{
+            @SuppressLint("NotifyDataSetChanged")
             override fun onDestroyListener() {
                 courses.clear()
                 courses.addAll(courseDB.readAll())
@@ -84,14 +82,14 @@ class CoursesFirstFragment : Fragment() {
         scroll = view.findViewById(R.id.nest_course)
         scroll.setOnScrollChangeListener(View.OnScrollChangeListener(
             fun(v: View, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int){
-                val view = scroll.getChildAt(scroll.childCount - 1) as View
-                val diff = view.bottom - (scroll.height + scroll
+                val scrollView = scroll.getChildAt(scroll.childCount - 1) as View
+                val diff = scrollView.bottom - (scroll.height + scroll
                     .scrollY)
                 if(diff==0){
                     Log.i("Scroll","BOTTOM")
-                    MainActivity.scrollFab(false);
+                    MainActivity.scrollFab(false)
                 }else{
-                    MainActivity.scrollFab(true);
+                    MainActivity.scrollFab(true)
                 }
             }
 
