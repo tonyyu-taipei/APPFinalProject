@@ -33,18 +33,27 @@ class CoursesDB(context: Context?) {
     }
     fun insert(course: Course): Boolean{
         val toInsert = ContentValues()
+        if(course.courseName.isEmpty()){
+            return false
+        }
         toInsert.put("courseName", course.courseName)
         toInsert.put("teacher",course.teacher)
         val res = db.insert(dbHelper.courseTableName,null,toInsert)
         return res != (-1).toLong()
     }
-    fun update(course: Course): Boolean{
+
+    /**
+     * Update the existing course in the database
+     * @param course The updated Course
+     * @param courseName The course name that you want to edit
+     */
+    fun update(course: Course, courseName: String): Boolean{
         val update = ContentValues().apply{
             put("courseName", course.courseName)
             put("teacher",course.teacher)
         }
 
-        val res= db.update(dbHelper.courseTableName,update,"id = ${course.courseName}",null)
+        val res= db.update(dbHelper.courseTableName,update,"courseName = ?",arrayOf(courseName))
         return res > 0
     }
     private fun cursorParser(cursor: Cursor): ArrayList<Course>{

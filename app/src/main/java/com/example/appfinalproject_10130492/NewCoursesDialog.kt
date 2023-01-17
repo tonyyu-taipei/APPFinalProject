@@ -14,12 +14,16 @@ class NewCoursesDialog: DialogFragment(){
     private lateinit var courseNameTextField:TextInputLayout
     private lateinit var teacherTextField: TextInputLayout
     lateinit var courseName: String
+    private var editCourse:Course? = null
     private var myListener: DialogInterface?
 
 
     init{
         myListener = null;
 
+    }
+    fun setEditCourse(course:Course){
+        editCourse = course
     }
 
     fun setDialogDestroyListener(dialogInterface: DialogInterface){
@@ -32,6 +36,8 @@ class NewCoursesDialog: DialogFragment(){
     }
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
+
+
             val builder = AlertDialog.Builder(it)
             // Get the layout inflater
             val inflater = requireActivity().layoutInflater;
@@ -41,10 +47,16 @@ class NewCoursesDialog: DialogFragment(){
             val view = inflater.inflate(R.layout.new_courses_dialog, null)
             courseNameTextField = view.findViewById(R.id.new_course_name)
             teacherTextField = view.findViewById(R.id.new_course_teacher)
-
+            var originalCourseName = ""
 
             if(this::courseName.isInitialized){
                 courseNameTextField.editText?.text = Editable.Factory.getInstance().newEditable(courseName)
+            }
+            val inputedCourse = editCourse
+            if(inputedCourse != null){
+                teacherTextField.editText?.text = Editable.Factory.getInstance().newEditable(if(inputedCourse.teacher == null)"" else inputedCourse.teacher)
+                courseNameTextField.editText?.text = Editable.Factory.getInstance().newEditable(inputedCourse.courseName)
+                originalCourseName =inputedCourse.courseName
             }
 
             builder.setView(view)
@@ -59,13 +71,31 @@ class NewCoursesDialog: DialogFragment(){
                             .show()
                     }
                     val course: Course = if(courseNameTextField.editText!!.text.toString() == ""){
-                        Course(courseNameTextField.editText!!.text.toString(),null)
+                        if(inputedCourse == null) {
+                            Course(courseNameTextField.editText!!.text.toString(), null)
+                        }else{
+                            inputedCourse.courseName = courseNameTextField.editText!!.text.toString()
+                            inputedCourse.teacher =null
+                            inputedCourse
+                        }
                     }else{
-                        Course(courseNameTextField.editText!!.text.toString(),teacherTextField.editText!!.text.toString())
+                        if(inputedCourse == null) {
+                            Course(
+                                courseNameTextField.editText!!.text.toString(),
+                                teacherTextField.editText!!.text.toString()
+                            )
+                        }else{
+                            inputedCourse.courseName = courseNameTextField.editText!!.text.toString()
+                            inputedCourse.teacher = teacherTextField.editText!!.text.toString()
+                            inputedCourse
+                        }
                     }
                     Snackbar.make(view,R.string.added_successfully,Snackbar.LENGTH_LONG).show()
-
-                    coursesDB.insert(course)
+                    if(editCourse == null) {
+                        coursesDB.insert(course)
+                    }else{
+                        coursesDB.update(course,originalCourseName)
+                    }
                 }
                 .setNegativeButton(R.string.cancel
                 ) { _, _ ->
@@ -74,6 +104,7 @@ class NewCoursesDialog: DialogFragment(){
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }
+
     interface DialogInterface{
         fun onDestroyListener()
     }

@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">缺學分</string>
     <string name="due_notification">即將到期提醒</string>
     <string name="due_notification_setting">即將到期百分比</string>
     <string name="due_notification_setting_description">系統會在到達您指定的百分比時，將作業標為即將到期。</string>
@@ -16,7 +17,6 @@
     <string name="late_notification_description">%1$s 已經截止了</string>
 
 
-    <string name="app_name">作業提醒</string>
     <string name="action_settings">設定</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">作業</string>

@@ -65,7 +65,7 @@ class CoursesFirstFragment : Fragment() {
 
         val courses = courseDB.readAll()
         assStatus = assignDB.readAllByStatus()
-        adapter = CoursesRecyclerAdapter(courses,courseDB,assignDB,view,this.context)
+        adapter = CoursesRecyclerAdapter(courses,courseDB,assignDB,view,this.context,parentFragmentManager)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
 

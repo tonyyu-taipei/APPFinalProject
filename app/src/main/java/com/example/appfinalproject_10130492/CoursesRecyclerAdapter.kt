@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appfinalproject_10130492.data.AssignmentsWithStatus
@@ -19,7 +20,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class CoursesRecyclerAdapter(val courses:ArrayList<Course>, val coursesDB: CoursesDB, val assignDB: AssignmentsDB, val viewParent: View, val context: Context?) : RecyclerView.Adapter<CoursesRecyclerAdapter.ViewHolder>(), ItemTouchHelperAdapter {
+class CoursesRecyclerAdapter(val courses:ArrayList<Course>, val coursesDB: CoursesDB, val assignDB: AssignmentsDB, val viewParent: View, val context: Context?, val fragmentManager: FragmentManager) : RecyclerView.Adapter<CoursesRecyclerAdapter.ViewHolder>(), ItemTouchHelperAdapter {
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val courseTitle: TextView
         val teacher: TextView
@@ -67,6 +68,24 @@ class CoursesRecyclerAdapter(val courses:ArrayList<Course>, val coursesDB: Cours
             FirstFragment.courseSpecific = courseData.courseName
             viewParent.findNavController().navigate(R.id.action_coursesFirstFragment_to_firstFragment)
         }
+        holder.linear.setOnLongClickListener {
+            val newCoursesDialog = NewCoursesDialog()
+            newCoursesDialog.setEditCourse(courseData)
+            newCoursesDialog.show(fragmentManager,null)
+            fun reloadSpecificItem(){
+                notifyItemChanged(position)
+            }
+            newCoursesDialog.setDialogDestroyListener(
+                object:NewCoursesDialog.DialogInterface{
+                    override fun onDestroyListener() {
+
+                        reloadSpecificItem()
+                    }
+
+                }
+            )
+            true
+        }
 
 
     }
@@ -100,5 +119,6 @@ class CoursesRecyclerAdapter(val courses:ArrayList<Course>, val coursesDB: Cours
         }
 
     }
+
 
 }
