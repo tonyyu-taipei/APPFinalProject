@@ -14,6 +14,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.preference.Preference
+import androidx.preference.PreferenceManager
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databinding.ActivityMainBinding
@@ -33,6 +35,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val input = intent.extras
         val inputedAssignmentID = input?.getInt("assignment")
+        val intent = Intent(this,AppIntroActivity::class.java)
+        PreferenceManager.getDefaultSharedPreferences(this).apply{
+            //Check if we need to display our OnboardingSupportFragment
+            if(!getBoolean(AppIntroActivity.ASSIGNMENT_TIP,false)){
+                startActivity(intent)
+            }
+        }
 
 
         AlarmService.alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -81,6 +90,13 @@ class MainActivity : AppCompatActivity() {
                     navController.setGraph(R.navigation.nav_graph3)
                     scrollFab(true)
                     appBarConfiguration = AppBarConfiguration(navController.graph)
+                    PreferenceManager.getDefaultSharedPreferences(this).apply{
+                        //Check if we need to display our OnboardingSupportFragment
+                        if(!getBoolean(AppIntroActivity.COURSE_TIP,false)){
+                            intent.putExtra("isCourse",true)
+                            startActivity(intent)
+                        }
+                    }
                 }
                 R.id.action_settings ->{
                     navController.setGraph(R.navigation.nav_settings)
