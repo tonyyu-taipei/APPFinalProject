@@ -62,6 +62,7 @@ class FirstFragment : Fragment() {
 
 
         if(isSpecific()){
+            MainActivity.scrollFab(false)
             assList = assignDB.readAll(courseSpecific)
         }else {
             assList = assignDB.readAll()

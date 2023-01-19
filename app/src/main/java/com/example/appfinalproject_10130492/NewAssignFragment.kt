@@ -1,10 +1,6 @@
 package com.example.appfinalproject_10130492
 
-import android.app.AlarmManager
 import android.app.AlertDialog
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableStringBuilder
@@ -15,13 +11,11 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.TextView
-import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databases.CoursesDB
 import com.example.appfinalproject_10130492.databases.NotificationsDB
-import com.example.appfinalproject_10130492.databases.SettingDB
 import com.example.appfinalproject_10130492.databases.exceptions.TooManyAssignmentsException
 import com.example.appfinalproject_10130492.databinding.FragmentSecondNewAssignBinding
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -51,7 +45,7 @@ class NewAssignFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentSecondNewAssignBinding.inflate(inflater, container, false)
         return binding.root
@@ -70,7 +64,6 @@ class NewAssignFragment : Fragment() {
         var toCalendarDate = Calendar.getInstance()
         val course = CoursesDB(this.context)
         val assignDB = AssignmentsDB(this.context)
-        val notificationsDB = NotificationsDB(requireContext())
 
 
 
@@ -167,7 +160,7 @@ class NewAssignFragment : Fragment() {
                 alert.setTitle(R.string.alert)
                 alert.setMessage(R.string.alert_msg_date_error)
                 alert.setPositiveButton(R.string.alert_msg_date_confirm) { dialog, _ ->
-                    dialog.dismiss();
+                    dialog.dismiss()
                     val tmp = fromCalendarDate
                     fromCalendarDate = toCalendarDate
                     toCalendarDate = tmp
@@ -191,7 +184,7 @@ class NewAssignFragment : Fragment() {
                     .setMessage(R.string.new_courses_from_qr_hint)
 
                 dialog.setPositiveButton(R.string.ok) { _, _ ->
-                    val newCoursesDialog = NewCoursesDialog();
+                    val newCoursesDialog = NewCoursesDialog()
                     newCoursesDialog.courseName = courseName.text.toString()
                     newCoursesDialog.show(parentFragmentManager, null)
                     newCoursesDialog.setDialogDestroyListener(object: NewCoursesDialog.DialogInterface{
@@ -202,7 +195,7 @@ class NewAssignFragment : Fragment() {
                     })
                 }
                 dialog.setNegativeButton(R.string.empty){_,_->
-                    courseName.text = Editable.Factory.getInstance().newEditable("");
+                    courseName.text = Editable.Factory.getInstance().newEditable("")
                 }
                 dialog.create()
                 dialog.show()
@@ -211,6 +204,9 @@ class NewAssignFragment : Fragment() {
                 return@setOnClickListener
             }
             var alarmService:AlarmService
+            // If this fragment is in editMode, do:
+            //    assignDB.update
+            //    alarm (notifications) update
             if(isAssignmentInitialized() && assignmentInput.id != -1){
                 val assignment = Assignment(
                     assignmentInput.id,
@@ -220,18 +216,20 @@ class NewAssignFragment : Fragment() {
                     courseName.text.toString(),
                     note.editText!!.text.toString(),
                     0 )
+                SecondFragment.assignmentBody = assignment
                 assignDB.update(assignment)
-                assignmentInput.id?.let { it1 -> notificationsDB.deleteOne(it1) }
+
                 /*
                 Note: AlarmService will handle the part where it adds the notification information into NotificationDB
                 Therefore, here we only need to delete the old one.
                  */
                 alarmService = AlarmService(requireContext())
-                alarmService.setAlarm(assignment)
-                SecondFragment.assignmentBody = assignment
+                alarmService.updateAlarm(assignment)
+
 
 
             }else {
+                // else if this is an new assignment, do:
                 val assignment = Assignment(
                     null,
                     nameString,
@@ -253,6 +251,7 @@ class NewAssignFragment : Fragment() {
                 }
 
             }
+            
             activity?.finish()
 
 

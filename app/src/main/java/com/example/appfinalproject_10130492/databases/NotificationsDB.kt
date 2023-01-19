@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.util.Log
+import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.data.Notification
 import com.example.appfinalproject_10130492.databases.exceptions.MultipleMatchesException
 
@@ -69,6 +70,17 @@ class NotificationsDB(context: Context){
         }else {
             -1
         }
+    }
+    fun update(notification: Notification): Boolean{
+        val update = ContentValues().apply{
+            put("assignId",notification.assignmentID)
+            put("notifyDate",notification.notifyDate)
+            put("notifyType",notification.notifyType)
+
+        }
+
+        val res= db.update(dbHelper.notificationTableName,update,"id = ?",arrayOf(notification.id.toString()))
+        return res > 0
     }
 
     private fun cursorParser(cursor: Cursor): ArrayList<Notification> {

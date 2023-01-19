@@ -5,20 +5,22 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
-import androidx.navigation.NavController
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+
+
 private lateinit var fab: FloatingActionButton
 
 
@@ -29,6 +31,10 @@ class MainActivity : AppCompatActivity() {
     var dialog: NewCoursesDialog = NewCoursesDialog()
     private lateinit var navController:NavController
     override fun onCreate(savedInstanceState: Bundle?) {
+        val input = intent.extras
+        val inputedAssignmentID = input?.getInt("assignment")
+
+
         AlarmService.alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         CoursesFirstFragment.newCoursesDialog = dialog
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -43,9 +49,22 @@ class MainActivity : AppCompatActivity() {
 
         // Bottom Navigation Listener
         botnav = findViewById(R.id.botnav)
+
+
         botnav.setOnItemSelectedListener{
 
             fab.setImageResource(android.R.drawable.ic_input_add)
+            // Somehow once the user pressed course from botnav,
+            // the onSupportNavUp() will no longer work, so I have to implement
+            // this custom listener. It starts once botnav was clicked.
+            SecondFragment.forceFabAdd = object: ForceChangeFabToAddListener{
+                override fun onChange() {
+                    fab.setImageResource(android.R.drawable.ic_input_add)
+                    editModeToggle(false)
+                }
+
+            }
+
             editModeToggle(false)
             Log.i("Menu", ""+it.itemId+" Title"+it.title)
             when(it.itemId){
@@ -56,8 +75,9 @@ class MainActivity : AppCompatActivity() {
                     scrollFab(true)
 
 
+
                 }
-                R.id.classes -> {
+                R.id.courses -> {
                     navController.setGraph(R.navigation.nav_graph3)
                     scrollFab(true)
                     appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -72,9 +92,14 @@ class MainActivity : AppCompatActivity() {
             return@setOnItemSelectedListener true
         }
         setupActionBarWithNavController(navController, appBarConfiguration)
+        if(inputedAssignmentID != null){
+            val assignmentsDB = AssignmentsDB(this)
+            SecondFragment.assignmentBody = assignmentsDB.read(inputedAssignmentID)!!
+            navController.navigate(R.id.SecondFragment)
+        }
         fab.setOnClickListener{
             val intent = Intent(this, AddActivity::class.java)
-            if(botnav.selectedItemId == R.id.classes){
+            if(botnav.selectedItemId == R.id.courses){
                 dialog.show(supportFragmentManager,null)
 
                 return@setOnClickListener
@@ -85,6 +110,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
 
             overridePendingTransition(R.anim.bottom_up,R.anim.no_anim)
+
         }
 
 
@@ -95,10 +121,11 @@ class MainActivity : AppCompatActivity() {
         AlarmService.alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
     }
-    fun backPressedFunc(){
+    private fun backPressedFunc(){
         onBackPressedDispatcher.onBackPressed()
         fab.setImageResource(android.R.drawable.ic_input_add)
         editModeToggle(false)
+        scrollFab(true)
     }
     @Deprecated("Deprecated in Java", ReplaceWith("backPressedFunc()"))
     override fun onBackPressed() {
@@ -130,7 +157,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 alertBuilder.create().show()
 
-                true
+               false
             }
             R.id.share_assign ->{
                 Log.i("Menu","Share button clicked")
@@ -141,7 +168,7 @@ class MainActivity : AppCompatActivity() {
                     R.id.nav_graph3->
                         navController.navigate(R.id.action_SecondFragment_to_QRShareFragment2)
                 }
-                true
+                false
             }
 
             else -> super.onOptionsItemSelected(item)
@@ -177,5 +204,10 @@ class MainActivity : AppCompatActivity() {
             }
     }
     }
+    //ForceChangeFabToAddListener
 
+
+}
+interface ForceChangeFabToAddListener{
+    fun onChange()
 }

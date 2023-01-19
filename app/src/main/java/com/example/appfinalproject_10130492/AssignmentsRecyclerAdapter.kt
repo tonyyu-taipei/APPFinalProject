@@ -111,6 +111,7 @@ class AssignmentsRecyclerAdapter(
             notifyItemRemoved(pos)
             val snackbar = context?.resources?.getString(R.string.deleted,deleteQueue.getCount())
                 ?.let { Snackbar.make(viewParent, it,Snackbar.LENGTH_LONG) }
+
             if (snackbar != null) {
                 snackbar.setAction(R.string.undo){
                     val tmpCount = deleteQueue.getCount()
@@ -126,6 +127,14 @@ class AssignmentsRecyclerAdapter(
                 snackbar.show()
             }
             //notifyItemRangeChanged(pos, itemData.size);
+
+            snackbar?.addCallback(object: Snackbar.Callback(){
+                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                    super.onDismissed(transientBottomBar, event)
+                    MainActivity.scrollFab(false)
+                    MainActivity.scrollFab(true)
+                }
+            })
         }
 
     }

@@ -15,8 +15,10 @@
 
     <string name="due_notification_description">%1$s 即將於 %2$s 截止</string>
     <string name="late_notification_description">%1$s 已經截止了</string>
-
-
+    <string name="percentage_changed">進度變更</string>
+    <string name="percentage_changed_msg">是否要將過往作業套用新設定的百分比設定？\n可能會造成重複通知。</string>
+    <string name="percentage_changed_positive">全部套用</string>
+    <string name="percentage_changed_negative">不需要</string>
     <string name="action_settings">設定</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">作業</string>
@@ -79,6 +81,8 @@
     <!-- Preference Titles -->
     <string name="status_header">進度</string>
     <string name="notification_header">通知</string>
+    <string name="notification_system_setting">變更通知設定</string>
+    <string name="notification_system_setting_description">進入系統設定以變更通知類別的設定</string>
     <string name="status_setting">提醒百分比</string>
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
@@ -96,4 +100,7 @@
     <string name="about">關於</string>
     <string name="byAuthor">作業提醒 By 余致學</string>
     <string name="originally_ios_scholarium_by">Originally iOS Scholarium By 吳承翰</string>
+    <string name="notification_prompt_description">掌握作業繳交期限</string>
+    <string name="notification_prompt_title">開啟通知</string>
+    <string name="open_notification">開啟通知</string>
 </resources>

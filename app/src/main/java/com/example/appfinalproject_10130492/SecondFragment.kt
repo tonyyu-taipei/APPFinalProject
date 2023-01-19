@@ -1,6 +1,8 @@
 package com.example.appfinalproject_10130492
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -10,6 +12,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
@@ -61,9 +65,11 @@ class SecondFragment : Fragment() {
         Log.i("Time","Resumed")
         MainActivity.editModeToggle(true)
        assignmentDB = AssignmentsDB(this.context)
-       assignmentBody = assignmentBody.id?.let { assignmentDB.read(it) }!!
-        assignmentBody.dueDate*1000
-        assignmentBody.assignedDate *1000
+        if(isInited()) {
+            assignmentBody = assignmentBody.id?.let { assignmentDB.read(it) }!!
+            assignmentBody.dueDate * 1000
+            assignmentBody.assignedDate * 1000
+        }
         updateUI()
 
 
@@ -83,8 +89,22 @@ class SecondFragment : Fragment() {
         sec = view.findViewById(R.id.sec_second)
         min = view.findViewById(R.id.sec_min)
         finishedButt = view.findViewById(R.id.sec_finish_butt)
+        if(!isInited()){
+            name.text = "錯誤：資料未正確載入"
+            return
+        }
+        val showNotificationPrompt: CardView = view.findViewById(R.id.notification_prompt)
+        if(this.context?.let { ActivityCompat.checkSelfPermission(it,Manifest.permission.POST_NOTIFICATIONS) } != PackageManager.PERMISSION_GRANTED
+            && activity?.let { ActivityCompat.shouldShowRequestPermissionRationale(it,Manifest.permission.POST_NOTIFICATIONS) } == true
+        ){
+            showNotificationPrompt.visibility = View.VISIBLE
+            val notificationBtn:Button = view.findViewById(R.id.open_notification_button)
+            notificationBtn.setOnClickListener {
+                activity?.let { it1 -> ActivityCompat.requestPermissions(it1,arrayOf(Manifest.permission.POST_NOTIFICATIONS),0) }
+                showNotificationPrompt.visibility = View.INVISIBLE
 
-
+            }
+        }
 
         /*
 
@@ -105,12 +125,14 @@ class SecondFragment : Fragment() {
         fab.setImageResource(R.drawable.edit_48px)
         // set MainActivity to accept the Assignment provided
         // it'll make AddActivity turn into edit mode
-        MainActivity.assignment = assignmentBody
-        MainActivity.editModeToggle(true)
+        if(isInited()) {
+            MainActivity.assignment = assignmentBody
+            MainActivity.editModeToggle(true)
 
-        name.text = assignmentBody.title
-        courseName.text = assignmentBody.courseName
-        note.text = assignmentBody.note
+            name.text = assignmentBody.title
+            courseName.text = assignmentBody.courseName
+            note.text = assignmentBody.note
+        }
 
 
 
@@ -155,7 +177,7 @@ class SecondFragment : Fragment() {
                         min.text = "$mins"
                         sec.text = "$secs"
                     }
-                    val settingDB = SettingDB(requireContext());
+                    val settingDB = SettingDB(context);
                     val setting = settingDB.read()
                     if(progress.progress > setting.duePercentage){
                         progress.progressTintList = ColorStateList.valueOf(Color.parseColor(getString(R.color.late)))
@@ -225,6 +247,7 @@ class SecondFragment : Fragment() {
         super.onDestroyView()
         Log.i("Fragment","SecondFragment Destroyed")
         timer.cancel()
+        forceFabAdd?.onChange()
         _binding = null
     }
 
@@ -241,5 +264,6 @@ class SecondFragment : Fragment() {
             return this::assignmentBody.isInitialized
         }
         lateinit var assignmentBody: Assignment
+        var forceFabAdd: ForceChangeFabToAddListener? = null
     }
 }

@@ -11,7 +11,7 @@
         android:tooltipText="作業"
         app:showAsAction="always|withText" />
     <item
-        android:id="@+id/classes"
+        android:id="@+id/courses"
         android:icon="@drawable/book_48px"
         android:iconTint="#606060"
         android:orderInCategory="2"

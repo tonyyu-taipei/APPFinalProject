@@ -3,7 +3,7 @@
 
 
     <PreferenceCategory app:title="@string/notification_header">
-
+    <!--
         <SwitchPreferenceCompat
             app:key="due_notification"
             app:summaryOff="@string/due_toggle_description_off"
@@ -15,10 +15,21 @@
             app:summaryOff="@string/late_notification_description_off"
             app:summaryOn="@string/late_notification_channel_description"
             app:title="@string/late_notification" />
+            -->
+
+        <Preference
+            android:icon="@drawable/bell"
+            android:key="goto_setting"
+            android:title="@string/notification_system_setting"
+            android:summary="@string/notification_system_setting_description" />
 
     </PreferenceCategory>
-    <PreferenceCategory app:title="@string/about">
-        <Preference android:layout="@layout/settings_credit" />
+    <PreferenceCategory app:title="@string/about"
+        >
+
+        <Preference android:title="@string/byAuthor"
+            android:summary="@string/originally_ios_scholarium_by"
+            android:icon="@drawable/information_outline"/>
     </PreferenceCategory>
 
 
