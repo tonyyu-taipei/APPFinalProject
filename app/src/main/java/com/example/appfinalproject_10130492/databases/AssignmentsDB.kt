@@ -153,7 +153,11 @@ class AssignmentsDB(context: Context?) {
             put("title",assignment.title)
             put("assignedDate",assignment.assignedDate)
             put("dueDate",assignment.dueDate)
-            put("courseName",assignment.courseName)
+            put("courseName",if(assignment.courseName == null || assignment.courseName.isEmpty()){
+                null}
+                else
+                assignment.courseName
+            )
             put("finished",assignment.finished)
 
 
