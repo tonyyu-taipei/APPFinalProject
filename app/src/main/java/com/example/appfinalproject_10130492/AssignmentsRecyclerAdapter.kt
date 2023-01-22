@@ -66,6 +66,7 @@ class AssignmentsRecyclerAdapter(
         }
         else if(data.finished == 1){
             holder.statusIco.setImageResource(R.drawable.check_circle_48px)
+
         }
         else{
             holder.statusIco.setImageResource(R.drawable.alarm_on_48px)

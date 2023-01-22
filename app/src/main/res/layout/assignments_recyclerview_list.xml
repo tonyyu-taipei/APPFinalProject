@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linear"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -26,16 +27,22 @@
             app:contentPaddingTop="10dp"
             app:rippleColor="@color/material_on_primary_emphasis_medium">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/linearLayout4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
-                android:orientation="horizontal">
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp">
 
                 <LinearLayout
-                    android:layout_width="280dp"
+                    android:id="@+id/linearLayout5"
+                    android:layout_width="wrap_content"
+
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+
+                    app:layout_constraintStart_toStartOf="parent">
 
                     <TextView
                         android:id="@+id/name"
@@ -51,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:singleLine="true"
                         android:text="作業說明"
-                        android:textColor="@android:color/system_neutral1_400" />
+                        android:textColor="?attr/colorOnBackground" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -98,29 +105,19 @@
 
                 <ImageView
                     android:id="@+id/statusIcon"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_gravity="center|right|end"
-                    android:layout_weight="1"
-                    android:paddingRight="24dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:cropToPadding="false"
+                    android:scaleType="fitCenter"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/schedule_48px" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="100dp"
-        android:layout_height="match_parent"
-        android:background="@color/late">
-
-        <ImageView
-            android:id="@+id/imageView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/delete_forever_48px"
-            app:tint="#FFFFFF" />
-    </FrameLayout>
 
 </LinearLayout>
