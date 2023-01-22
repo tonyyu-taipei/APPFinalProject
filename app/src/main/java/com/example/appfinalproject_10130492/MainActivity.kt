@@ -208,22 +208,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun fabAnimation(toggle: Boolean){
+        Log.i("Animation","FAB Animation Func Triggered")
         fab = this.findViewById(R.id.fab1)
-        val scalex: PropertyValuesHolder = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.1f)
-        val scaley: PropertyValuesHolder = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.1f)
-        val anim: ObjectAnimator =
-            ObjectAnimator.ofPropertyValuesHolder(fab, scalex, scaley)
+
         if(toggle){
 
-
+            val scalex: PropertyValuesHolder = PropertyValuesHolder.ofFloat(View.SCALE_X, 0.9f)
+            val scaley: PropertyValuesHolder = PropertyValuesHolder.ofFloat(View.SCALE_Y, 0.9f)
+            anim =
+                ObjectAnimator.ofPropertyValuesHolder(fab, scalex, scaley)
             anim.repeatCount = ValueAnimator.INFINITE
             anim.repeatMode = ValueAnimator.REVERSE
             anim.duration = 2000
+            anim.startDelay = 500
             anim.start()
 
 
         }else{
-            anim.cancel()
+            if(isAnimInited()) {
+                anim.cancel()
+                anim.end()
+            }
+
         }
     }
     // This is for hiding the fab button when user's navigating to the bottom.
@@ -232,6 +238,10 @@ class MainActivity : AppCompatActivity() {
         lateinit var assignment:Assignment
         fun editModeToggle(toggle: Boolean){
             EditMode.canItEdit = toggle
+        }
+        lateinit var anim: ObjectAnimator
+        fun isAnimInited():Boolean{
+            return this::anim.isInitialized
         }
         class EditMode {
             companion object{
