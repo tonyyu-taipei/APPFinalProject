@@ -111,4 +111,6 @@
     <string name="course_instruction2">編輯課程</string>
     <string name="course_instruction_description">長按課程即可編輯課程資訊。</string>
     <string name="new_assign_instruction_description">點擊右下角按鈕新增作業。</string>
+    <string name="use_app_to_read_qrcode">使用缺學分來讀取條碼</string>
+    <string name="assignment_qrcode">作業條碼</string>
 </resources>
