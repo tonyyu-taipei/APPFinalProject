@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.*
 import android.view.View.*
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.FileProvider
@@ -45,7 +46,7 @@ class QRShareFragment : Fragment() {
     private lateinit var courseText: TextView
     private lateinit var dateText: TextView
     private lateinit var cardView: CardView
-    private lateinit var shareText: TextView
+    private lateinit var shareText: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

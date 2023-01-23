@@ -38,6 +38,7 @@
     <string name="add_qr_code">掃描QR Code</string>
     <string name="add_assign">新增作業</string>
     <string name="add_course">新增課程</string>
+    <string name="edit_course_title">編輯課程</string>
     <string name="course_name_hint">課程名稱</string>
     <string name="course_teacher_hint">教師名稱</string>
     <string name="assign_name_hint">作業名稱</string>
@@ -76,7 +77,7 @@
     <string name="confirm_del">確定要刪除嗎？</string>
     <string name="confirm_del_courses">確定要刪除嗎？\n所有此課程的作業將會一並刪除。</string>
 
-    <string name="share_hint">您可將上方QR Code截圖給同學們，只需使用此程式或Scholarium iOS版，即可輕鬆新增您所建立的作業。</string>
+    <string name="share_hint">點擊右上方分享作業給您的朋友，朋友們只需使用缺學分或Scholarium掃描即可輕鬆新增您所建立的作業。</string>
     <string name="courses">課程</string>
     <!-- Preference Titles -->
     <string name="status_header">進度</string>
@@ -113,4 +114,5 @@
     <string name="new_assign_instruction_description">點擊右下角按鈕新增作業。</string>
     <string name="use_app_to_read_qrcode">使用缺學分來讀取條碼</string>
     <string name="assignment_qrcode">作業條碼</string>
+    <string name="included_info">內含資訊</string>
 </resources>

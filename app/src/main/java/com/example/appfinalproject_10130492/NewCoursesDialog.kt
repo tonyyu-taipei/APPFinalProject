@@ -3,6 +3,7 @@ package com.example.appfinalproject_10130492
 import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.example.appfinalproject_10130492.data.Course
@@ -13,6 +14,7 @@ import com.google.android.material.textfield.TextInputLayout
 class NewCoursesDialog: DialogFragment(){
     private lateinit var courseNameTextField:TextInputLayout
     private lateinit var teacherTextField: TextInputLayout
+    private lateinit var newCourseTitle: TextView
     lateinit var courseName: String
     private var editCourse:Course? = null
     private var myListener: DialogInterface?
@@ -46,7 +48,8 @@ class NewCoursesDialog: DialogFragment(){
             // Pass null as the parent view because its going in the dialog layout
             val view = inflater.inflate(R.layout.new_courses_dialog, null)
             courseNameTextField = view.findViewById(R.id.new_course_name)
-            teacherTextField = view.findViewById(R.id.new_course_teacher)
+            newCourseTitle = view.findViewById(R.id.new_course_title)
+                teacherTextField = view.findViewById(R.id.new_course_teacher)
             var originalCourseName = ""
 
             if(this::courseName.isInitialized){
@@ -54,6 +57,7 @@ class NewCoursesDialog: DialogFragment(){
             }
             val inputedCourse = editCourse
             if(inputedCourse != null){
+                newCourseTitle.text = getString(R.string.edit_course_title)
                 teacherTextField.editText?.text = Editable.Factory.getInstance().newEditable(if(inputedCourse.teacher == null)"" else inputedCourse.teacher)
                 courseNameTextField.editText?.text = Editable.Factory.getInstance().newEditable(inputedCourse.courseName)
                 originalCourseName =inputedCourse.courseName
