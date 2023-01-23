@@ -1,158 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_marginLeft="24dp"
-    android:layout_marginRight="24dp"
-    tools:context=".QRShareFragment">
+    android:layout_width="match_parent">
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="200dp">
-
-        <ImageView
-            android:id="@+id/qrcode_display"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:src="@drawable/qr_code_2_48px" />
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:text="@string/share_hint" />
-
-    <TextView
-        android:id="@+id/textView15"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="@string/included_info" />
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:orientation="vertical"
+        tools:context=".QRShareFragment">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/share_card"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        app:strokeWidth="0dp">
-
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="200dp">
+
+            <ImageView
+                android:id="@+id/qrcode_display"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:src="@drawable/qr_code_2_48px" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="@string/share_hint" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="@string/included_info" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/share_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/share_assign_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:maxWidth="400dp"
-                android:singleLine="true"
-                android:text="一個作業的名稱一個作業的名稱一個作業的名稱"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+            app:strokeWidth="0dp">
 
             <LinearLayout
-                android:id="@+id/share_lin_course"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/sec_name">
-
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="24sp"
-                    android:layout_height="24sp"
-                    android:layout_weight="1"
-                    android:src="@drawable/book_48px" />
-
-                <TextView
-                    android:id="@+id/share_course_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:maxWidth="400dp"
-                    android:text="課程名稱"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/lin_cal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/share_lin_course">
-
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="24sp"
-                    android:layout_height="24sp"
-                    android:layout_weight="1"
-                    android:src="@drawable/calendar_month_48px" />
-
-                <TextView
-                    android:id="@+id/share_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="bottom"
-                    android:text="2023/01/22 ~ 2023/02/03"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/textView13"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:text="@string/use_app_to_read_qrcode"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/share_assign_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:maxWidth="400dp"
+                    android:singleLine="true"
+                    android:text="一個作業的名稱一個作業的名稱一個作業的名稱"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
-    </com.google.android.material.card.MaterialCardView>
+                <LinearLayout
+                    android:id="@+id/share_lin_course"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
 
-    <LinearLayout
-        android:id="@+id/share_text_for_qr"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="invisible">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/sec_name">
 
-        <ImageView
-            android:id="@+id/imageView9"
-            android:layout_width="32sp"
-            android:layout_height="32sp"
-            android:src="@drawable/logo" />
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="24sp"
+                        android:layout_height="24sp"
+                        android:layout_weight="1"
+                        android:src="@drawable/book_48px" />
 
-        <TextView
-            android:id="@+id/share_qr_title"
+                    <TextView
+                        android:id="@+id/share_course_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:maxWidth="400dp"
+                        android:text="課程名稱"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lin_cal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/share_lin_course">
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="24sp"
+                        android:layout_height="24sp"
+                        android:layout_weight="1"
+                        android:src="@drawable/calendar_month_48px" />
+
+                    <TextView
+                        android:id="@+id/share_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="bottom"
+                        android:text="2023/01/22 ~ 2023/02/03"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textView13"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="@string/use_app_to_read_qrcode"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:id="@+id/share_text_for_qr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/assignment_qrcode"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            android:orientation="horizontal"
+            android:visibility="invisible">
 
-</LinearLayout>
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="32sp"
+                android:layout_height="32sp"
+                android:src="@drawable/logo" />
+
+            <TextView
+                android:id="@+id/share_qr_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/assignment_qrcode"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

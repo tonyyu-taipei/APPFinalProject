@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -20,6 +21,7 @@ import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databases.SettingDB
 import com.example.appfinalproject_10130492.databinding.FragmentSecondBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.zxing.common.StringUtils
 import org.joda.time.*
 import java.util.*
 
@@ -40,9 +42,13 @@ class SecondFragment : Fragment() {
     private lateinit var note: TextView
     private lateinit var dueDate: TextView
     private lateinit var day: TextView
+    private  lateinit var linDay: LinearLayout
     private lateinit var hour: TextView
+    private  lateinit var linHour: LinearLayout
     private lateinit var sec: TextView
+    private  lateinit var linSec: LinearLayout
     private lateinit var min: TextView
+    private  lateinit var linMin: LinearLayout
     private lateinit var fab: FloatingActionButton
     private lateinit var finishedButt: Button
     private lateinit var assignmentDB: AssignmentsDB
@@ -88,6 +94,10 @@ class SecondFragment : Fragment() {
         day = view.findViewById(R.id.sec_day)
         sec = view.findViewById(R.id.sec_second)
         min = view.findViewById(R.id.sec_min)
+        linMin = view.findViewById(R.id.sec_lin_min)
+        linSec = view.findViewById(R.id.sec_lin_sec)
+        linHour = view.findViewById(R.id.sec_lin_hour)
+        linDay = view.findViewById(R.id.sec_lin_day)
         finishedButt = view.findViewById(R.id.sec_finish_butt)
         if(!isInited()){
             name.text = "錯誤：資料未正確載入"
@@ -115,10 +125,10 @@ class SecondFragment : Fragment() {
 
     fun updateUI(){
         //reset the texts to 0
-        day.text = "0"
-        hour.text = "0"
-        min.text = "0"
-        sec.text = "0"
+        day.text = "00"
+        hour.text = "00"
+        min.text = "00"
+        sec.text = "00"
 
         // set fab to editMode
         fab = activity?.findViewById(R.id.fab1)!!
@@ -172,11 +182,38 @@ class SecondFragment : Fragment() {
                                 assignmentBody.dueDate
                             )
                         ).seconds - days * 24*60*60 - hours * 60*60 - mins * 60
-                        day.text = "$days"
-                        hour.text = "$hours"
-                        min.text = "$mins"
-                        sec.text = "$secs"
+                        day.text = String.format("%02d",days)
+                        hour.text = String.format("%02d",hours)
+                        min.text = String.format("%02d",mins)
+                        sec.text = String.format("%02d",secs)
+                        if(days > 0) {
+                            linDay.visibility = View.VISIBLE
+                            linHour.visibility = View.VISIBLE
+                            linMin.visibility = View.VISIBLE
+                            linSec.visibility = View.VISIBLE
+                        }
+                        if(hours > 0 && days == 0) {
+                            linDay.visibility = View.GONE
+                            linHour.visibility = View.VISIBLE
+                            linMin.visibility = View.VISIBLE
+                            linSec.visibility = View.VISIBLE
+                        }
+                        if(mins > 0 && hours == 0 && days == 0 ){
+                            linDay.visibility = View.GONE
+                            linHour.visibility = View.GONE
+                            linMin.visibility = View.VISIBLE
+                            linSec.visibility = View.VISIBLE
+                        }
+                        if(secs > 0 && mins == 0 && hours == 0 && days == 0 ){
+                            linDay.visibility = View.GONE
+                            linHour.visibility = View.GONE
+                            linMin.visibility = View.GONE
+                            linSec.visibility = View.VISIBLE
+                        }
+
+
                     }
+
                     val settingDB = SettingDB(context);
                     val setting = settingDB.read()
                     if(progress.progress > setting.duePercentage){

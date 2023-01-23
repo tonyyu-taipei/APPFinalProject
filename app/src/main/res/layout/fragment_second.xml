@@ -137,10 +137,12 @@
                         android:orientation="horizontal">
 
                         <LinearLayout
+                            android:id="@+id/sec_lin_day"
                             android:layout_width="48sp"
                             android:layout_height="match_parent"
                             android:layout_marginTop="5dp"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/sec_day"
@@ -159,10 +161,12 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/sec_lin_hour"
                             android:layout_width="48sp"
                             android:layout_height="match_parent"
                             android:layout_marginTop="5dp"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/sec_hour"
@@ -179,11 +183,14 @@
                                 android:gravity="bottom|center_horizontal"
                                 android:text="@string/hour" />
                         </LinearLayout>
+
                         <LinearLayout
+                            android:id="@+id/sec_lin_min"
                             android:layout_width="48sp"
                             android:layout_height="match_parent"
                             android:layout_marginTop="5dp"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/sec_min"
@@ -200,7 +207,9 @@
                                 android:gravity="center"
                                 android:text="@string/min" />
                         </LinearLayout>
+
                         <LinearLayout
+                            android:id="@+id/sec_lin_sec"
                             android:layout_width="48sp"
                             android:layout_height="match_parent"
                             android:layout_marginTop="5dp"

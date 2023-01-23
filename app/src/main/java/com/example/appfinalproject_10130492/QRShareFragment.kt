@@ -1,6 +1,7 @@
 package com.example.appfinalproject_10130492
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -76,12 +77,10 @@ class QRShareFragment : Fragment() {
         assignText.text = assignment?.title
         courseText.text = assignment?.courseName
         val dueDate = assignment?.let { Date(it.dueDate) }
-        val uDate = java.text.SimpleDateFormat("yyyy-MM-dd  HH:mm", Locale.TAIWAN)
+        val uDate = java.text.SimpleDateFormat("yyyy/MM/dd aa HH:mm", Locale.TAIWAN)
         var dateStr = uDate.format(dueDate)
 
-        val assignedDate = assignment?.let{Date(it.assignedDate)}
 
-        dateStr = "${uDate.format(assignedDate)} ~ $dateStr"
         dateText.text = dateStr
 
 
@@ -112,6 +111,7 @@ class QRShareFragment : Fragment() {
             Log.e("QR",e.toString())
         }
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_share_page,menu)
@@ -150,6 +150,8 @@ class QRShareFragment : Fragment() {
         val bos = ByteArrayOutputStream()
         shareText.visibility = VISIBLE
         shareText.measure(MeasureSpec.UNSPECIFIED,MeasureSpec.UNSPECIFIED)
+        val backgroundColorOriginal = cardView.backgroundTintList
+        cardView.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
         cardView.measure(MeasureSpec.UNSPECIFIED,MeasureSpec.UNSPECIFIED)
         val textBitmap = Bitmap.createBitmap(shareText.width,shareText.height,Bitmap.Config.ARGB_8888)
         val cardBitmap = Bitmap.createBitmap(cardView.measuredWidth,cardView.measuredHeight,Bitmap.Config.ARGB_8888)
@@ -173,11 +175,12 @@ class QRShareFragment : Fragment() {
 
         resBitmap.compress(Bitmap.CompressFormat.PNG, 0, bos)
         shareText.visibility = INVISIBLE
+        cardView.backgroundTintList = backgroundColorOriginal
         return bos.toByteArray()
     }
 
     private fun writeToInternal(data: ByteArray): File{
-        file = File(context?.filesDir, "${courseName}-$findId.png")
+        file = File(context?.filesDir, "CheckAssign-$findId.png")
         val fos = FileOutputStream(file)
         fos.write(data)
         fos.flush()
