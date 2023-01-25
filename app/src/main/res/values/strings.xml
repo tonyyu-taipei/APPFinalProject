@@ -115,4 +115,7 @@
     <string name="use_app_to_read_qrcode">使用缺學分來讀取條碼</string>
     <string name="assignment_qrcode">作業條碼</string>
     <string name="included_info">內含資訊</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
 </resources>

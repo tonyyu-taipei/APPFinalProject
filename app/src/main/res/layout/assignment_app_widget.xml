@@ -1,0 +1,81 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.APPFinalProject_10130492.AppWidget.Container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/Theme.APPFinalProject_10130492.AppWidgetContainer">
+
+    <TextView
+        android:id="@+id/appwidget_text"
+        style="@style/Widget.APPFinalProject_10130492.AppWidget.InnerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/first_fragment_label"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+<!--
+    <ImageView
+        android:id="@+id/imageView10"
+        style="@style/Widget.APPFinalProject_10130492.AppWidget.InnerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/alarm_on_48px"
+        app:tint="@color/blue" />-->
+
+    <TextView
+        android:id="@+id/textView11"
+        style="@style/Widget.APPFinalProject_10130492.AppWidget.InnerView"
+        android:layout_width="wrap_content"
+        android:paddingStart="18dp"
+        app:autoSizeStepGranularity="8sp"
+        android:paddingEnd="18dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appwidget_text"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:singleLine="true"
+        android:text="我是作業名稱我是作業名稱我是作業名稱
+" />
+
+    <LinearLayout
+        android:layout_marginStart="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        style="@style/Widget.APPFinalProject_10130492.AppWidget.InnerViewCountText"
+        android:orientation="horizontal">
+
+        <ImageView
+            style="@style/Widget.APPFinalProject_10130492.AppWidget.InnerViewCountIcon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:tint="@android:color/system_accent1_900"
+            android:src="@drawable/alarm_on_48px" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginStart="5dp"
+            android:textSize="20dp"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/system_accent1_900"
+            android:text="50分鐘">
+
+        </TextView>
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        style="@style/Widget.APPFinalProject_10130492.AppWidget.InnerViewCountText"
+        android:text="下一個" />
+</RelativeLayout>
