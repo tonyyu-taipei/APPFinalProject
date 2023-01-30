@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">缺學分</string>
     <string name="due_notification">即將到期提醒</string>
+    <string name="expired">已到期</string>
+    <string name="upcoming">即將到期</string>
     <string name="due_notification_setting">即將到期百分比</string>
     <string name="due_notification_setting_description">系統會在到達您指定的百分比時，將作業標為即將到期。</string>
     <string name="due_toggle_description">將在作業到達您所指定即將到期的百分比時，主動提醒您。</string>
@@ -31,6 +33,7 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="empty_assign">沒有作業</string>
+    <string name="empty_due_assign">沒有排程中的作業</string>
     <string name="empty_courses">沒有課程</string>
     <string name="celebrate">是不是應該慶祝一下？</string>
     <string name="added_successfully">新增成功</string>
@@ -118,4 +121,6 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">This is an app widget description</string>
+    <string name="assignment_not_loaded">作業提醒</string>
+    <string name="assignment_not_loaded_hint">若遲未載入\n請重新加入小工具</string>
 </resources>

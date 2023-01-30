@@ -11,10 +11,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/first_fragment_label"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
         android:textSize="20sp"
         android:textStyle="bold" />
 <!--
@@ -29,53 +29,78 @@
         app:tint="@color/blue" />-->
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/widget_assign_title"
         style="@style/Widget.APPFinalProject_10130492.AppWidget.InnerView"
         android:layout_width="wrap_content"
-        android:paddingStart="18dp"
-        app:autoSizeStepGranularity="8sp"
-        android:paddingEnd="18dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/appwidget_text"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:singleLine="true"
-        android:text="我是作業名稱我是作業名稱我是作業名稱
-" />
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text="@string/assignment_not_loaded"
+        android:textSize="24sp"
+        app:autoSizeStepGranularity="8sp" />
 
-    <LinearLayout
-        android:layout_marginStart="8dp"
+    <TextView
+        android:id="@+id/widget_assign_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:text="@string/assignment_not_loaded_hint" />
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         style="@style/Widget.APPFinalProject_10130492.AppWidget.InnerViewCountText"
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/widget_due_icon"
             style="@style/Widget.APPFinalProject_10130492.AppWidget.InnerViewCountIcon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:tint="@android:color/system_accent1_900"
             android:src="@drawable/alarm_on_48px" />
+
         <TextView
+            android:id="@+id/widget_due_clock_text"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_marginStart="5dp"
-            android:textSize="20dp"
             android:gravity="center_vertical"
+            android:text=" - "
             android:textColor="@android:color/system_accent1_900"
-            android:text="50分鐘">
+            android:textSize="18dp"
+            android:textStyle="bold">
 
         </TextView>
 
     </LinearLayout>
 
-    <Button
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
+    <ImageButton
+        android:id="@+id/widget_button_prev"
         style="@style/Widget.APPFinalProject_10130492.AppWidget.InnerViewCountText"
-        android:text="下一個" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="60dp"
+        android:foregroundGravity="center_vertical|center"
+        android:paddingStart="10dp"
+        android:src="@drawable/chevron_left" />
+
+    <ImageButton
+        android:id="@+id/widget_button"
+        style="@style/Widget.APPFinalProject_10130492.AppWidget.InnerViewCountText"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+
+        android:paddingStart="10dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/chevron_right" />
 </RelativeLayout>
