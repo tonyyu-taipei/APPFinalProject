@@ -112,7 +112,7 @@
                         android:layout_width="24sp"
                         android:layout_height="24sp"
                         android:layout_weight="1"
-                        android:src="@drawable/calendar_month_48px" />
+                        android:src="@drawable/dueicon" />
 
                     <TextView
                         android:id="@+id/share_date"
@@ -123,17 +123,6 @@
                         android:text="2023/01/22 ~ 2023/02/03"
                         android:textSize="16sp" />
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/textView13"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:text="@string/use_app_to_read_qrcode"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>

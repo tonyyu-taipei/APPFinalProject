@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.TextView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
@@ -32,6 +33,8 @@ class CoursesFirstFragment : Fragment() {
     private lateinit var courseDB: CoursesDB
     private lateinit var assignDB:AssignmentsDB
     private lateinit var appBarConfiguration:AppBarConfiguration
+    private lateinit var noCourseText: TextView
+    private lateinit var noCourseTextDescription: TextView
 
 
     override fun onCreateView(
@@ -61,6 +64,8 @@ class CoursesFirstFragment : Fragment() {
         recyclerView = view.findViewById(R.id.courses_rec)
         courseDB = CoursesDB(this.context)
         assignDB = AssignmentsDB(this.context)
+        noCourseText = view.findViewById(R.id.no_course_prompt)
+        noCourseTextDescription = view.findViewById(R.id.no_course_prompt_description)
 
 
         val courses = courseDB.readAll()
@@ -68,6 +73,7 @@ class CoursesFirstFragment : Fragment() {
         adapter = CoursesRecyclerAdapter(courses,courseDB,assignDB,view,this.context,parentFragmentManager)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
+        setVisibility(courses.isNotEmpty())
 
         newCoursesDialog.setDialogDestroyListener(object: NewCoursesDialog.DialogInterface{
             @SuppressLint("NotifyDataSetChanged")
@@ -75,7 +81,8 @@ class CoursesFirstFragment : Fragment() {
                 courses.clear()
                 courses.addAll(courseDB.readAll())
                 adapter.notifyDataSetChanged()
-                Log.i("Courses","Destroyed")
+                setVisibility(courses.isNotEmpty())
+
             }
 
         })
@@ -86,7 +93,6 @@ class CoursesFirstFragment : Fragment() {
                 val diff = scrollView.bottom - (scroll.height + scroll
                     .scrollY)
                 if(diff==0){
-                    Log.i("Scroll","BOTTOM")
                     MainActivity.scrollFab(false)
                 }else{
                     MainActivity.scrollFab(true)
@@ -100,6 +106,19 @@ class CoursesFirstFragment : Fragment() {
 
 
 
+    }
+    private fun setVisibility(showRecycler: Boolean){
+        if(!showRecycler) {
+            noCourseText.visibility = View.VISIBLE
+            noCourseTextDescription.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+            (activity as MainActivity).fabAnimation(false)
+        }else{
+            noCourseText.visibility = View.GONE
+            noCourseTextDescription.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+            (activity as MainActivity).fabAnimation(true)
+        }
     }
 
     override fun onDestroyView() {

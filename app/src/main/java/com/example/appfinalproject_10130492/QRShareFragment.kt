@@ -16,6 +16,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.FileProvider
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
@@ -29,16 +30,14 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
 
 /**
  * A simple [Fragment] subclass.
+ * For Sharing the Assignment QRCode to others.
 
  */
 class QRShareFragment : Fragment() {
-    // TODO: Rename and change types of parameters
     private lateinit var qrImg: ImageView
     private lateinit var bitmap: Bitmap
     private lateinit var courseName: String
@@ -100,10 +99,14 @@ class QRShareFragment : Fragment() {
             Log.i("QR",json.toString())
             bitmap = encoder.encodeBitmap(String(json.toString().toByteArray(),Charsets.ISO_8859_1), BarcodeFormat.QR_CODE,300,300)
             var newBitmap = Bitmap.createBitmap(bitmap.width,bitmap.height,bitmap.config)
-            val logoBitmap = resources.getDrawable(R.drawable.ic_launcher_foreground).toBitmap(100,100)
+            val logoBitmap =
+                ResourcesCompat.getDrawable(resources,R.drawable.ic_launcher_foreground,null)
+                    ?.toBitmap(100,100)
             val canvas = Canvas(newBitmap)
             canvas.drawBitmap(bitmap, Matrix(),null)
-            canvas.drawBitmap(logoBitmap,100f,100f,null)
+            if (logoBitmap != null) {
+                canvas.drawBitmap(logoBitmap,100f,100f,null)
+            }
             bitmap = newBitmap
             qrImg.setImageBitmap(bitmap)
         }catch(e: WriterException){
@@ -153,14 +156,14 @@ class QRShareFragment : Fragment() {
         val backgroundColorOriginal = cardView.backgroundTintList
         cardView.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
         cardView.measure(MeasureSpec.UNSPECIFIED,MeasureSpec.UNSPECIFIED)
-        val textBitmap = Bitmap.createBitmap(shareText.width,shareText.height,Bitmap.Config.ARGB_8888)
+        val textBitmap = Bitmap.createBitmap(shareText.width,shareText.height+10,Bitmap.Config.ARGB_8888)
         val cardBitmap = Bitmap.createBitmap(cardView.measuredWidth,cardView.measuredHeight,Bitmap.Config.ARGB_8888)
         val resBitmap = Bitmap.createBitmap(
             if(cardBitmap.width > bitmap.width){
-                                                     cardView.measuredWidth
-                                                     }else{
-                                                          bitmap.width
-                                                          },cardBitmap.height + bitmap.height+textBitmap.height,Bitmap.Config.ARGB_8888)
+                 cardView.measuredWidth
+            }else{
+              bitmap.width
+            },cardBitmap.height + bitmap.height+textBitmap.height,Bitmap.Config.ARGB_8888)
 
         val outputCanvas = Canvas(resBitmap)
         val textCanvas = Canvas(textBitmap)
@@ -169,7 +172,7 @@ class QRShareFragment : Fragment() {
 
         cardView.draw(cardCanvas)
         outputCanvas.drawColor(Color.WHITE)
-        outputCanvas.drawBitmap(textBitmap,10f,0f,null)
+        outputCanvas.drawBitmap(textBitmap,10f,10f,null)
         outputCanvas.drawBitmap(bitmap,cardBitmap.width/2f-bitmap.width/2f,textBitmap.height.toFloat(),null)
         outputCanvas.drawBitmap(cardBitmap,0f,textBitmap.height.toFloat()+bitmap.height.toFloat(),null)
 

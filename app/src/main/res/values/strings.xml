@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">缺學分</string>
+    <string name="app_name">死線達人</string>
     <string name="due_notification">即將到期提醒</string>
     <string name="expired">已到期</string>
     <string name="upcoming">即將到期</string>
@@ -35,6 +35,7 @@
     <string name="empty_assign">沒有作業</string>
     <string name="empty_due_assign">沒有排程中的作業</string>
     <string name="empty_courses">沒有課程</string>
+    <string name="celebrate_vacation">還沒放假？點擊「+」來新增一堂課吧！</string>
     <string name="celebrate">是不是應該慶祝一下？</string>
     <string name="added_successfully">新增成功</string>
     <string name="title_activity_class">ClassActivity</string>
@@ -75,7 +76,6 @@
 
     <string name="finished">標示完成</string>
     <string name="unfinish">標示未完成</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="editAssign">編輯作業</string>
     <string name="confirm_del">確定要刪除嗎？</string>
     <string name="confirm_del_courses">確定要刪除嗎？\n所有此課程的作業將會一並刪除。</string>
@@ -93,7 +93,6 @@
     <string name="reply_title">Default reply action</string>
 
     <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
@@ -103,12 +102,12 @@
     <string name="sync_header">Sync</string>
     <string name="about">關於</string>
     <string name="byAuthor">作業提醒 By 余致學</string>
-    <string name="originally_ios_scholarium_by">Originally iOS Scholarium By 吳承翰</string>
+    <string name="originally_ios_scholarium_by">Inspired By Scholarium (iOS)</string>
     <string name="notification_prompt_description">掌握作業繳交期限</string>
     <string name="notification_prompt_title">開啟通知</string>
     <string name="open_notification">開啟通知</string>
     <string name="welcome">歡迎</string>
-    <string name="welcome_description">感謝這位缺學分的朋友下載此App\n分享及紀錄各科作業進度，避免重修就好。</string>
+    <string name="welcome_description">感謝下載此App\n分享及紀錄各科作業進度，避免重修就好。</string>
     <string name="new_assign_instruction">新增作業</string>
     <string name="course">課程</string>
     <string name="course_description">各項課程作業進度一目了然。\n點擊右下角按鈕新增課程。</string>
@@ -118,9 +117,8 @@
     <string name="use_app_to_read_qrcode">使用缺學分來讀取條碼</string>
     <string name="assignment_qrcode">作業條碼</string>
     <string name="included_info">內含資訊</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
-    <string name="app_widget_description">This is an app widget description</string>
+    <string name="add_widget">新增小工具</string>
+    <string name="app_widget_description" >在桌面上查看未完成的作業。</string>
     <string name="assignment_not_loaded">作業提醒</string>
     <string name="assignment_not_loaded_hint">若遲未載入\n請重新加入小工具</string>
 </resources>

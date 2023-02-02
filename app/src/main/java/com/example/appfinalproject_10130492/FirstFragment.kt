@@ -62,7 +62,6 @@ class FirstFragment : Fragment() {
             (activity as MainActivity).fabAnimation(false)
         }else{
             setVisibility(false)
-            setVisibility(false)
             (activity as MainActivity).fabAnimation(true)
         }
 
