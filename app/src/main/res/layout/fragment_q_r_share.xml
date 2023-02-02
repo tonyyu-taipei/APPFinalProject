@@ -24,6 +24,7 @@
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center_horizontal|center_vertical"
+                android:contentDescription="@string/assignment_not_loaded_hint"
                 android:src="@drawable/qr_code_2_48px" />
 
         </com.google.android.material.card.MaterialCardView>
@@ -87,6 +88,7 @@
                         android:layout_width="24sp"
                         android:layout_height="24sp"
                         android:layout_weight="1"
+                        android:contentDescription="@string/course_name_hint"
                         android:src="@drawable/book_48px" />
 
                     <TextView
@@ -112,6 +114,7 @@
                         android:layout_width="24sp"
                         android:layout_height="24sp"
                         android:layout_weight="1"
+                        android:contentDescription="@string/date_due"
                         android:src="@drawable/dueicon" />
 
                     <TextView

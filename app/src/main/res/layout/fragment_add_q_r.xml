@@ -14,10 +14,11 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_qr_fab"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginRight="@dimen/fab_margin_right"
         android:layout_marginBottom="@dimen/fab_margin"
-        android:layout_height="wrap_content"
         android:clickable="true"
+        android:contentDescription="@string/load_img"
         android:src="@drawable/image_48px" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

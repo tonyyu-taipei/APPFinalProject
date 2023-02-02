@@ -63,6 +63,7 @@
                 android:layout_width="24sp"
                 android:layout_height="24sp"
                 android:layout_weight="1"
+                android:contentDescription="@string/confirm_del_courses"
                 android:src="@drawable/book_48px" />
 
             <TextView
@@ -87,6 +88,7 @@
                 android:layout_width="24sp"
                 android:layout_height="24sp"
                 android:layout_weight="1"
+                android:contentDescription="@string/assign_recview_date_img_desc"
                 android:src="@drawable/calendar_month_48px" />
 
             <TextView

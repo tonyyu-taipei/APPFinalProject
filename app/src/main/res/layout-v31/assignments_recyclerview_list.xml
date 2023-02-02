@@ -63,6 +63,7 @@
                             android:id="@+id/courseIcon"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
+                            android:contentDescription="@string/courses"
                             app:srcCompat="@drawable/book_48px" />
 
                         <TextView
@@ -83,6 +84,7 @@
                             android:id="@+id/timeIcon"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
+                            android:contentDescription="@string/assign_recview_date_img_desc"
                             android:layout_weight="1"
                             app:srcCompat="@drawable/calendar_month_48px" />
 
