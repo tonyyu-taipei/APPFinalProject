@@ -2,6 +2,7 @@ package com.example.appfinalproject_10130492
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Camera
 import android.os.Bundle
@@ -34,68 +35,79 @@ import org.json.JSONObject
 class AddQRFragment : Fragment() {
 
     private lateinit var cameraPreview: CameraSourcePreview
-    private lateinit var fab:FloatingActionButton
+    private lateinit var fab: FloatingActionButton
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
 
-         cameraPreview = view.findViewById(R.id.camera_view)
+        cameraPreview = view.findViewById(R.id.camera_view)
         fab = view.findViewById(R.id.add_qr_fab)
-        val barcodeDetector = BarcodeDetector.Builder(this.context).setBarcodeFormats(Barcode.QR_CODE).build()
-        val cameraSource = CameraSource.Builder(this.context,barcodeDetector).setRequestedPreviewSize(500,500).setAutoFocusEnabled(true).build()
-        if(this.context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.CAMERA) }
-            != PackageManager.PERMISSION_GRANTED){
+        val barcodeDetector =
+            BarcodeDetector.Builder(this.context).setBarcodeFormats(Barcode.QR_CODE).build()
+        val cameraSource =
+            CameraSource.Builder(this.context, barcodeDetector).setRequestedPreviewSize(500, 500)
+                .setAutoFocusEnabled(true).build()
+        if (this.context?.let { ActivityCompat.checkSelfPermission(it, Manifest.permission.CAMERA) }
+            != PackageManager.PERMISSION_GRANTED) {
             val array = arrayOf(Manifest.permission.CAMERA)
-            this.activity?.let { ActivityCompat.requestPermissions(it,array,1) };
+            this.activity?.let { ActivityCompat.requestPermissions(it, array, 1) };
         }
         val navController = findNavController()
 
-                if (context?.let {
-                        ActivityCompat.checkSelfPermission(
-                            it,
-                            Manifest.permission.CAMERA
-                        )
-                    }
-                    != PackageManager.PERMISSION_GRANTED
+        if (context?.let {
+                ActivityCompat.checkSelfPermission(
+                    it,
+                    Manifest.permission.CAMERA
                 )
-                    navController.navigateUp()
-                try {
+            }
+            != PackageManager.PERMISSION_GRANTED
+        )
+            navController.navigateUp()
+        try {
 
-                    cameraPreview.start(cameraSource)
+            cameraPreview.start(cameraSource)
 
-                } catch (e:Exception) {
-                    e.printStackTrace()
-                }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
 
-        pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()){
-                uri ->
+        pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             run {
                 if (uri != null) {
                     Log.d("PhotoPicked", "Photo Picked: $uri")
 
-                    if(uri != null){
-                        val image = BitmapFactory.decodeStream(context?.contentResolver?.openInputStream(uri!!))
+                    if (uri != null) {
+                        val image =
+                            BitmapFactory.decodeStream(context?.contentResolver?.openInputStream(uri))
                         val frame = Frame.Builder().setBitmap(image).build()
                         barcodeDetector.receiveFrame(frame)
                     }
                 }
             }
         }
+        if(isBitmapImported()){
+            val image = bitmap
+            val frame = Frame.Builder().setBitmap(image).build()
+            barcodeDetector.receiveFrame(frame)
+            importMode = false
+        }
         barcodeDetector.setProcessor(object : Detector.Processor<Barcode> {
             override fun release() {
             }
+
             override fun receiveDetections(p0: Detector.Detections<Barcode>) {
                 val qrCodes = p0.detectedItems
-                if(qrCodes.size() !=0){
-                    Log.i("QR",qrCodes.valueAt(0).displayValue)
+                if (qrCodes.size() != 0) {
+                    Log.i("QR", qrCodes.valueAt(0).displayValue)
                     NewAssignFragment.setEditModeToggle(true)
                     NewAssignFragment.assignmentInput = jsonParser(qrCodes.valueAt(0).displayValue)
-                    AddActivity.backFragmentTransition = R.id.action_addQRFragment_to_AddFirstFragment
+                    AddActivity.backFragmentTransition =
+                        R.id.action_addQRFragment_to_AddFirstFragment
                     AddActivity.onBackBehavior = "Fragment"
-                    navController?.navigate(R.id.action_addQRFragment_to_AddSecondFragment)
+                    navController.navigate(R.id.action_addQRFragment_to_AddSecondFragment)
                     cameraSource.stop()
 
                 }
@@ -111,14 +123,13 @@ class AddQRFragment : Fragment() {
         }
 
 
-
-
     }
 
     override fun onDestroy() {
         cameraPreview.stop()
         super.onDestroy()
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -127,9 +138,24 @@ class AddQRFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_add_q_r, container, false)
     }
 
-    fun jsonParser(str: String): Assignment{
+    fun jsonParser(str: String): Assignment {
         val jsonObj = JSONObject(str)
-        return Assignment(-1,jsonObj.getString("title"),(jsonObj.getLong("assignedDate")+978307200)*1000,(jsonObj.getLong("dueDate")+978307200)*1000,jsonObj.getString("courseName"),jsonObj.getString("note"),0)
+        return Assignment(
+            -1,
+            jsonObj.getString("title"),
+            (jsonObj.getLong("assignedDate") + 978307200) * 1000,
+            (jsonObj.getLong("dueDate") + 978307200) * 1000,
+            jsonObj.getString("courseName"),
+            jsonObj.getString("note"),
+            0
+        )
     }
 
+    companion object{
+        lateinit var bitmap: Bitmap
+        var importMode = false
+        fun isBitmapImported(): Boolean{
+            return !this::bitmap.isInitialized && importMode
+        }
+    }
 }

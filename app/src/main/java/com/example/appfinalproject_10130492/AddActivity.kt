@@ -1,10 +1,18 @@
 package com.example.appfinalproject_10130492
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
+import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toolbar
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.navigation.findNavController
@@ -40,7 +48,7 @@ class AddActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
 
         setupActionBarWithNavController(navController, appBarConfiguration)
-        if(inputedAssignment != null){
+        if (inputedAssignment != null) {
             NewAssignFragment.assignmentInput = inputedAssignment
             NewAssignFragment.setEditModeToggle(true)
             navController.navigate(R.id.AddSecondFragment)
@@ -49,14 +57,17 @@ class AddActivity : AppCompatActivity() {
 
 
         }
-
+        if (intent?.action == Intent.ACTION_SEND && intent?.type?.startsWith("image/") == true) {
+            handleImageInput(intent, this)
+            navController.navigate(R.id.addQRFragment)
+        }
 
 
     }
 
     @SuppressLint("SuspiciousIndentation")
     override fun onBackPressed() {
-        if(onBackBehavior == "No"){
+        if (onBackBehavior == "No") {
             finish()
             return
         }
@@ -64,12 +75,13 @@ class AddActivity : AppCompatActivity() {
 
         NewAssignFragment.Companion.EditMode.canItEdit = false
 
-        if(onBackBehavior == "Activity")
-        overridePendingTransition(R.anim.no_anim,R.anim.up_bottom)
+        if (onBackBehavior == "Activity")
+            overridePendingTransition(R.anim.no_anim, R.anim.up_bottom)
     }
+
     override fun onSupportNavigateUp(): Boolean {
-        return when(onBackBehavior){
-            "No"->{
+        return when (onBackBehavior) {
+            "No" -> {
                 finish()
                 false
             }
@@ -77,10 +89,10 @@ class AddActivity : AppCompatActivity() {
                 finish()
                 true
             }
-            else ->{
+            else -> {
                 val navController = findNavController(R.id.nav_host_fragment_content_class)
-                overridePendingTransition(R.anim.no_anim,R.anim.left_right)
-                navController.navigateUp()||super.onSupportNavigateUp()
+                overridePendingTransition(R.anim.no_anim, R.anim.left_right)
+                navController.navigateUp() || super.onSupportNavigateUp()
                 true
             }
         }
@@ -88,22 +100,47 @@ class AddActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.close->{
+        when (item.itemId) {
+            R.id.close -> {
                 finish()
                 NewAssignFragment.Companion.EditMode.canItEdit = false
-                overridePendingTransition(R.anim.no_anim,R.anim.up_bottom)
+                overridePendingTransition(R.anim.no_anim, R.anim.up_bottom)
             }
         }
 
         return super.onOptionsItemSelected(item)
     }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_add, menu)
         return true
     }
-    companion object{
+
+    private fun handleImageInput(intent: Intent, context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            (intent.getParcelableExtra(Intent.EXTRA_STREAM, Parcelable::class.java) as? Uri)?.let {
+                // Update UI to reflect image being shared
+                handleImage(it, context)
+            }
+        } else {
+            (intent.getParcelableExtra<Parcelable>(Intent.EXTRA_STREAM) as? Uri)?.let {
+                handleImage(it, context)
+            }
+        }
+    }
+
+    private fun handleImage(uri: Uri, context: Context) {
+        val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, uri))
+        } else {
+            MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+        }
+        AddQRFragment.bitmap = bitmap
+        AddQRFragment.importMode = true
+    }
+
+    companion object {
         var onBackBehavior = "Activity"
         var backFragmentTransition = 0
     }
