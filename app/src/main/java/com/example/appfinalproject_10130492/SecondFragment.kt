@@ -159,7 +159,8 @@ class SecondFragment : Fragment() {
 
         progress.max = 100
 
-
+        val settingDB = SettingDB(context);
+        val setting = settingDB.read()
         timer.scheduleAtFixedRate(object: TimerTask(){
             override fun run() {
                 activity!!.runOnUiThread {
@@ -214,8 +215,7 @@ class SecondFragment : Fragment() {
 
                     }
 
-                    val settingDB = SettingDB(context);
-                    val setting = settingDB.read()
+
                     if(progress.progress > setting.duePercentage){
                         progress.progressTintList = ColorStateList.valueOf(Color.parseColor(getString(R.color.late)))
                     }else{
