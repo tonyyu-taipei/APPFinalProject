@@ -38,7 +38,7 @@
     <string name="celebrate_vacation">還沒放假？點擊「+」來新增一堂課吧！</string>
     <string name="celebrate">是不是應該慶祝一下？</string>
     <string name="added_successfully">新增成功</string>
-    <string name="title_activity_class">ClassActivity</string>
+    <string name="title_activity_class">QR新增作業</string>
     <string name="add_qr_code">掃描QR Code</string>
     <string name="add_assign">新增作業</string>
     <string name="add_course">新增課程</string>
@@ -126,5 +126,6 @@
     <string name="next_page">下一頁</string>
     <string name="due_status">到期狀況</string>
     <string name="assign_recview_date_img_desc">起始日期及到期日期</string>
+    <string name="qr_error">請確認條碼內容</string>
     <string name="load_img">由相簿讀取QRCode</string>
 </resources>

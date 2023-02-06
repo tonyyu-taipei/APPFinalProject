@@ -22,6 +22,7 @@ import com.google.android.gms.vision.Frame
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import org.json.JSONObject
 
 
@@ -79,20 +80,12 @@ class AddQRFragment : Fragment() {
                 if (uri != null) {
                     Log.d("PhotoPicked", "Photo Picked: $uri")
 
-                    if (uri != null) {
-                        val image =
-                            BitmapFactory.decodeStream(context?.contentResolver?.openInputStream(uri))
-                        val frame = Frame.Builder().setBitmap(image).build()
-                        barcodeDetector.receiveFrame(frame)
-                    }
+                    val image =
+                        BitmapFactory.decodeStream(context?.contentResolver?.openInputStream(uri))
+                    val frame = Frame.Builder().setBitmap(image).build()
+                    barcodeDetector.receiveFrame(frame)
                 }
             }
-        }
-        if(isBitmapImported()){
-            val image = bitmap
-            val frame = Frame.Builder().setBitmap(image).build()
-            barcodeDetector.receiveFrame(frame)
-            importMode = false
         }
         barcodeDetector.setProcessor(object : Detector.Processor<Barcode> {
             override fun release() {
@@ -103,7 +96,18 @@ class AddQRFragment : Fragment() {
                 if (qrCodes.size() != 0) {
                     Log.i("QR", qrCodes.valueAt(0).displayValue)
                     NewAssignFragment.setEditModeToggle(true)
-                    NewAssignFragment.assignmentInput = jsonParser(qrCodes.valueAt(0).displayValue)
+                    val qrThread = QRMessageThread(view)
+                    try {
+                        NewAssignFragment.assignmentInput =
+                            jsonParser(qrCodes.valueAt(0).displayValue)
+                    }catch(e: org.json.JSONException){
+                        e.printStackTrace()
+                        qrThread.start()
+                        qrThread.join()
+
+                        return
+                    }
+                    qrThread.interrupt()
                     AddActivity.backFragmentTransition =
                         R.id.action_addQRFragment_to_AddFirstFragment
                     AddActivity.onBackBehavior = "Fragment"
@@ -114,6 +118,12 @@ class AddQRFragment : Fragment() {
             }
 
         })
+        if(isBitmapImported()){
+            val image = bitmap
+            val frame = Frame.Builder().setBitmap(image).build()
+            barcodeDetector.receiveFrame(frame)
+            importMode = false
+        }
 
         fab.setOnClickListener {
 
@@ -138,6 +148,9 @@ class AddQRFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_add_q_r, container, false)
     }
 
+    /**
+     * @throws org.json.JSONException
+     */
     fun jsonParser(str: String): Assignment {
         val jsonObj = JSONObject(str)
         return Assignment(
@@ -145,7 +158,8 @@ class AddQRFragment : Fragment() {
             jsonObj.getString("title"),
             (jsonObj.getLong("assignedDate") + 978307200) * 1000,
             (jsonObj.getLong("dueDate") + 978307200) * 1000,
-            jsonObj.getString("courseName"),
+            try{
+            jsonObj.getString("courseName")}catch (e:Exception){null},
             jsonObj.getString("note"),
             0
         )
@@ -155,7 +169,15 @@ class AddQRFragment : Fragment() {
         lateinit var bitmap: Bitmap
         var importMode = false
         fun isBitmapImported(): Boolean{
-            return !this::bitmap.isInitialized && importMode
+            return this::bitmap.isInitialized && importMode
         }
+    }
+}
+
+class QRMessageThread(val view: View) : Thread(){
+    override fun run() {
+            Snackbar.make(view, R.string.qr_error, Snackbar.LENGTH_SHORT).show()
+            sleep(1500)
+
     }
 }
