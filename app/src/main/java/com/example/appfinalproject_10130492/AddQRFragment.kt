@@ -87,6 +87,7 @@ class AddQRFragment : Fragment() {
                 }
             }
         }
+        var recieved = ""
         barcodeDetector.setProcessor(object : Detector.Processor<Barcode> {
             override fun release() {
             }
@@ -94,35 +95,40 @@ class AddQRFragment : Fragment() {
             override fun receiveDetections(p0: Detector.Detections<Barcode>) {
                 val qrCodes = p0.detectedItems
                 if (qrCodes.size() != 0) {
+                    if (recieved == qrCodes.valueAt(0).displayValue) {
+                        return
+                    } else {
+                        recieved = qrCodes.valueAt(0).displayValue
+                    }
                     Log.i("QR", qrCodes.valueAt(0).displayValue)
                     NewAssignFragment.setEditModeToggle(true)
-                    val qrThread = QRMessageThread(view)
                     try {
                         NewAssignFragment.assignmentInput =
                             jsonParser(qrCodes.valueAt(0).displayValue)
-                    }catch(e: org.json.JSONException){
+                    } catch (e: org.json.JSONException) {
                         e.printStackTrace()
-                        qrThread.start()
-                        qrThread.join()
+                        Snackbar.make(view, R.string.qr_error, Snackbar.LENGTH_SHORT).show()
+                        Thread.sleep(1400)
 
                         return
                     }
-                    qrThread.interrupt()
                     AddActivity.backFragmentTransition =
                         R.id.action_addQRFragment_to_AddFirstFragment
                     AddActivity.onBackBehavior = "Fragment"
-                    navController.navigate(R.id.action_addQRFragment_to_AddSecondFragment)
+                    navController.navigate(R.id.AddSecondFragment)
                     cameraSource.stop()
+                    return
 
                 }
             }
 
         })
-        if(isBitmapImported()){
+        if (isBitmapImported()) {
+            Log.d("QR", "${isBitmapImported()}")
             val image = bitmap
             val frame = Frame.Builder().setBitmap(image).build()
-            barcodeDetector.receiveFrame(frame)
             importMode = false
+            barcodeDetector.receiveFrame(frame)
         }
 
         fab.setOnClickListener {
@@ -158,26 +164,21 @@ class AddQRFragment : Fragment() {
             jsonObj.getString("title"),
             (jsonObj.getLong("assignedDate") + 978307200) * 1000,
             (jsonObj.getLong("dueDate") + 978307200) * 1000,
-            try{
-            jsonObj.getString("courseName")}catch (e:Exception){null},
+            try {
+                jsonObj.getString("courseName")
+            } catch (e: Exception) {
+                null
+            },
             jsonObj.getString("note"),
             0
         )
     }
 
-    companion object{
+    companion object {
         lateinit var bitmap: Bitmap
         var importMode = false
-        fun isBitmapImported(): Boolean{
+        fun isBitmapImported(): Boolean {
             return this::bitmap.isInitialized && importMode
         }
-    }
-}
-
-class QRMessageThread(val view: View) : Thread(){
-    override fun run() {
-            Snackbar.make(view, R.string.qr_error, Snackbar.LENGTH_SHORT).show()
-            sleep(1500)
-
     }
 }

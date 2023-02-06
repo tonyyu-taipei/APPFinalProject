@@ -119,7 +119,7 @@
     <string name="included_info">內含資訊</string>
     <string name="add_widget">新增小工具</string>
     <string name="app_widget_description" >在桌面上查看未完成的作業。</string>
-    <string name="assignment_not_loaded">作業提醒</string>
+    <string name="assignment_not_loaded">載入中...</string>
     <string name="assignment_not_loaded_hint">若遲未載入\n請重新加入小工具</string>
     <string name="addOrEdit">新增或編輯作業</string>
     <string name="previous_page">上一頁</string>
@@ -128,4 +128,6 @@
     <string name="assign_recview_date_img_desc">起始日期及到期日期</string>
     <string name="qr_error">請確認條碼內容</string>
     <string name="load_img">由相簿讀取QRCode</string>
+    <string name="widget_date_format_example">2天10小時</string>
+    <string name="assignment_example">微積分作業50題</string>
 </resources>

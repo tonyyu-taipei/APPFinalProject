@@ -143,14 +143,6 @@
                 android:layout_height="32sp"
                 android:src="@drawable/logo" />
 
-            <TextView
-                android:id="@+id/share_qr_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/assignment_qrcode"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>

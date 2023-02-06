@@ -7,8 +7,7 @@
         <item name="android:clipToOutline">true</item>
     </style>
     <style name="Widget.APPFinalProject_10130492.AppWidget.InnerTitle" parent="android:Widget">
-        <item name="android:padding">?attr/appWidgetPadding</item>
-        <item name="android:background">@drawable/app_widget_inner_view_background</item>
+        <!--<item name="android:background">@drawable/app_widget_inner_view_background</item>-->
         <item name="android:textColor">?android:attr/colorForeground</item>
         <item name="android:clipToOutline">true</item>
     </style>

@@ -38,7 +38,6 @@ class AssignmentAppWidget : AppWidgetProvider() {
     }
 
     override fun onReceive(context: Context, intent: Intent?) {
-        super.onReceive(context, intent)
         val id = intent?.getIntExtra("showId",0)?:0
         val widgetId = intent?.getIntExtra("appWidgetId",0)?:0
         Log.d("Widget","onRecieve ID: $id")
@@ -48,6 +47,8 @@ class AssignmentAppWidget : AppWidgetProvider() {
         }
         showId = id
         updateAppWidget(context,AppWidgetManager.getInstance(context),widgetId, showId)
+        super.onReceive(context, intent)
+
     }
     companion object{
         private var showId = 0
@@ -81,6 +82,7 @@ class AssignmentAppWidget : AppWidgetProvider() {
         }
 
     }
+
 }
 internal fun dateToStringHelper(dueDate: Long, context: Context): String{
     val days: Int = Days.daysBetween(

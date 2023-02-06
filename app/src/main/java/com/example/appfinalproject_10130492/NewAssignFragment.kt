@@ -1,5 +1,6 @@
 package com.example.appfinalproject_10130492
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
@@ -52,6 +53,7 @@ class NewAssignFragment : Fragment() {
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fromDateTextView = view.findViewById(R.id.fromDateText)
@@ -300,6 +302,7 @@ class NewAssignFragment : Fragment() {
         }
         return courseArr
     }
+
 
 
 
