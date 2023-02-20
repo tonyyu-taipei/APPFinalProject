@@ -72,11 +72,11 @@
     <ImageButton
         android:id="@+id/widget_button_prev_ex"
         style="@style/Widget.APPFinalProject_10130492.AppWidget.InnerViewCountText"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginRight="60dp"
+        android:layout_marginRight="80dp"
         android:contentDescription="@string/previous_page"
         android:foregroundGravity="center_vertical|center"
         android:paddingStart="10dp"
@@ -85,8 +85,8 @@
     <ImageButton
         android:id="@+id/widget_button_ex"
         style="@style/Widget.APPFinalProject_10130492.AppWidget.InnerViewCountText"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
 

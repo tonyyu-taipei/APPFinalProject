@@ -48,6 +48,7 @@ class QRShareFragment : Fragment() {
     private lateinit var dateText: TextView
     private lateinit var cardView: CardView
     private lateinit var shareText: LinearLayout
+    private lateinit var assignNote: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,6 +66,7 @@ class QRShareFragment : Fragment() {
 
         assignText.text = assignment?.title
         courseText.text = assignment?.courseName
+        assignNote.text = assignment?.note
         val dueDate = assignment?.let { Date(it.dueDate) }
         val uDate = java.text.SimpleDateFormat("yyyy/MM/dd aa HH:mm", Locale.TAIWAN)
         var dateStr = uDate.format(dueDate)
@@ -113,6 +115,7 @@ class QRShareFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         assignText = view.findViewById(R.id.share_assign_name)
+        assignNote = view.findViewById(R.id.share_assign_note)
         courseText = view.findViewById(R.id.share_course_name)
         dateText = view.findViewById(R.id.share_date)
         cardView = view.findViewById(R.id.share_card)

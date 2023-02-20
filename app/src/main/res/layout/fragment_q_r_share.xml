@@ -45,7 +45,7 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/share_card"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
@@ -72,6 +72,16 @@
                     android:text="一個作業的名稱一個作業的名稱一個作業的名稱"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/share_assign_note"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:hyphenationFrequency="none"
+                    android:maxWidth="300dp"
+                    android:maxLines="1"
+                    android:text="TextView" />
 
                 <LinearLayout
                     android:id="@+id/share_lin_course"
