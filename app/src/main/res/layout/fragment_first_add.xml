@@ -7,7 +7,7 @@
     android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp"
     android:orientation="vertical"
-    tools:context=".AddFirstFragment">
+    tools:context=".AMMenuFirstFragment">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/scan_qr_btn"

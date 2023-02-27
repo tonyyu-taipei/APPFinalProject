@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.appfinalproject_10130492.SettingsFragment"
+        android:name="com.example.appfinalproject_10130492.MainSettingsFragment"
         android:label="@string/action_settings" />
 </navigation>

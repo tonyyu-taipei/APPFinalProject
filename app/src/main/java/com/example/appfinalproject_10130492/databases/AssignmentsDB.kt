@@ -21,6 +21,9 @@ class AssignmentsDB(context: Context?) {
      * @throws MultipleMatchesException
      * @param[id] ID of the Assignment that you want to read
      */
+    fun close(){
+        db.close()
+    }
     fun read(id: Int): Assignment?{
         var assignment: Assignment? = null
         Log.i("database","database read-id: $id")
@@ -43,6 +46,7 @@ class AssignmentsDB(context: Context?) {
                 throw MultipleMatchesException(assListAny)
             }
             assignment = assList[0]
+            cursor.close()
         }catch(e: Exception){
             Log.i("db",e.toString())
             e.printStackTrace()
@@ -56,6 +60,7 @@ class AssignmentsDB(context: Context?) {
             val cursor =
                 db.query(false, dbHelper.assignTableName, null, whereClause, null, null, null, "dueDate DESC", null)
             assList = cursorParser(cursor)
+            cursor.close()
         }catch(e:Exception){
             e.printStackTrace()
         }
@@ -184,6 +189,7 @@ class AssignmentsDB(context: Context?) {
                 cursor.moveToNext()
                 assList.add(assignment)
             }
+        cursor.close()
         return assList
     }
 

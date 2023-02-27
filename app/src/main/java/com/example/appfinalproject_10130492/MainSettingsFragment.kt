@@ -1,29 +1,20 @@
 package com.example.appfinalproject_10130492
 
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
-import android.util.Log
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceGroupAdapter
-import androidx.preference.PreferenceManager
-import androidx.preference.PreferenceScreen
-import androidx.preference.PreferenceViewHolder
 
-import androidx.recyclerview.widget.RecyclerView
 import com.example.appfinalproject_10130492.data.Setting
 import com.example.appfinalproject_10130492.databases.SettingDB
 
 
-class SettingsFragment : PreferenceFragmentCompat() {
+class MainSettingsFragment : PreferenceFragmentCompat() {
     private lateinit var settingDB: SettingDB
     private lateinit var setting: Setting;
     private lateinit var sharedPref: SharedPreferences

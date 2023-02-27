@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Camera
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -29,11 +28,11 @@ import org.json.JSONObject
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 /**
  * A simple [Fragment] subclass.
- * Use the [AddQRFragment.newInstance] factory method to
+ * Use the [AMQrResolveFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
 
-class AddQRFragment : Fragment() {
+class AMQrResolveFragment : Fragment() {
 
     private lateinit var cameraPreview: CameraSourcePreview
     private lateinit var fab: FloatingActionButton
@@ -101,9 +100,9 @@ class AddQRFragment : Fragment() {
                         recieved = qrCodes.valueAt(0).displayValue
                     }
                     Log.i("QR", qrCodes.valueAt(0).displayValue)
-                    NewAssignFragment.setEditModeToggle(true)
+                    AMDetailFragment.setEditModeToggle(true)
                     try {
-                        NewAssignFragment.assignmentInput =
+                        AMDetailFragment.assignmentInput =
                             jsonParser(qrCodes.valueAt(0).displayValue)
                     } catch (e: org.json.JSONException) {
                         e.printStackTrace()
@@ -112,9 +111,9 @@ class AddQRFragment : Fragment() {
 
                         return
                     }
-                    AddActivity.backFragmentTransition =
+                    AssignmentsModifyActivity.backFragmentTransition =
                         R.id.action_addQRFragment_to_AddFirstFragment
-                    AddActivity.onBackBehavior = "Fragment"
+                    AssignmentsModifyActivity.onBackBehavior = "Fragment"
                     navController.navigate(R.id.AddSecondFragment)
                     cameraSource.stop()
                     return

@@ -10,9 +10,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationSet
-import android.view.animation.ScaleAnimation
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -31,16 +28,26 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 private lateinit var fab: FloatingActionButton
 
-
+/**
+ * MainActivity
+ * Handling the main UI of the app.
+ */
 class MainActivity : AppCompatActivity() {
     private lateinit var botnav: BottomNavigationView
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var assignmentsDB: AssignmentsDB
     var dialog: NewCoursesDialog = NewCoursesDialog()
     private lateinit var navController:NavController
     override fun onCreate(savedInstanceState: Bundle?) {
+        assignmentsDB = AssignmentsDB(this)
         val input = intent.extras
+
+        /**
+         * Receive and redirect the required AssignmentID
+         */
         val inputedAssignmentID = input?.getInt("assignment")
+        Log.i("MainActivity","Recieved Assignment ID: $inputedAssignmentID")
         val intent = Intent(this,AppIntroActivity::class.java)
         PreferenceManager.getDefaultSharedPreferences(this).apply{
             //Check if we need to display our OnboardingSupportFragment
@@ -51,7 +58,11 @@ class MainActivity : AppCompatActivity() {
 
 
         AlarmService.alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        CoursesFirstFragment.newCoursesDialog = dialog
+        try{
+            MainCoursesFirstFragment.newCoursesDialog = dialog
+        }catch(e: Exception){
+            Log.e("MainActivity",e.toString())
+        }
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -72,7 +83,7 @@ class MainActivity : AppCompatActivity() {
             // Somehow once the user pressed course from botnav,
             // the onSupportNavUp() will no longer work, so I have to implement
             // this custom listener. It starts once botnav was clicked.
-            SecondFragment.forceFabAdd = object: ForceChangeFabToAddListener{
+            MainSecondFragment.forceFabAdd = object: ForceChangeFabToAddListener{
                 override fun onChange() {
                     fab.setImageResource(android.R.drawable.ic_input_add)
                     editModeToggle(false)
@@ -84,7 +95,7 @@ class MainActivity : AppCompatActivity() {
             Log.i("Menu", ""+it.itemId+" Title"+it.title)
             when(it.itemId){
                 R.id.assignments->{
-                    FirstFragment.modeOn = false
+                    MainAssignmentsFirstFragment.modeOn = false
                     navController.setGraph(R.navigation.nav_graph)
                     appBarConfiguration = AppBarConfiguration(navController.graph)
                     scrollFab(true)
@@ -115,12 +126,18 @@ class MainActivity : AppCompatActivity() {
         }
         setupActionBarWithNavController(navController, appBarConfiguration)
         if(inputedAssignmentID != null){
-            val assignmentsDB = AssignmentsDB(this)
-            SecondFragment.assignmentBody = assignmentsDB.read(inputedAssignmentID)!!
+            try {
+                MainSecondFragment.assignmentBody = assignmentsDB.read(inputedAssignmentID)!!
+            }catch(e: NullPointerException) {
+                Log.e(
+                    "Database",
+                    "Error: null pointer from database, please report this to the dev"
+                )
+            }
             navController.navigate(R.id.SecondFragment)
         }
         fab.setOnClickListener{
-            val intent = Intent(this, AddActivity::class.java)
+            val intent = Intent(this, AssignmentsModifyActivity::class.java)
             if(botnav.selectedItemId == R.id.courses){
                 dialog.show(supportFragmentManager,null)
 
@@ -167,10 +184,9 @@ class MainActivity : AppCompatActivity() {
                 val alertBuilder = AlertDialog.Builder(this)
                 alertBuilder.setMessage(R.string.confirm_del)
                     .setPositiveButton(R.string.confirm) { _, _ ->
-                        val assignDB = AssignmentsDB(this)
                         val alarmService =  AlarmService(this)
                         alarmService.cancelSpecificAlarm(assignment)
-                        assignment.id?.let { assignDB.deleteOne(it) }
+                        assignment.id?.let { assignmentsDB.deleteOne(it) }
                         backPressedFunc()
 
                     }
@@ -183,7 +199,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.share_assign ->{
                 Log.i("Menu","Share button clicked")
-                QRShareFragment.findId = assignment.id!!
+                MainQRShareFragment.findId = assignment.id!!
                 when(navController.graph.id) {
                     R.id.nav_graph->
                         navController.navigate(R.id.action_SecondFragment_to_QRShareFragment)
@@ -207,29 +223,12 @@ class MainActivity : AppCompatActivity() {
                 || super.onSupportNavigateUp()
     }
 
-    fun fabAnimation(toggle: Boolean){
-        Log.i("Animation","FAB Animation Func Triggered")
-        fab = this.findViewById(R.id.fab1)
-
-        if(toggle){
-
-            val scalex: PropertyValuesHolder = PropertyValuesHolder.ofFloat(View.SCALE_X, 0.9f)
-            val scaley: PropertyValuesHolder = PropertyValuesHolder.ofFloat(View.SCALE_Y, 0.9f)
-            anim =
-                ObjectAnimator.ofPropertyValuesHolder(fab, scalex, scaley)
-            anim.repeatCount = ValueAnimator.INFINITE
-            anim.repeatMode = ValueAnimator.REVERSE
-            anim.duration = 2000
-            anim.startDelay = 500
-            anim.start()
 
 
-        }else{
-            if(isAnimInited()) {
-                anim.cancel()
-                anim.end()
-            }
-
+    override fun onDestroy() {
+        super.onDestroy()
+        if(this::assignmentsDB.isInitialized){
+            assignmentsDB.close()
         }
     }
     // This is for hiding the fab button when user's navigating to the bottom.

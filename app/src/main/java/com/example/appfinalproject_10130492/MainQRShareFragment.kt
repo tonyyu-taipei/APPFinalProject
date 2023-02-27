@@ -1,7 +1,6 @@
 package com.example.appfinalproject_10130492
 
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -15,7 +14,6 @@ import android.view.View.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.cardview.widget.CardView
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
@@ -36,9 +34,10 @@ import java.util.*
 /**
  * A simple [Fragment] subclass.
  * For Sharing the Assignment QRCode to others.
+ *
 
  */
-class QRShareFragment : Fragment() {
+class MainQRShareFragment : Fragment() {
     private lateinit var qrImg: ImageView
     private lateinit var bitmap: Bitmap
     private lateinit var courseName: String

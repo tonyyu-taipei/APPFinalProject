@@ -6,12 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.ScaleAnimation
 import android.widget.TextView
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,12 +17,15 @@ import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databases.AssignmentsDeleteQueue
 import com.example.appfinalproject_10130492.databases.CoursesDB
 import com.example.appfinalproject_10130492.databinding.FragmentFirstBinding
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
+ * MainAssignmentsFirstFragment
+ * A fragment to view all of the assignments in the DB via recyclerView.
+ *
+ * Once clicked the assignment item, it redirects to MainSecondFragment.
  */
-class FirstFragment : Fragment() {
+class MainAssignmentsFirstFragment : Fragment() {
     var assList = ArrayList<Assignment>()
     private lateinit var scroll: NestedScrollView
     private var _binding: FragmentFirstBinding? = null
@@ -59,10 +59,8 @@ class FirstFragment : Fragment() {
         })
         if(assList.isNotEmpty()){
             setVisibility(true)
-            (activity as MainActivity).fabAnimation(false)
         }else{
             setVisibility(false)
-            (activity as MainActivity).fabAnimation(true)
         }
 
         adapter.notifyDataSetChanged()
@@ -108,7 +106,7 @@ class FirstFragment : Fragment() {
         adapter = AssignmentsRecyclerAdapter(assList, view,this.context,deleteQueue)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false)
-        val itemCallback = this.parentFragment?.context?.let { ItemTouchHelperCallback(adapter, it) }
+        val itemCallback = this.parentFragment?.context?.let { ItemTouchHelperCallback(adapter, it,"Assignments") }
         val itemHelper = itemCallback?.let { ItemTouchHelper(it) }
         itemHelper?.attachToRecyclerView(recyclerView)
 
@@ -135,7 +133,6 @@ class FirstFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        (activity as MainActivity).fabAnimation(false)
         _binding = null
     }
     companion object{

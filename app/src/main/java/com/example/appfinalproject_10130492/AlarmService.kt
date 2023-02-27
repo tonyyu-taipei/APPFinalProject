@@ -38,14 +38,14 @@ class AlarmService(val context: Context) {
         val dueTime = dueNotiCalc(assignment.assignedDate,assignment.dueDate,setting)
         var notification = Notification(-1, assignment.id!!, dueTime,NotificationService.DUE_CHANNEL_ID)
         notificationsDB.insert(notification)
-        startAlarm(notification,false)
+        startAlarm(notification)
 
         /*
         Late Assignment
          */
         notification = Notification(-1, assignment.id!!, assignment.dueDate,NotificationService.LATE_CHANNEL_ID)
         notificationsDB.insert(notification)
-        startAlarm(notification,false)
+        startAlarm(notification)
 
 
 
@@ -72,7 +72,7 @@ class AlarmService(val context: Context) {
                 notification.copy(notifyDate = dueNotiCalc(assignment.assignedDate,assignment.dueDate,settingDB.read()))
             }
             notificationsDB.update(notiTmp)
-            startAlarm(notiTmp,true)
+            startAlarm(notiTmp)
         }
     }
 
@@ -81,7 +81,7 @@ class AlarmService(val context: Context) {
      * @param notification The specific Notification object that you want to start the alarm
      * @param toUpdate If you want to update the current alarm, send true to send PendingIntent.FLAG_UPDATE_CURRENT
      */
-    fun startAlarm(notification: Notification, toUpdate: Boolean){
+    fun startAlarm(notification: Notification){
         if(!isAlarmInitialized()){
             return
         }

@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databases.CoursesDB
-import com.example.appfinalproject_10130492.databases.NotificationsDB
 import com.example.appfinalproject_10130492.databases.exceptions.TooManyAssignmentsException
 import com.example.appfinalproject_10130492.databinding.FragmentSecondNewAssignBinding
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -28,9 +27,11 @@ import com.google.android.material.timepicker.TimeFormat
 import java.util.*
 
 /**
+ * AssignmentModifyActivity Detail Fragment
+ * A [fragment] to modify/ create the details of the assignment.
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class NewAssignFragment : Fragment() {
+class AMDetailFragment : Fragment() {
 
     private var _binding: FragmentSecondNewAssignBinding? = null
 
@@ -218,7 +219,7 @@ class NewAssignFragment : Fragment() {
                     courseName.text.toString(),
                     note.editText!!.text.toString(),
                     0 )
-                SecondFragment.assignmentBody = assignment
+                MainSecondFragment.assignmentBody = assignment
                 assignDB.update(assignment)
 
                 /*

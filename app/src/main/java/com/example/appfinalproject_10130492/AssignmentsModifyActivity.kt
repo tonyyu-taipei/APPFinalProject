@@ -11,18 +11,23 @@ import android.os.Parcelable
 import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toolbar
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databinding.ActivityAddBinding
 
-class AddActivity : AppCompatActivity() {
+/**
+ * AssignmentsModifyActivity
+ * Everything related the Assignment. Including create and modify assignments,
+ * and also create assignments via QR code.
+ *
+ * intent:
+ * Sharing Intent (EXTRA_STREAM) requires an IME type that's image
+ */
+class AssignmentsModifyActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityAddBinding
@@ -49,8 +54,8 @@ class AddActivity : AppCompatActivity() {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         if (inputedAssignment != null) {
-            NewAssignFragment.assignmentInput = inputedAssignment
-            NewAssignFragment.setEditModeToggle(true)
+            AMDetailFragment.assignmentInput = inputedAssignment
+            AMDetailFragment.setEditModeToggle(true)
             navController.navigate(R.id.AddSecondFragment)
             onBackBehavior = "No"
             supportActionBar?.title = getString(R.string.editAssign)
@@ -73,7 +78,7 @@ class AddActivity : AppCompatActivity() {
         }
         super.onBackPressed()
 
-        NewAssignFragment.Companion.EditMode.canItEdit = false
+        AMDetailFragment.Companion.EditMode.canItEdit = false
 
         if (onBackBehavior == "Activity")
             overridePendingTransition(R.anim.no_anim, R.anim.up_bottom)
@@ -103,7 +108,7 @@ class AddActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.close -> {
                 finish()
-                NewAssignFragment.Companion.EditMode.canItEdit = false
+                AMDetailFragment.Companion.EditMode.canItEdit = false
                 overridePendingTransition(R.anim.no_anim, R.anim.up_bottom)
             }
         }
@@ -136,8 +141,8 @@ class AddActivity : AppCompatActivity() {
         } else {
             MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
         }
-        AddQRFragment.bitmap = bitmap
-        AddQRFragment.importMode = true
+        AMQrResolveFragment.bitmap = bitmap
+        AMQrResolveFragment.importMode = true
     }
 
     companion object {

@@ -17,6 +17,7 @@ class NotificationService(private val context: Context) {
 
         val activityIntent = Intent(context, MainActivity::class.java)
         activityIntent.putExtra("ID",notificationId)
+        activityIntent.putExtra("assignment",notificationId)
         val receiverIntent = Intent(context, NotificationReceiver::class.java)
         receiverIntent.putExtra("NOTIFICATION_ID", notificationId)
         Log.i("Notification","Notification Service Received: $notificationId")

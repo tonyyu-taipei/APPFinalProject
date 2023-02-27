@@ -8,6 +8,10 @@ import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
 import com.github.appintro.AppIntroPageTransformerType
 
+/**
+ * AppIntroActivity
+ * An [activity] to handle the app introductions.
+ */
 class AppIntroActivity : AppIntro() {
     var isCourse = false
 

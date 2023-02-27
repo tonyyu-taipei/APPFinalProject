@@ -21,14 +21,15 @@ import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databases.SettingDB
 import com.example.appfinalproject_10130492.databinding.FragmentSecondBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.zxing.common.StringUtils
 import org.joda.time.*
 import java.util.*
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
+ * MainSecondFragment
+ * A fragment to view the detailed information for the assignment.
  */
-class SecondFragment : Fragment() {
+class MainSecondFragment : Fragment() {
 
     private var _binding: FragmentSecondBinding? = null
     // This property is only valid between onCreateView and
@@ -134,7 +135,7 @@ class SecondFragment : Fragment() {
         fab = activity?.findViewById(R.id.fab1)!!
         fab.setImageResource(R.drawable.edit_48px)
         // set MainActivity to accept the Assignment provided
-        // it'll make AddActivity turn into edit mode
+        // it'll make AssignmentsModifyActivity turn into edit mode
         if(isInited()) {
             MainActivity.assignment = assignmentBody
             MainActivity.editModeToggle(true)
@@ -282,7 +283,7 @@ class SecondFragment : Fragment() {
     }
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.i("Fragment","SecondFragment Destroyed")
+        Log.i("Fragment","MainSecondFragment Destroyed")
         timer.cancel()
         forceFabAdd?.onChange()
         _binding = null

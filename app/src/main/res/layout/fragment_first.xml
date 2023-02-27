@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
 
     android:layout_marginBottom="@dimen/m3_bottom_nav_with_margin"
-    tools:context=".FirstFragment">
+    tools:context=".MainAssignmentsFirstFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

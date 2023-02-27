@@ -21,8 +21,11 @@ import com.example.appfinalproject_10130492.databinding.FragmentCoursesFirstBind
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
+ * A fragment to view all of the courses in the DB via recyclerView.
+ *
+ * Once clicked the assignment item, it redirects to MainAssignmentsFirstFragment.
  */
-class CoursesFirstFragment : Fragment() {
+class MainCoursesFirstFragment : Fragment() {
     private lateinit var assStatus:AssignmentsWithStatus
     private lateinit var scroll: NestedScrollView
     private var _binding: FragmentCoursesFirstBinding? = null
@@ -100,7 +103,7 @@ class CoursesFirstFragment : Fragment() {
             }
 
         ))
-        val itemCallback = this.context?.let { ItemTouchHelperCallback(adapter, it) }
+        val itemCallback = this.context?.let { ItemTouchHelperCallback(adapter, it,"Courses") }
         val itemHelper = itemCallback?.let { ItemTouchHelper(it) }
         itemHelper?.attachToRecyclerView(recyclerView)
 
@@ -112,12 +115,10 @@ class CoursesFirstFragment : Fragment() {
             noCourseText.visibility = View.VISIBLE
             noCourseTextDescription.visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
-            (activity as MainActivity).fabAnimation(false)
         }else{
             noCourseText.visibility = View.GONE
             noCourseTextDescription.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
-            (activity as MainActivity).fabAnimation(true)
         }
     }
 

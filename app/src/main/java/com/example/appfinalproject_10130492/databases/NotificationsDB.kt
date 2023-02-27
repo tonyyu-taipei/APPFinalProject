@@ -43,6 +43,7 @@ class NotificationsDB(context: Context){
             arrListAny.addAll(arrList)
             throw MultipleMatchesException(arrListAny)
         }
+        cursor.close()
         return arrList[0]
     }
     fun deleteAll(){
@@ -96,6 +97,7 @@ class NotificationsDB(context: Context){
                 val notification = Notification(id,assignID,notifyDate,notifyType)
                 notificationList.add(notification)
             }
+        cursor.close()
         return notificationList
     }
 }

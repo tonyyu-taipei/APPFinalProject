@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="@dimen/m3_bottom_nav_with_margin"
-    tools:context=".CoursesFirstFragment">
+    tools:context=".MainCoursesFirstFragment">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nest_course"

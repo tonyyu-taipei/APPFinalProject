@@ -11,8 +11,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.appfinalproject_10130492.data.AssignmentsWithStatus
 import com.example.appfinalproject_10130492.data.Course
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databases.CoursesDB
@@ -64,26 +64,12 @@ class CoursesRecyclerAdapter(val courses:ArrayList<Course>, val coursesDB: Cours
         //TODO: Convert assignment sec to courses sec
         holder.linear.setOnClickListener{
             MainActivity.scrollFab(true)
-            FirstFragment.modeOn = true
-            FirstFragment.courseSpecific = courseData.courseName
+            MainAssignmentsFirstFragment.modeOn = true
+            MainAssignmentsFirstFragment.courseSpecific = courseData.courseName
             viewParent.findNavController().navigate(R.id.action_coursesFirstFragment_to_firstFragment)
         }
         holder.linear.setOnLongClickListener {
-            val newCoursesDialog = NewCoursesDialog()
-            newCoursesDialog.setEditCourse(courseData)
-            newCoursesDialog.show(fragmentManager,null)
-            fun reloadSpecificItem(){
-                notifyItemChanged(position)
-            }
-            newCoursesDialog.setDialogDestroyListener(
-                object:NewCoursesDialog.DialogInterface{
-                    override fun onDestroyListener() {
-
-                        reloadSpecificItem()
-                    }
-
-                }
-            )
+            showEditCourseDialog(position)
             true
         }
 
@@ -98,26 +84,46 @@ class CoursesRecyclerAdapter(val courses:ArrayList<Course>, val coursesDB: Cours
         // No need to move the item
     }
 
-    override fun onItemDismiss(pos: Int) {
+    override fun onItemDismiss(pos: Int, direction: Int) {
+        if (direction == ItemTouchHelper.START) {
+            if (courses.size != 0) {
+                val coursesData = courses[pos]
+                val alertDialog = AlertDialog.Builder(context)
+                alertDialog.setTitle(R.string.alert)
+                    .setMessage(R.string.confirm_del_courses)
+                    .setPositiveButton(R.string.confirm,) { _, _ ->
+                        assignDB.deleteByCourse(coursesData.courseName)
+                        coursesData.courseName?.let { coursesDB.deleteOne(it) }
+                        courses.removeAt(pos)
+                        notifyItemRemoved(pos)
+                    }.setNegativeButton(R.string.cancel) { i, _ ->
+                        i.dismiss()
+                        this.notifyDataSetChanged()
+                    }.create().show()
 
-        if(courses.size != 0) {
-            val coursesData = courses[pos]
-            val alertDialog = AlertDialog.Builder(context)
-            alertDialog.setTitle(R.string.alert)
-                .setMessage(R.string.confirm_del_courses)
-                .setPositiveButton(R.string.confirm,){_,_->
-                    assignDB.deleteByCourse(coursesData.courseName)
-                    coursesData.courseName?.let { coursesDB.deleteOne(it) }
-                    courses.removeAt(pos)
-                    notifyItemRemoved(pos)
-                }.setNegativeButton(R.string.cancel){i,_->
-                    i.dismiss()
-                    this.notifyDataSetChanged()
-                }.create().show()
+                //notifyItemRangeChanged(pos, itemData.size);
+            }
 
-            //notifyItemRangeChanged(pos, itemData.size);
+        }else if(direction == ItemTouchHelper.END){
+            showEditCourseDialog(pos)
         }
+    }
+    fun showEditCourseDialog(position: Int){
+        val newCoursesDialog = NewCoursesDialog()
+        newCoursesDialog.setEditCourse(courses[position])
+        newCoursesDialog.show(fragmentManager,null)
+        fun reloadSpecificItem(){
+            notifyItemChanged(position)
+        }
+        newCoursesDialog.setDialogDestroyListener(
+            object:NewCoursesDialog.DialogInterface{
+                override fun onDestroyListener() {
 
+                    reloadSpecificItem()
+                }
+
+            }
+        )
     }
 
 

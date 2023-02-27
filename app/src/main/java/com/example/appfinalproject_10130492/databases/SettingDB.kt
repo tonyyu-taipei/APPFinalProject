@@ -30,13 +30,14 @@ class SettingDB(context: Context?) {
     }
     private fun cursorParser(cursor: Cursor): Setting{
         var setting = Setting(1,1,90)
-        if (cursor!=null && cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             val toggleLate = cursor.getInt(0)
             val toggleDue = cursor.getInt(1);
             val duePercentage = cursor.getInt(2)
             setting = Setting(toggleLate, toggleDue, duePercentage)
             Log.i("Courses", "settingsDB CursorParser ")
         }
+        cursor.close()
         return setting
     }
 }

@@ -21,6 +21,7 @@ class CoursesDB(context: Context?) {
             val cursor =
                 readAllCursor()
             assList = cursorParser(cursor)
+            cursor.close()
         }catch(e:Exception){
 
         }
@@ -67,6 +68,7 @@ class CoursesDB(context: Context?) {
                 assList.add(course)
                 Log.i("Courses","CoursesDB CursorParser $courseName")
             }
+        cursor.close()
         return assList
     }
 }

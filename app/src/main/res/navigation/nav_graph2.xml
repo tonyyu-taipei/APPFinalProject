@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/AddFirstFragment"
-        android:name="com.example.appfinalproject_10130492.AddFirstFragment"
+        android:name="com.example.appfinalproject_10130492.AMMenuFirstFragment"
         android:label="@string/first_fragment_add_label"
         tools:layout="@layout/fragment_first_add">
 
@@ -26,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/AddSecondFragment"
-        android:name="com.example.appfinalproject_10130492.NewAssignFragment"
+        android:name="com.example.appfinalproject_10130492.AMDetailFragment"
         android:label="@string/second_fragment_add_label"
         tools:layout="@layout/fragment_second_new_assign"
         >
@@ -39,7 +39,7 @@
     </fragment>
     <fragment
         android:id="@+id/addQRFragment"
-        android:name="com.example.appfinalproject_10130492.AddQRFragment"
+        android:name="com.example.appfinalproject_10130492.AMQrResolveFragment"
         android:label="@string/fragment_add_q_r_label"
         tools:layout="@layout/fragment_add_q_r">
         <action

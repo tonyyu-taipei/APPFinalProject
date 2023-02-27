@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDeleteQueue
@@ -78,7 +79,7 @@ class AssignmentsRecyclerAdapter(
         holder.desc.text = data.note
         holder.linear.setOnClickListener{
             MainActivity.scrollFab(true)
-            SecondFragment.assignmentBody = data
+            MainSecondFragment.assignmentBody = data
             val graph = viewParent.findNavController().graph
             when(graph.id){
                 R.id.nav_graph->
@@ -102,7 +103,10 @@ class AssignmentsRecyclerAdapter(
         // No need to move the item
     }
 
-    override fun onItemDismiss(pos: Int) {
+    override fun onItemDismiss(pos: Int,direction: Int) {
+        if(direction != ItemTouchHelper.START){
+            return
+        }
         Log.i("Menu", "Position is at $pos")
         Log.i("Menu","The adapter data is \r\n $itemData")
         if(itemData.size != 0) {
