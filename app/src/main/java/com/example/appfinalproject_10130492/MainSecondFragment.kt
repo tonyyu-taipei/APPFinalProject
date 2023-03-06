@@ -16,6 +16,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.appfinalproject_10130492.data.Assignment
 import com.example.appfinalproject_10130492.databases.AssignmentsDB
 import com.example.appfinalproject_10130492.databases.SettingDB
@@ -102,6 +103,8 @@ class MainSecondFragment : Fragment() {
         finishedButt = view.findViewById(R.id.sec_finish_butt)
         if(!isInited()){
             name.text = "錯誤：資料未正確載入"
+            findNavController().navigate(R.id.FirstFragment)
+
             return
         }
         val showNotificationPrompt: CardView = view.findViewById(R.id.notification_prompt)
@@ -136,26 +139,29 @@ class MainSecondFragment : Fragment() {
         fab.setImageResource(R.drawable.edit_48px)
         // set MainActivity to accept the Assignment provided
         // it'll make AssignmentsModifyActivity turn into edit mode
-        if(isInited()) {
-            MainActivity.assignment = assignmentBody
-            MainActivity.editModeToggle(true)
-
-            name.text = assignmentBody.title
-            courseName.text = assignmentBody.courseName
-            note.text = assignmentBody.note
-        }
-
-
-
-        val date = Date(assignmentBody.dueDate)
-        val uDate = java.text.SimpleDateFormat("yyyy-MM-dd  aa hh:mm", Locale.TAIWAN)
-        dueDate.text = uDate.format(date)
-
         val assignedCal = Calendar.getInstance()
-        assignedCal.time = Date(assignmentBody.assignedDate)
-
         val dueCal = Calendar.getInstance()
-        dueCal.time = Date(assignmentBody.dueDate)
+        try {
+            if (isInited()) {
+                MainActivity.assignment = assignmentBody
+                MainActivity.editModeToggle(true)
+
+                name.text = assignmentBody.title
+                courseName.text = assignmentBody.courseName
+                note.text = assignmentBody.note
+            }
+
+
+            val date = Date(assignmentBody.dueDate)
+            val uDate = java.text.SimpleDateFormat("yyyy-MM-dd  aa hh:mm", Locale.TAIWAN)
+            dueDate.text = uDate.format(date)
+
+            assignedCal.time = Date(assignmentBody.assignedDate)
+
+            dueCal.time = Date(assignmentBody.dueDate)
+        }catch(e: Exception){
+            Log.e("SecondFragment",e.toString())
+        }
 
 
         progress.max = 100
@@ -229,11 +235,13 @@ class MainSecondFragment : Fragment() {
 
         fun statusHelper() {
             val assignedCal = Calendar.getInstance()
-            assignedCal.time = Date(assignmentBody.assignedDate)
-
             val dueCal = Calendar.getInstance()
-            dueCal.time = Date(assignmentBody.dueDate)
-
+            try {
+                assignedCal.time = Date(assignmentBody.assignedDate)
+                dueCal.time = Date(assignmentBody.dueDate)
+            }catch(e: Exception){
+                Log.e("SecondFragment",e.toString())
+            }
 
             if (percentageCalc(assignedCal, dueCal) >= 100) {
                 statusTxt.text = getString(R.string.late)
@@ -245,11 +253,16 @@ class MainSecondFragment : Fragment() {
                 statusIco.imageTintList =
                     ColorStateList.valueOf(Color.parseColor(context?.getString(R.color.blue)))
             }
-            if (assignmentBody.finished == 1) {
-                statusTxt.text = getString(R.string.done)
-                statusIco.setImageResource(R.drawable.check_circle_48px)
-                finishedButt.text = getString(R.string.unfinish)
-                statusIco.imageTintList = ColorStateList.valueOf(Color.parseColor(getString(R.color.blue)))
+            try {
+                if (assignmentBody.finished == 1) {
+                    statusTxt.text = getString(R.string.done)
+                    statusIco.setImageResource(R.drawable.check_circle_48px)
+                    finishedButt.text = getString(R.string.unfinish)
+                    statusIco.imageTintList =
+                        ColorStateList.valueOf(Color.parseColor(getString(R.color.blue)))
+                }
+            }catch(e: Exception){
+                Log.e("SecondFragment",e.toString())
             }
         }
         statusHelper()

@@ -1,15 +1,12 @@
 package com.example.appfinalproject_10130492
 
 import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
-import android.animation.ValueAnimator
 import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -46,8 +43,8 @@ class MainActivity : AppCompatActivity() {
         /**
          * Receive and redirect the required AssignmentID
          */
-        val inputedAssignmentID = input?.getInt("assignment")
-        Log.i("MainActivity","Recieved Assignment ID: $inputedAssignmentID")
+        val inputtedAssignmentId = input?.getInt("assignment")
+        Log.i("MainActivity","Recieved Assignment ID: $inputtedAssignmentId")
         val intent = Intent(this,AppIntroActivity::class.java)
         PreferenceManager.getDefaultSharedPreferences(this).apply{
             //Check if we need to display our OnboardingSupportFragment
@@ -63,6 +60,7 @@ class MainActivity : AppCompatActivity() {
         }catch(e: Exception){
             Log.e("MainActivity",e.toString())
         }
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -71,7 +69,6 @@ class MainActivity : AppCompatActivity() {
         navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         fab = findViewById(R.id.fab1)
-
 
         // Bottom Navigation Listener
         botnav = findViewById(R.id.botnav)
@@ -125,16 +122,16 @@ class MainActivity : AppCompatActivity() {
             return@setOnItemSelectedListener true
         }
         setupActionBarWithNavController(navController, appBarConfiguration)
-        if(inputedAssignmentID != null){
+        if(inputtedAssignmentId != null){
             try {
-                MainSecondFragment.assignmentBody = assignmentsDB.read(inputedAssignmentID)!!
+                MainSecondFragment.assignmentBody = assignmentsDB.read(inputtedAssignmentId)!!
+                navController.navigate(R.id.SecondFragment)
             }catch(e: NullPointerException) {
                 Log.e(
                     "Database",
                     "Error: null pointer from database, please report this to the dev"
                 )
             }
-            navController.navigate(R.id.SecondFragment)
         }
         fab.setOnClickListener{
             val intent = Intent(this, AssignmentsModifyActivity::class.java)
